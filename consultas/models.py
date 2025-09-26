@@ -26,7 +26,7 @@ class Diagnostico(models.Model):
     tipo = models.CharField(max_length=100,choices=[],null=False,blank=False)
     plano_de_tratamento = models.TextField(null=False,blank=False)
     detalhes = models.TextField(null=False,blank=False)
-    consultas = models.ManyToManyField(Consulta, related_name="diagnosticos")
+    consulta = models.ManyToManyField(Consulta, related_name="diagnosticos")
     def __str__(self):
         return self.detalhes
     
