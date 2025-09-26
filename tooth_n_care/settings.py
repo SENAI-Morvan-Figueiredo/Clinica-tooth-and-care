@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Apps da clínica
+    'appadmin',
     'consultas',
     'medicos',
     'pacientes',
