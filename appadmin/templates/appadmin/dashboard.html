@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block paginas %}
+<p>teste</p>
+{% endblock %}
+
+{% block content %}
+<div class="container border pd-3 mt-3 rounded-4">
+    <h3>N° de pacientes cadastrados</h3>
+    <li><strong>{{ qtd_pacientes }}</strong> pacientes.</li>
+
+    <h3>Medicos Ativos</h3>
+    <div class="row pd-3">
+        <!-- TODO: adicionar a função de filtro nos médicos -->
+        <input class="col" type="text" placeholder="Pesquisar médico" id="searchInput" onkeyup="">
+        <select class="col" name="especialidade" id="especialidade">
+            <option value="" disabled selected>Selecione uma especialidade</option>
+            {% for especialidade in especialidades %}
+            <option value="{{ especialidade.id }}">{{ especialidade.nome }}</option>
+            {% endfor %}
+        </select>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Médico</th>
+                    <th scope="col">CRM</th>
+                    <th scope="col">Especialidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for Medico in medicos_ativos %}
+                <tr>
+                    <td>{{ Medico.nome }}</td>
+                    <td>{{ Medico.crm }}</td>
+                    <td>{{ Medico.especialidades.all|join:", " }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="container border pd-3 mt-4 rounded-4">
+    <h3>Consultas de hoje:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col">Nome do paciente</th>
+                <th class="col">Médico</th>
+                <th class="col">Horário</th>
+                <th class="col">Tipo</th>
+                <th class="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for consulta in proximas_consultas %}
+            <tr>
+                <td>{{ consulta.paciente.nome }}</td>
+                <td>{{ consulta.medico.nome }}</td>
+                <td>{{ consulta.data|date:"H:i" }}</td>
+                <td>{{ consulta.servico }}</td>
+                <td>{{ consulta.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
