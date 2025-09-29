@@ -4,7 +4,7 @@ from .models import Consulta, Exame, Diagnostico, Anamnese
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model= Consulta
-        Fields = ['data', 'sala', 'servico', 'valor', 'status', 'paciente', 'medico']
+        fields = ['data', 'sala', 'servico', 'valor', 'status', 'paciente', 'medico']
         widgets = {}
 
 class ExameForm(forms.ModelForm):

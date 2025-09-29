@@ -1,0 +1,55 @@
+{% extends 'pacientes/base.html' %}
+
+{% block title %}CRUD de Consultas{% endblock %}
+
+{% block content %}
+<h2>{% if consulta_editando %}Editar Consulta{% else %}Nova Consulta{% endif %}</h2>
+
+<form method="post" style="border:1px solid #ccc; padding:15px; width:400px; margin-bottom:20px;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% if consulta_editando %}Atualizar{% else %}Salvar{% endif %}</button>
+    {% if consulta_editando %}
+        <a href="{% url 'consultas-crud' %}" class="btn">Cancelar</a>
+    {% endif %}
+</form>
+
+<h2>Lista de Consultas</h2>
+{% if consultas %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Paciente</th>
+            <th>Médico</th>
+            <th>Data</th>
+            <th>Sala</th>
+            <th>Serviço</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for consulta in consultas %}
+        <tr>
+            <td>{{ consulta.id }}</td>
+            <td>{{ consulta.paciente }}</td>
+            <td>{{ consulta.medico }}</td>
+            <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
+            <td>{{ consulta.sala }}</td>
+            <td>{{ consulta.servico }}</td>
+            <td>R$ {{ consulta.valor|floatformat:2 }}</td>
+            <td>{{ consulta.status }}</td>
+            <td>
+                <a href="{% url 'consultas-editar' consulta.id %}" class="btn btn-editar">Editar</a>
+                <a href="{% url 'consultas-excluir' consulta.id %}" class="btn btn-excluir" onclick="return confirm('Confirma exclusão?');">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Nenhuma consulta cadastrada.</p>
+{% endif %}
+{% endblock %}
