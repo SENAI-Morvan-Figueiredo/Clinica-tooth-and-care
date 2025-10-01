@@ -3,9 +3,13 @@
 
 {% block content %}
 <div class="container border pd-4 mt-3 rounded-4">
-    <div class="row d-flex justify-content-between">
-        <h3 class="col-1">Medicos</h3>
-        <a href="" class="btn btn-danger col-2">Remover paciente</a>
+    <div class="d-flex justify-content-between">
+        <h3>Medicos</h3>
+        <div class="d-flex gap-3">
+            <!-- Depois de fazer merge: adicionar a url para criar medico -->
+            <a href="" id="adiciona-medico" class="btn btn-primary">Adicionar médico</a>
+            <button id="remove-medico" class="btn btn-danger">Remover médico</button>
+        </div>
     </div>
     <div class="row pd-3">
         <!-- TODO: adicionar a função de filtro de pacientes -->
@@ -13,7 +17,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" id="select-all"></th>
                     <th scope="col">Médico</th>
                     <th scope="col">CRM</th>
                     <th scope="col">especialidades</th>
@@ -21,9 +25,12 @@
             </thead>
             <tbody>
                 {% for medico in medicos %}
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td>{{ medico.user.username }}</td>
+                <tr class="position-relative">
+                    <td><input type="checkbox" name="medico_id" class="medico-checkbox" value="{{ medico.pk }}"></td>
+                    <td>
+                        {{ medico.user.username }}
+                        <a href="{% url 'adm-detalhe-medico' medico.id %}" class="stretched-link"></a>
+                    </td>
                     <td>{{ medico.crm }}</td>
                     <td>
                         <ul>
@@ -38,4 +45,43 @@
         </table>
     </div>
 </div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+<script> 
+    document.getElementById('remove-medico').addEventListener('click', () => {
+        const csrfToken = '{{ csrf_token }}'
+        const ids = Array.from(document.querySelectorAll('.medico-checkbox:checked'))
+            .map(cb => parseInt(cb.value));
+
+        if(ids.length == 0) {
+            console.error("Selecione pelo menos um médico.");
+            return;
+        }
+
+        if(!confirm(`Tem certeza que deseja deletar ${ids.length} médicos selecionado(s)?`)) return;
+
+        fetch("{% url 'deletar-medicos' %}", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ medico_ids: ids })
+        })
+        .then(response => {
+            if(!response.ok) return response.json().then(error => { throw new Error(error.mensagem || "Erro desconhecido na exclusão."); });
+            return response.json();
+        })
+        .then(data => {
+            console.log(data.mensagem);
+            document.location.reload();
+        })
+        .catch(error => {
+            console.error('Falha ao processar a exclusão')
+        });
+    });
+</script>
+<script src="{% static 'js/medicos.js' %}"></script>
 {% endblock %}
