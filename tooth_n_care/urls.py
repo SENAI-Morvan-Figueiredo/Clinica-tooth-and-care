@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from appadmin import views as adm_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,4 +24,5 @@ urlpatterns = [
     path('consulta/', include('consultas.urls')),
     path('paciente/', include('pacientes.urls')),
     path('appadmin/', include('appadmin.urls')),
+    path('deletar-medicos/', adm_views.deletar_medico, name="deletar-medicos"),
 ]
