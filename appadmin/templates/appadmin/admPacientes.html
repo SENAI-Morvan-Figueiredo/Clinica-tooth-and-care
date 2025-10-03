@@ -15,7 +15,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" id="select-all"></th>
                     <th scope="col">Nome do paciente</th>
                     <th scope="col">CPF</th>
                     <th scope="col">Último login</th>
@@ -23,9 +23,14 @@
             </thead>
             <tbody>
                 {% for paciente in pacientes %}
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td>{{ paciente.user.username }}</td>
+                <tr class="position-relative">
+                    <td class="td-checkbox position-relative">
+                        <input type="checkbox" name="paciente_id" class="paciente-checkbox" value="{{ paciente.pk }}">
+                    </td>
+                    <td>
+                        {{ paciente.user.username }}
+                        <a href="{% url 'adm-detalhe-paciente' paciente.pk %}" class="stretched-link"></a>
+                    </td>
                     <td>{{ paciente.cpf }}</td>
                     <td>{{ paciente.user.last_login|date:"d/m/Y \à\s H:i" }}</td>
                 </tr>
@@ -34,4 +39,42 @@
         </table>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script> 
+    document.getElementById('remove-paciente').addEventListener('click', () => {
+        const csrfToken = '{{ csrf_token }}'
+        const ids = Array.from(document.querySelectorAll('.paciente-checkbox:checked'))
+            .map(cb => parseInt(cb.value));
+
+        if(ids.length == 0) {
+            console.error("Selecione pelo menos um paciente.");
+            return;
+        }
+
+        if(!confirm(`Tem certeza que deseja deletar ${ids.length} pacientes selecionado(s)?`)) return;
+
+        fetch("{% url 'deletar-pacientes' %}", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ p_ids: ids })
+        })
+        .then(response => {
+            if(!response.ok) return response.json().then(error => { throw new Error(error.mensagem || "Erro inesperado na exclusão."); });
+            return response.json();
+        })
+        .then(data => {
+            console.log(data.mensagem);
+            document.location.reload();
+        })
+        .catch(error => {
+            console.error('Falha ao processar a exclusão')
+        });
+    });
+</script>
+<script src="{% static 'js/pacientes.js' %}"></script>
 {% endblock %}

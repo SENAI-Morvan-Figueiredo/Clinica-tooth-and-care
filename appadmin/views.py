@@ -77,6 +77,8 @@ def consultas(request):
 
         return render(request, 'appadmin/admConsultas.html', context)
 
+#----------------------- detail views-------------------------
+
 def detalhe_consulta(request, pk):
     if request.method == 'GET':
         consulta = get_object_or_404(Consulta, pk=pk)
@@ -88,6 +90,12 @@ def detalhe_medico(request, pk):
     consultas = Consulta.objects.filter(medico=medico)
 
     return render(request, 'appadmin/medicoDetalhe.html', {'medico': medico, 'consultas': consultas})
+
+def detalhe_paciente(request, pk):
+    paciente = get_object_or_404(Paciente, pk=pk)
+    consultas = Consulta.objects.filter(paciente=paciente)
+
+    return render(request, "appadmin/pacienteDetalhe.html", {"paciente": paciente, "consultas": consultas})
 
 #---------------------create views-----------------------
 #TODO: adicionar view de criar medico após merge  
@@ -153,3 +161,48 @@ def deletar_consulta(request, pk):
     except Exception as e:
         print("Erro:", str(e))
         return redirect('adm-consultas')
+
+def deletar_paciente(request, pk=-1):
+    if request.method == 'POST':        
+        try:
+            data = json.loads(request.body)
+            p_ids = data.get('p_ids') # procura a chave "p_ids" no body
+
+            if not p_ids or not isinstance(p_ids, list):
+                return HttpResponseBadRequest(
+                    "Requisição inválida. Conteúdo recebido não está correto"
+                )
+            
+            # busca todos os médicos da lista
+            pacientes_deletar = Medico.objects.filter(pk__in=p_ids)
+            users_ids = pacientes_deletar.values_list('user_id', flat=True)
+            usuarios_deletar = User.objects.filter(pk__in=users_ids)
+
+            count, _ = usuarios_deletar.delete() # deleta os usuários dos médicos
+
+            return JsonResponse(
+                {"status": "sucesso",
+                "mensagem": f"{count} pacientes(s) excluído(s) com sucesso!"},
+                status=200
+            )
+
+        except json.JSONDecodeError:
+            # Lidar com erro se o corpo não for um JSON válido
+            return HttpResponseBadRequest("Corpo da requisição deve ser um JSON válido.")
+        except Exception as e:
+            # Lidar com outros erros (erro de banco de dados, etc.)
+            return JsonResponse({
+                'status': 'erro',
+                'mensagem': f'Ocorreu um erro ao excluir os pacientes: {str(e)}'
+            }, status=500)
+    else:
+        if pk == -1:
+            return HttpResponseBadRequest("id inválido.")
+
+        pacientes = Paciente.objects.get(pk=pk)
+        # Consegue o usuário
+        user_id = pacientes.user.pk
+        user = User.objects.get(pk=user_id)
+        user.delete() # deleta o usuário
+        
+        return redirect('adm-pacientes')

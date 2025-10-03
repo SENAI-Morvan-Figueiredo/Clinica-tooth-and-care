@@ -26,7 +26,9 @@
             <tbody>
                 {% for medico in medicos %}
                 <tr class="position-relative">
-                    <td><input type="checkbox" name="medico_id" class="medico-checkbox" value="{{ medico.pk }}"></td>
+                    <td class="td-checkbox position-relative">
+                        <input type="checkbox" name="medico_id" class="medico-checkbox" value="{{ medico.pk }}">
+                    </td>
                     <td>
                         {{ medico.user.username }}
                         <a href="{% url 'adm-detalhe-medico' medico.id %}" class="stretched-link"></a>
@@ -49,18 +51,18 @@
 
 
 {% block extra_scripts %}
-<script> 
+<script>
     document.getElementById('remove-medico').addEventListener('click', () => {
         const csrfToken = '{{ csrf_token }}'
         const ids = Array.from(document.querySelectorAll('.medico-checkbox:checked'))
             .map(cb => parseInt(cb.value));
 
-        if(ids.length == 0) {
+        if (ids.length == 0) {
             console.error("Selecione pelo menos um médico.");
             return;
         }
 
-        if(!confirm(`Tem certeza que deseja deletar ${ids.length} médicos selecionado(s)?`)) return;
+        if (!confirm(`Tem certeza que deseja deletar ${ids.length} médicos selecionado(s)?`)) return;
 
         fetch("{% url 'deletar-medicos' %}", {
             method: 'POST',
@@ -70,17 +72,17 @@
             },
             body: JSON.stringify({ medico_ids: ids })
         })
-        .then(response => {
-            if(!response.ok) return response.json().then(error => { throw new Error(error.mensagem || "Erro desconhecido na exclusão."); });
-            return response.json();
-        })
-        .then(data => {
-            console.log(data.mensagem);
-            document.location.reload();
-        })
-        .catch(error => {
-            console.error('Falha ao processar a exclusão')
-        });
+            .then(response => {
+                if (!response.ok) return response.json().then(error => { throw new Error(error.mensagem || "Erro desconhecido na exclusão."); });
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.mensagem);
+                document.location.reload();
+            })
+            .catch(error => {
+                console.error('Falha ao processar a exclusão')
+            });
     });
 </script>
 <script src="{% static 'js/medicos.js' %}"></script>
