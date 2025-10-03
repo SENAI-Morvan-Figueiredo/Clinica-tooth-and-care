@@ -77,8 +77,18 @@ def filtro_consultas_medico(request, pk):
 def teste(request):
     return render(request, 'medicos/medIndex.html')
 
-def teste2(request):
-    return render(request, 'medicos/medDetalhesMed.html')
+def medico_update_teste(request):
+    medico = Medico.objects.first()
+
+    if request.method == "POST":
+        form = MedicoForm(request.POST, instance=medico)
+        if form.is_valid():
+            form.save()
+            return redirect("medico_update_teste")  # usa o nome correto da rota
+    else:
+        form = MedicoForm(instance=medico)
+
+    return render(request, "medicos/medDetalhesMed.html", {"form": form, "medico": medico})
 
 def teste3(request):
-    return render(request, 'medicos/medConsultas.html')
+    return render(request, 'medicos/medIndex.html')
