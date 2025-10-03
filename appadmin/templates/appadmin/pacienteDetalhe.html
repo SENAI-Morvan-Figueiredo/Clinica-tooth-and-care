@@ -1,0 +1,47 @@
+{% extends "basedashboards.html" %}
+{% load static %}
+
+{% block title %}Detalhe do Paciente{% endblock %}
+
+{% block content %}
+<div class="container border pd-4 mt-3 rounded-4">
+    <div class="d-flex justify-content-between">
+        <h3>{{ paciente.user.username }}</h3>
+        <a href="{% url 'adm-deletar-paciente' paciente.id %}" class="btn btn-danger">Deletar paciente</a>
+    </div>
+    <div id="detalhes">
+        <div class="info"><strong>CPF: </strong>{{ paciente.cpf }}</div>
+        <div class="info"><strong>RG: </strong>{{ paciente.rg }}</div>
+        <div class="info"><strong>E-mail: </strong>{{ paciente.user.email }}</div>
+        <div class="info"><strong>Telefone: </strong>{{ paciente.telefone }}</div>
+        <div class="info"><strong>Data de nascimento: </strong>{{ paciente.data_nasc|date:"d/m/Y" }}</div>
+        <div class="info"><strong>Endereço: </strong>{{ paciente.endereco }}</div>
+    </div>
+</div>
+<div class="container border pd-4 mt-3 rounded-4">
+    <h3>Próximas Consultas</h3>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Médico</th>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                <tr class="position-relative">
+                    <td>
+                        {{ consulta.medico.user.username }}
+                        <a href="{% url 'adm-detalhe-consulta' consulta.id %}" class="stretched-link"></a>
+                    </td>
+                    <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
+                    <td>{{ consulta.servico }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
