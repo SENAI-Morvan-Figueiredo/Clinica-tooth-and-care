@@ -7,6 +7,12 @@ class ConsultaForm(forms.ModelForm):
         Fields = ['data', 'sala', 'servico', 'valor', 'status', 'paciente', 'medico']
         widgets = {}
 
+class ConsultaAdiar(forms.ModelForm):
+    class Meta:
+        model= Consulta
+        Fields = ['data', 'medico']
+        widgets = {}
+
 class ExameForm(forms.ModelForm):
     class Meta:
         model = Exame
