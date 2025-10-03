@@ -1,0 +1,34 @@
+{% load static %}
+<div class="col-2 d-flex flex-column">
+    <!-- links para as outras páginas -->
+    {% if current_app == appadmin %}
+    <a href="{% url 'dashboard' %}" class="text-decoration-none mb-3">
+        <img src="" alt="">
+        Página inicial
+    </a>
+    <a href="{% url 'adm-pacientes' %}" class="text-decoration-none mb-3">
+        <img src="" alt="">
+        Pacientes
+    </a>
+    <a href="{% url 'adm-medicos' %}" class="text-decoration-none mb-3">
+        <img src="" alt="">
+        Médicos
+    </a>
+    <a href="{% url 'adm-consultas' %}" class="text-decoration-none mb-3">
+        <img src="" alt="">
+        Consultas
+    </a>
+    {% elif current_app == pacientes %}
+    <li>Clientes</li>
+    <li>Consultas</li>
+    {% elif current_app == medicos %}
+    <a href="">
+        <img src="" alt="">
+        Página inicial
+    </a>
+    <a href="">
+        <img src="" alt="">
+        Consultas
+    </a>
+    {% endif %}
+</div>
