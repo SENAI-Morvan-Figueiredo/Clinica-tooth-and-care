@@ -1,10 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Sistema de Clínica{% endblock %}</title>
-    <style>
-    </style>
+    <link rel="stylesheet" href="{% static 'pacientes/style.css' %}">
 </head>
 <body>
     <header>
@@ -12,7 +12,9 @@
         <hr>
     </header>
 
-    {% block content %}
-    {% endblock %}
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 </body>
 </html>
