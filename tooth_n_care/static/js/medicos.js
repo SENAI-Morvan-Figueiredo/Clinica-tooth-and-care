@@ -25,3 +25,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+$(document).ready(function() {
+    const tabela = $('#tabela-medicos').DataTable({
+        dom: 'lrtip',
+        paging: false, // desativa paginação
+        info: false,   // remove "Mostrando X de Y"
+        searching: false, // desativa o campo de pesquisa interno
+        ordering: false    // mantém a ordenação clicável nas colunas
+    });
+
+    // filtra para cada tecla apertada
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        tabela.rows().every(function() {
+            const termo = $('#searchInput').val().toLowerCase();
+            const dataSearch = $(this.node()).data('search') || '';
+            const corresponde = dataSearch.toLowerCase().includes(termo);
+            $(this.node()).toggle(corresponde);
+        });
+    });
+});
