@@ -8,6 +8,7 @@ from django.views.generic import CreateView
 # módulos do projeto
 from pacientes.models import Paciente
 from medicos.models import Medico, Especialidade
+from medicos.forms import MedicoUserForm
 from consultas.models import Consulta
 from django.utils import timezone
 
@@ -67,11 +68,9 @@ def medicos(request):
 def consultas(request):
     if request.method == 'GET':
         consultas = Consulta.objects.all()
-        horarios = gerar_slots_de_tempo(time(6, 0), time(20, 0), 15) # consegue todos os horários de consultas
 
         context = {
             "consultas": consultas, 
-            "horarios": horarios,
             "servicos": Consulta.SERVICOS
             }
 
@@ -97,11 +96,41 @@ def detalhe_paciente(request, pk):
 
     return render(request, "appadmin/pacienteDetalhe.html", {"paciente": paciente, "consultas": consultas})
 
-#---------------------create views-----------------------
-#TODO: adicionar view de criar medico após merge  
-# class MedicoCreateView(CreateView):
-#     model = Medico
-#     form_class = 
+#---------------------create views-----------------------  
+def adicionar_medico(request):
+    if request.method == 'POST':
+        form = MedicoUserForm(request.POST)
+
+        if form.is_valid():
+
+            new_name = form.cleaned_data["username"]
+            new_email = form.cleaned_data["email"]
+
+            user = User.objects.create(
+                username=new_name,
+                email=new_email
+            )
+
+            new_cpf = form.cleaned_data["cpf"]
+            new_rg = form.cleaned_data["rg"]
+            new_crm = form.cleaned_data["crm"]
+            new_telefone = form.cleaned_data["telefone"]
+
+            Medico.objects.create(
+                user=user,
+                cpf=new_cpf,
+                rg=new_rg,
+                crm=new_crm,
+                telefone=new_telefone
+            )
+
+            return redirect('adm-medicos')
+
+    else:
+        form = MedicoUserForm
+
+    return render(request, 'appadmin/medicoCriar.html', {"form": form})
+
 
 #------------------------delete views--------------------------
 #TODO: garantir que o usuário é válido
