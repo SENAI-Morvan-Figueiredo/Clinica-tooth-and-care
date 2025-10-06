@@ -9,7 +9,7 @@ def consulta_lista(request):
     Lista todas as consultas.
     """
     consultas = Consulta.objects.all().order_by("-data")
-    return render(request, "pacientes/consultas_lista.html", {"consultas": consultas})
+    return render(request, "paciente/consulta/crud.html", {"consultas": consultas})
 
 
 def consulta_criar(request):
@@ -24,7 +24,7 @@ def consulta_criar(request):
             return redirect("consultas-lista")
     else:
         form = ConsultaForm()
-    return render(request, "pacientes/consulta_form.html", {"form": form})
+    return render(request, "paciente/consulta/crud.html", {"form": form})
 
 
 def consulta_editar(request, consulta_id):
@@ -40,7 +40,7 @@ def consulta_editar(request, consulta_id):
             return redirect("consultas-lista")
     else:
         form = ConsultaForm(instance=consulta)
-    return render(request, "pacientes/consulta_form.html", {"form": form, "consulta": consulta})
+    return render(request, "paciente/consulta/crud.html", {"form": form, "consulta": consulta})
 
 
 def consulta_excluir(request, consulta_id):
