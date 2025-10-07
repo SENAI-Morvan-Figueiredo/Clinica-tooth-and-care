@@ -2,6 +2,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseBadRequest, JsonResponse
+from django.urls import reverse
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views.generic import CreateView
 
@@ -11,6 +13,7 @@ from medicos.models import Medico, Especialidade
 from medicos.forms import MedicoUserForm
 from consultas.models import Consulta
 from django.utils import timezone
+from consultas.forms import ConsultaAdiar
 
 # outras bibliotecas
 from datetime import datetime, timedelta, time
@@ -79,10 +82,25 @@ def consultas(request):
 #----------------------- detail views-------------------------
 
 def detalhe_consulta(request, pk):
-    if request.method == 'GET':
-        consulta = get_object_or_404(Consulta, pk=pk)
+    consulta = get_object_or_404(Consulta, pk=pk)
 
-        return render(request, 'appadmin/consultaDetalhe.html', {"consulta": consulta})
+    # para editar a data ou médico da consulta
+    if request.method == 'POST':
+        form = ConsultaAdiar(request.POST, instance=consulta)
+
+        if form.is_valid():
+            form.save()
+
+            url = reverse('adm-detalhe-consulta', args=[pk])
+            return redirect(url)
+
+    elif request.method == 'GET':
+        form = ConsultaAdiar(instance=consulta)
+
+        return render(request, 'appadmin/consultaDetalhe.html', {
+            "consulta": consulta,
+            "form": form
+            })
 
 def detalhe_medico(request, pk):
     medico = get_object_or_404(Medico, pk=pk)
@@ -100,37 +118,49 @@ def detalhe_paciente(request, pk):
 def adicionar_medico(request):
     if request.method == 'POST':
         form = MedicoUserForm(request.POST)
-
+        
         if form.is_valid():
-
+            # dados do usuário
             new_name = form.cleaned_data["username"]
             new_email = form.cleaned_data["email"]
-
-            user = User.objects.create(
-                username=new_name,
-                email=new_email
-            )
-
+            
+            # dados do médico
             new_cpf = form.cleaned_data["cpf"]
             new_rg = form.cleaned_data["rg"]
             new_crm = form.cleaned_data["crm"]
             new_telefone = form.cleaned_data["telefone"]
-
-            Medico.objects.create(
-                user=user,
-                cpf=new_cpf,
-                rg=new_rg,
-                crm=new_crm,
-                telefone=new_telefone
+            new_especialidades = request.POST.getlist('especialidades')  
+            
+            user = User.objects.create( #cria o usuário e salva em uma variável
+                username=new_name,
+                email=new_email
             )
 
-            return redirect('adm-medicos')
+            try:
+                medico = Medico.objects.create( #cria o médico e salva em uma variável
+                    user=user,
+                    cpf=new_cpf,
+                    rg=new_rg,
+                    crm=new_crm,
+                    telefone=new_telefone
+                )
+
+                # Adiciona as especialidades ao médico
+                medico.especialidades.set(new_especialidades)
+                return redirect('adm-medicos')
+
+            except TypeError as e:
+                # Deleta o usuário para evitar erros futuros
+                user_del = User.objects.get(username=new_name)
+                user_del.delete()
+
+                messages.error(request, "Algo de errado aconteceu!")
+                return redirect('adicionar-medico')
 
     else:
         form = MedicoUserForm
 
     return render(request, 'appadmin/medicoCriar.html', {"form": form})
-
 
 #------------------------delete views--------------------------
 #TODO: garantir que o usuário é válido

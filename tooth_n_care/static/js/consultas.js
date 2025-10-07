@@ -31,5 +31,9 @@ $(document).ready(function () {
 
     // detecta alterações no filtro
     $('#searchInput, #tipos, #status, #data').on('keyup change', filtrar);
-
 });
+
+
+
+
+
