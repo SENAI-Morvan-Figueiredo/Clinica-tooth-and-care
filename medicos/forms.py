@@ -40,9 +40,10 @@ class MedicoUserForm(forms.ModelForm):
         # 4. Obtém os dados dos campos do User antes de salvar o Medico
         username = self.cleaned_data.get('username')
         email = self.cleaned_data.get('email')
-
+        
         # 5. Salva (ou atualiza) o objeto User
         user = self.instance.user
+        
         user.username = username
         user.email = email
         if commit:
