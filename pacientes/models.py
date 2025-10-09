@@ -9,7 +9,7 @@ GENERO_CHOICES = [
 
 # Create your models here.
 class Paciente(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente')
     cpf = models.CharField(null=False, blank=False, unique=True)
     rg = models.CharField(null=False, blank=False, unique=True)
     telefone = models.CharField(null=False, blank=False)
