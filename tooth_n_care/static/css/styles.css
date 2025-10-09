@@ -1,7 +1,53 @@
+:root {
+  --sidebar-background: #257470;
+  --navbar-background: #2C8E89;
+  --fonte: Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: var(--fonte);
+}
+
+html, body {
+  margin: 0;
+  padding: 0; 
+  height: 100vh; 
+}
+
+#sidebar {
+  background-color: var(--sidebar-background);
+  color: white;
+  padding: 50px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  a {
+    color: white;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: block;
+  }
+}
+
+#dashboard-navbar {
+  background-color: var(--navbar-background);
+  color: white;
+  padding: 10px 20px;
+}
+
+#main {
+  height: 100%;
+}
+
 .td-checkbox {
     z-index: 2;
 }
 
+
+
+/* modal da página de consultas */
 #adiar-modal {
   padding: 20px;
   border: none;
