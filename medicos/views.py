@@ -3,7 +3,7 @@ from .models import Medico
 from .models import Especialidade
 from consultas.models import Consulta
 from pacientes.models import Paciente
-from .forms import MedicoForm
+from .forms import MedicoUserForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
@@ -17,12 +17,12 @@ def medico_detail(request, pk):
 def medico_update(request, pk):
     medico = get_object_or_404(Medico, pk=pk)
     if request.method == "POST":
-        form = MedicoForm(request.POST, instance=medico)
+        form = MedicoUserForm(request.POST, instance=medico)
         if form.is_valid():
             form.save()
             return redirect('medico_detail', pk=medico.pk)
     else:
-        form = MedicoForm(instance=medico)
+        form = MedicoUserForm(instance=medico)
     return render(request, 'medicos/medIndex.html', {'form': form})
 
 # Consultas de cada Médico
@@ -81,12 +81,12 @@ def medico_update_teste(request):
     medico = Medico.objects.first()
 
     if request.method == "POST":
-        form = MedicoForm(request.POST, instance=medico)
+        form = MedicoUserForm(request.POST, instance=medico)
         if form.is_valid():
             form.save()
-            return redirect("medico_update_teste")  # usa o nome correto da rota
+            return redirect("medIndex")  # usa o nome correto da rota
     else:
-        form = MedicoForm(instance=medico)
+        form = MedicoUserForm(instance=medico)
 
     return render(request, "medicos/medDetalhesMed.html", {"form": form, "medico": medico})
 

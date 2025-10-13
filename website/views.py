@@ -7,7 +7,7 @@ from medicos.models import Medico
 
 # Create your views here.
 def teste(request):
-    return render(request, 'base.html')
+    return redirect('/medicos/medIndex/')
 
 def teste2(request):
     return render(request, 'basedashboards.html')
@@ -24,7 +24,7 @@ def get_user_type(request):
     if hasattr(user, 'paciente'):
         return redirect('teste')
     elif hasattr(user, 'medico'):
-        return redirect('teste2')
+        return redirect('medIndex')
     elif user.is_staff:
         return redirect('appadmin/dashboard')
     else:
