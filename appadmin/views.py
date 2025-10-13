@@ -40,6 +40,7 @@ def gerar_slots_de_tempo(hora_inicio, hora_fim, intervalo_minutos):
     return slots
 
 # --------------------------list views--------------------
+@permission_required(['medico'])
 @login_required
 def dashboard(request):
     if request.method == 'GET':

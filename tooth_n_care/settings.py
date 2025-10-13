@@ -131,4 +131,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/appadmin/dashboard/'
+LOGIN_REDIRECT_URL = '/get_user_type'
