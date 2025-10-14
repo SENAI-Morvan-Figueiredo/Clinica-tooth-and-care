@@ -26,56 +26,31 @@ def medico_update(request, pk):
     return render(request, 'medicos/medIndex.html', {'form': form})
 
 # Consultas de cada Médico
-def consulta_medico(request, pk):
-    medico = get_object_or_404(Medico, id=pk)
-    consultas = Consulta.objects.filter(medico=medico).order_by('-data')
-    return render(request, 'consultas/consultas_por_medico.html', {
-        'medico': medico,
-        'consultas': consultas
-    })
 
-# Filtro de consulta
-def filtro_consultas_medico(request, pk):
-    medico = get_object_or_404(Medico, id=pk)
+def consultas_primeiro_medico(request):
+    # 1. Tenta obter o primeiro médico do banco de dados (ordenando por id para garantir consistência)
+    try:
+        primeiro_medico = Medico.objects.order_by('id').first()
+    except Medico.DoesNotExist:
+        primeiro_medico = None
 
-    # Coleta os parâmetros do formulário
-    nome_paciente = request.GET.get('paciente', '').strip()
-    data = request.GET.get('data', '').strip()
-    status = request.GET.get('status', '').strip()
-    servico = request.GET.get('servico', '').strip()
+    consultas = []
+    medico_encontrado = False
 
-    # Primeiro, restringe às consultas do médico
-    consultas = Consulta.objects.filter(medico=medico)
+    if primeiro_medico:
+        # 2. Se um médico for encontrado, obtenha todas as suas consultas
+        consultas = Consulta.objects.filter(medico=primeiro_medico).order_by('data')
+        medico_encontrado = True
 
-    # Aplica os filtros adicionais
-    if nome_paciente:
-        consultas = consultas.filter(paciente__nome__icontains=nome_paciente)
-
-    if data:
-        consultas = consultas.filter(data__date=data)
-
-    if status:
-        consultas = consultas.filter(status=status)
-
-    if servico:
-        consultas = consultas.filter(servico__icontains=servico)
-
-    consultas = consultas.order_by('-data')
-
+    # 3. Prepara o contexto para o template
     context = {
-        'medico': medico,
+        'primeiro_medico': primeiro_medico,
         'consultas': consultas,
-        'filtros': {
-            'paciente': nome_paciente,
-            'data': data,
-            'status': status,
-            'servico': servico
-        }
+        'medico_encontrado': medico_encontrado,
     }
-    return render(request, 'consultas/filtro_consultas_medico.html', context)
 
-def teste(request):
-    return render(request, 'medicos/medIndex.html')
+    # 4. Renderiza o template, passando o contexto
+    return render(request, 'medicos/medConsultas.html', context)
 
 def medico_update_teste(request):
     medico = Medico.objects.first()
