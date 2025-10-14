@@ -1,0 +1,16 @@
+{% load static %}
+<div class="col-2 d-flex flex-column" id="sidebar">
+    <!-- links para as outras páginas -->
+    <a href="{% url 'medIndex' %}" class="text-decoration-none mb-3">
+        <img src="{% static 'img/home.png' %}" alt="">
+        Página inicial
+    </a>
+    <a href="{% url 'medConsultas' %}" class="text-decoration-none mb-3">
+        <img src="{% static 'img/calendar.png' %}" alt="">
+        Consultas
+    </a>
+    <a href="{% url 'medDetalhesMed' %}" class="text-decoration-none mb-3">
+        <img src="{% static 'img/people.png' %}" alt="">
+        Perfil
+    </a>
+</div>
