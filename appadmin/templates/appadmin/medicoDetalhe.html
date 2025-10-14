@@ -4,7 +4,7 @@
 {% block title %}Detalhe do Médico{% endblock %}
 
 {% block content %}
-<div class="container border pd-4 mt-3 rounded-4">
+<div class="container border p-4 mt-3 rounded-4">
     <div class="d-flex justify-content-between">
         <h3>{{ medico.user.username }}</h3>
         <a href="{% url 'adm-deletar-medico' medico.id %}" class="btn btn-danger">Deletar médico</a>
@@ -24,7 +24,7 @@
         <div class="info"><strong>Telefone: </strong>{{ medico.telefone }}</div>
     </div>
 </div>
-<div class="container border pd-4 mt-3 rounded-4">
+<div class="container border p-4 mt-3 rounded-4">
     <h3>Consultas</h3>
     <div class="row">
         <table class="table">

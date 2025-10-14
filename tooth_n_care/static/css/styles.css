@@ -15,6 +15,10 @@ html, body {
   height: 100vh; 
 }
 
+.pd-4 {
+  padding: 20px;
+}
+
 #sidebar {
   background-color: var(--sidebar-background);
   color: white;
