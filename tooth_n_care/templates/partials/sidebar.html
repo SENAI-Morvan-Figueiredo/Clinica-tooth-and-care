@@ -1,7 +1,6 @@
 {% load static %}
 <div class="col-2 d-flex flex-column" id="sidebar">
     <!-- links para as outras páginas -->
-    {% if current_app == appadmin %}
     <a href="{% url 'dashboard' %}" class="text-decoration-none mb-3">
         <img src="{% static 'img/home.png' %}" alt="">
         Página inicial
@@ -18,17 +17,4 @@
         <img src="{% static 'img/calendar.png' %}" alt="">
         Consultas
     </a>
-    {% elif current_app == pacientes %}
-    <li>Clientes</li>
-    <li>Consultas</li>
-    {% elif current_app == medicos %}
-    <a href="">
-        <img src="" alt="">
-        Página inicial
-    </a>
-    <a href="">
-        <img src="" alt="">
-        Consultas
-    </a>
-    {% endif %}
 </div>

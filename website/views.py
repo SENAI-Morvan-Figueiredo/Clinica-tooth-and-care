@@ -26,6 +26,6 @@ def get_user_type(request):
     elif hasattr(user, 'medico'):
         return redirect('medIndex')
     elif user.is_staff:
-        return redirect('appadmin/dashboard')
+        return redirect('dashboard')
     else:
         return HttpResponseForbidden("ERRO: 403. Você não tem permissão para acessar essa página")
