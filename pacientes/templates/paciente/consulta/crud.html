@@ -20,8 +20,8 @@
                     <p><strong>📋 Tipo de consulta:</strong> {{ consulta.servico }}</p>
 
                     <div class="consulta-acoes">
-                        <a href="{% url 'consulta-editar' consulta.id %}" class="btn-editar">Editar</a>
-                        <a href="{% url 'consulta-excluir' consulta.id %}" class="btn-excluir"
+                        <a href="{% url 'consultas-editar' consulta.id %}" class="btn-editar">Editar</a>
+                        <a href="{% url 'consultas-excluir' consulta.id %}" class="btn-excluir"
                            onclick="return confirm('Tem certeza que deseja excluir esta consulta?');">Excluir</a>
                     </div>
                 </div>
@@ -36,7 +36,8 @@
     <section class="consultas-nova">
         <h2>Agendar nova consulta</h2>
 
-        <form method="post" class="form-consulta">
+        <form method="post" action="{% url 'consultas-criar' %}" class="form-consulta">
+
             {% csrf_token %}
             <div class="form-campos">
                 {{ form.as_p }}
@@ -48,7 +49,8 @@
                 </button>
 
                 {% if consulta_editando %}
-                <a href="{% url 'consultas-crud' %}" class="btn-cancelar">Cancelar</a>
+                <a href="{% url 'consultas-lista' %}" class="btn-cancelar">Cancelar</a>
+
                 {% endif %}
             </div>
         </form>
@@ -59,18 +61,31 @@
 
 {% block extra_css %}
 <style>
+/* ======== Layout geral ======== */
 .consultas-container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 2.5rem;
     background-color: #bde0dc;
-    padding: 2rem;
+    padding: 3rem 2rem;
     min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
 }
 
-/* ===== Seção Suas Consultas ===== */
-.consultas-lista h2 {
+/* ======== Títulos ======== */
+.consultas-container h2 {
+    color: #008c8c;
+    font-weight: 600;
     margin-bottom: 1rem;
+}
+
+/* ======== Seção Suas Consultas ======== */
+.consultas-lista {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
 }
 
 .consultas-cards {
@@ -80,17 +95,23 @@
 }
 
 .consulta-card {
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: #f7fdfd;
+    border: 1px solid #dcebea;
     border-radius: 12px;
-    box-shadow: 2px 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
     padding: 1rem 1.5rem;
     width: 280px;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .consulta-card:hover {
-    transform: scale(1.02);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.consulta-card p {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
 }
 
 .consulta-acoes {
@@ -99,28 +120,38 @@
     justify-content: space-between;
 }
 
-.btn-editar, .btn-excluir {
+.btn-editar,
+.btn-excluir {
     text-decoration: none;
     color: #fff;
     padding: 6px 12px;
     border-radius: 6px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    transition: background-color 0.3s ease;
 }
 
 .btn-editar {
     background-color: #008c8c;
 }
 
-.btn-excluir {
-    background-color: #c0392b;
+.btn-editar:hover {
+    background-color: #006f6f;
 }
 
-/* ===== Seção Agendar Nova Consulta ===== */
+.btn-excluir {
+    background-color: #d9534f;
+}
+
+.btn-excluir:hover {
+    background-color: #b52b27;
+}
+
+/* ======== Seção Agendar Nova Consulta ======== */
 .consultas-nova {
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 2px 3px 6px rgba(0,0,0,0.1);
-    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
 }
 
 .form-consulta {
@@ -129,30 +160,71 @@
     gap: 1rem;
 }
 
+.form-campos p {
+    margin-bottom: 1rem;
+}
+
+.form-campos label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    color: #006f6f;
+}
+
+.form-campos input,
+.form-campos select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+}
+
+.form-campos input:focus,
+.form-campos select:focus {
+    border-color: #008c8c;
+    box-shadow: 0 0 4px rgba(0, 140, 140, 0.3);
+}
+
+/* ======== Botões ======== */
 .form-botoes {
     display: flex;
     gap: 1rem;
+    margin-top: 1rem;
 }
 
 .btn-salvar {
     background-color: #008c8c;
-    color: white;
+    color: #fff;
     border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn-salvar:hover {
-    background-color: #007777;
+    background-color: #006f6f;
+    transform: translateY(-2px);
 }
 
 .btn-cancelar {
     background-color: #ccc;
     color: #333;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
     text-decoration: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-cancelar:hover {
+    background-color: #b1b1b1;
+    transform: translateY(-2px);
 }
 </style>
 {% endblock %}

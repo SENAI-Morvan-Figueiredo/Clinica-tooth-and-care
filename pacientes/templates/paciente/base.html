@@ -5,9 +5,12 @@
     <meta charset="UTF-8">
     <title>{% block title %}Sistema de Clínica{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'pacientes/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}  
 </head>
 <body>
     <header>
+        <img src="logo (1).png" alt="">
         <h1>Clínica Tooth & Care</h1>
         <hr>
     </header>
