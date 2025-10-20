@@ -12,11 +12,12 @@
 html, body {
   margin: 0;
   padding: 0; 
-  height: 100vh; 
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
-
-.pd-4 {
-  padding: 20px;
+body {
+  background-color: #C4E4DF;
 }
 
 #sidebar {
@@ -43,22 +44,24 @@ html, body {
 
 #main {
   height: 100%;
+  width: 100%;
 }
 
 .td-checkbox {
     z-index: 2;
 }
 
-
-
-/* modal da página de consultas */
-#adiar-modal {
-  padding: 20px;
-  border: none;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.container {
+  height: 100%;
+  background-color: white;
 }
 
-#adiar-modal::backdrop {
-  background-color: rgba(0, 0, 0, 0.6); /* Cor escura semi-transparente */
+#content-area {
+  padding-block: 10px;
+  padding-inline: 0;
+}
+
+#searchInput,
+select {
+  max-width: 400px;
 }
