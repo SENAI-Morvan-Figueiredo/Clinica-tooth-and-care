@@ -1,10 +1,18 @@
 {% extends "basedashboards.html" %}
 {% load static %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/adm_medico.css' %}">
+{% endblock %}
+
 {% block title %}Detalhe do Médico{% endblock %}
 
 {% block content %}
+<<<<<<< Updated upstream
 <div class="container border pd-4 mt-3 rounded-4">
+=======
+<div class="container border p-4 mt-3 rounded-4" id="info-medico">
+>>>>>>> Stashed changes
     <div class="d-flex justify-content-between">
         <h3>{{ medico.user.username }}</h3>
         <a href="{% url 'adm-deletar-medico' medico.id %}" class="btn btn-danger">Deletar médico</a>
@@ -17,14 +25,18 @@
                 <li>{{ especialidade.nome }}</li>
                 {% endfor %}
             </ul>
-        
+
         </div>
         <div class="info"><strong>CRM: </strong>{{ medico.crm }}</div>
         <div class="info"><strong>E-mail: </strong>{{ medico.user.email }}</div>
         <div class="info"><strong>Telefone: </strong>{{ medico.telefone }}</div>
     </div>
 </div>
+<<<<<<< Updated upstream
 <div class="container border pd-4 mt-3 rounded-4">
+=======
+<div class="container border p-4 mt-3 rounded-4" id="consultas">
+>>>>>>> Stashed changes
     <h3>Consultas</h3>
     <div class="row">
         <table class="table">
