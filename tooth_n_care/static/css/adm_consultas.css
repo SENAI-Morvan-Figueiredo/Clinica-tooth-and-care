@@ -1,0 +1,37 @@
+#filtros {
+  padding-inline: 0;
+}
+#filtro-header {
+  background-color: #2C8E89;
+  color: white;
+}
+#filtro-content {
+  padding: 10px;
+}
+
+/* modal da página de consultas */
+#adiar-modal {
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#adiar-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.6); /* Cor escura semi-transparente */
+}
+
+#medico-container,
+#paciente-container {
+    height: fit-content;
+}
+
+#medico-container,
+#paciente-container,
+#consulta-container {
+    padding: 20px;
+}
+
+li {
+    list-style: none;
+}
