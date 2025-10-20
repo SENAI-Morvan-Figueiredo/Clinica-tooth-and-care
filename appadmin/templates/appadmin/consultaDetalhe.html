@@ -1,6 +1,10 @@
 {% extends "basedashboards.html" %}
 {% load static %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/adm_consultas.css' %}">
+{% endblock %}
+
 {% block title %}Detalhe da Consulta{% endblock %}
 
 {% block content %}

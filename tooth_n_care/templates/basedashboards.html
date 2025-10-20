@@ -18,7 +18,7 @@
     {% include 'partials/navbar.html' %}
     <div class="row" id="main">
         {% include 'partials/sidebar.html' %}
-        <div class="col-10">
+        <div class="col-10 d-flex flex-column" id="content-area">
             {% block content %}
             {% endblock %}
         </div>
