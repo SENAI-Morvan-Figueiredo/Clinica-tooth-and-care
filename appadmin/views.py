@@ -1,6 +1,6 @@
 # bibliotecas do django
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.urls import reverse
 from django.contrib import messages
@@ -40,6 +40,8 @@ def gerar_slots_de_tempo(hora_inicio, hora_fim, intervalo_minutos):
     return slots
 
 # --------------------------list views--------------------
+@permission_required(['medicos.view_medico', "pacientes.view_paciente", "consultas.view_consulta"])
+@login_required
 def dashboard(request):
     if request.method == 'GET':
         qtd_pacientes = Paciente.objects.count()
@@ -56,18 +58,24 @@ def dashboard(request):
         }
         return render(request, "appadmin/dashboard.html", context) 
     
+@permission_required(["pacientes.view_paciente"])
+@login_required
 def pacientes(request):
     if request.method == 'GET':
         pacientes = Paciente.objects.all()
 
         return render(request, "appadmin/admPacientes.html", {"pacientes": pacientes})
 
+@permission_required(["medicos.view_medico"])
+@login_required
 def medicos(request):
     if request.method == 'GET':
         medicos = Medico.objects.all()
 
         return render(request, "appadmin/admMedicos.html", {"medicos": medicos})
     
+@permission_required(["consultas.view_consulta"])
+@login_required
 def consultas(request):
     if request.method == 'GET':
         consultas = Consulta.objects.all()
@@ -81,6 +89,8 @@ def consultas(request):
 
 #----------------------- detail views-------------------------
 
+@permission_required(["consultas.view_consulta"])
+@login_required
 def detalhe_consulta(request, pk):
     consulta = get_object_or_404(Consulta, pk=pk)
 
@@ -102,12 +112,16 @@ def detalhe_consulta(request, pk):
             "form": form
             })
 
+@permission_required(["medicos.view_medico"])
+@login_required
 def detalhe_medico(request, pk):
     medico = get_object_or_404(Medico, pk=pk)
     consultas = Consulta.objects.filter(medico=medico)
 
     return render(request, 'appadmin/medicoDetalhe.html', {'medico': medico, 'consultas': consultas})
 
+@permission_required(["pacientes.view_paciente"])
+@login_required
 def detalhe_paciente(request, pk):
     paciente = get_object_or_404(Paciente, pk=pk)
     consultas = Consulta.objects.filter(paciente=paciente)
@@ -115,8 +129,10 @@ def detalhe_paciente(request, pk):
     return render(request, "appadmin/pacienteDetalhe.html", {"paciente": paciente, "consultas": consultas})
 
 #---------------------create views-----------------------  
+@permission_required(['medicos.add_medico'])
+@login_required
 def adicionar_medico(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_staff:
         form = MedicoUserForm(request.POST)
         
         if form.is_valid():
@@ -164,9 +180,10 @@ def adicionar_medico(request):
 
 #------------------------delete views--------------------------
 #TODO: garantir que o usuário é válido
-
+@permission_required(['medicos.delete_medico'])
+@login_required
 def deletar_medico(request, pk=-1):
-    if request.method == 'POST':        
+    if request.method == 'POST' and request.user.is_staff:        
         try:
             data = json.loads(request.body)
             medico_ids = data.get('medico_ids') # procura a chave "medico_ids" no body
@@ -210,6 +227,8 @@ def deletar_medico(request, pk=-1):
         
         return redirect('adm-medicos')
 
+@permission_required(['consultas.delete_consulta'])
+@login_required
 def deletar_consulta(request, pk):
     try:
         consulta = Consulta.objects.get(pk=pk)
@@ -221,8 +240,10 @@ def deletar_consulta(request, pk):
         print("Erro:", str(e))
         return redirect('adm-consultas')
 
+@permission_required(["pacientes.delete_paciente"])
+@login_required
 def deletar_paciente(request, pk=-1):
-    if request.method == 'POST':        
+    if request.method == 'POST' and request.user.is_staff:        
         try:
             data = json.loads(request.body)
             p_ids = data.get('p_ids') # procura a chave "p_ids" no body
