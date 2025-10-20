@@ -8,12 +8,12 @@
 {% block title %}Dashboard Admin{% endblock %}
 
 {% block content %}
-<div class="container border pd-3 mt-3 rounded-4">
+<div class="container border p-3 mt-3 rounded-4">
     <h3>N° de pacientes cadastrados</h3>
     <li><strong>{{ qtd_pacientes }}</strong> pacientes.</li>
 
     <h3>Medicos Ativos</h3>
-    <div class="row pd-3">
+    <div class="row p-3">
         <!-- TODO: adicionar a função de filtro nos médicos -->
         <input class="col m-2" type="text" placeholder="Pesquisar médico" id="searchInput">
         <select class="col m-2" name="especialidade" id="especialidade">
@@ -42,7 +42,7 @@
         </table>
     </div>
 </div>
-<div class="container border pd-3 mt-4 rounded-4">
+<div class="container border -3 mt-4 rounded-4">
     <h3>Consultas de hoje:</h3>
     <table class="table">
         <thead>
