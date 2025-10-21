@@ -12,8 +12,13 @@ def teste(request):
 def teste2(request):
     return render(request, 'basedashboards.html')
 
+def home(request):
+    return render(request, 'home.html')
+
 def login(request):
     return redirect('/accounts/login/')
+
+
 
 logger = logging.getLogger(__name__)
 
