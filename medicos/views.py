@@ -6,6 +6,7 @@ from pacientes.models import Paciente
 from .forms import MedicoUserForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from datetime import date # Importe a classe date
 
 
 # ✅ Detalhar médico
@@ -65,5 +66,21 @@ def medico_update_teste(request):
 
     return render(request, "medicos/medDetalhesMed.html", {"form": form, "medico": medico})
 
-def teste3(request):
-    return render(request, 'medicos/medIndex.html')
+
+def index(request):
+    user = request.user
+    medico = Medico.objects.get(user=user)
+
+    # Obtém a data de hoje
+    hoje = date.today() 
+
+    consultas = Consulta.objects.filter(
+        medico=medico, 
+        data__gte=hoje 
+    ).order_by('data')
+    
+    return render(request, 'medicos/medIndex.html', context={"medico": medico, "consultas": consultas})
+
+def diagnostico(request, pk):
+
+    return render(request, 'medicos/medDiagnostico.html')
