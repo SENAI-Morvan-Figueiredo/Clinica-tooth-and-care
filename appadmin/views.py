@@ -47,7 +47,7 @@ def dashboard(request):
         qtd_pacientes = Paciente.objects.count()
         medicos_ativos = Medico.objects.all().prefetch_related("especialidades")
         hoje = timezone.now().date()
-        proximas_consultas = Consulta.objects.filter(data__date=hoje)
+        proximas_consultas = Consulta.objects.filter(data__date=hoje)   
         especialidades = Especialidade.objects.all()
 
         context = {
