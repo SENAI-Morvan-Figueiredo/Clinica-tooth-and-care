@@ -9,14 +9,14 @@ from pacientes.models import Paciente
 # ======================================================
 # 🔹 AGENDAR CONSULTA (PACIENTE)
 # ======================================================
-@login_required
+#@login_required
 def agendar_consulta(request):
     """
     Permite ao paciente agendar uma nova consulta.
     """
     # Obter o paciente associado ao usuário logado
     try:
-        paciente = Paciente.objects.get(usuario=request.user)
+        paciente = Paciente.objects.get(user=request.user)
     except Paciente.DoesNotExist:
         messages.error(request, "Paciente não encontrado.")
         return redirect('pagina-inicial')
@@ -52,13 +52,13 @@ def agendar_consulta(request):
 # ======================================================
 # 🔹 LISTA DE CONSULTAS DO PACIENTE
 # ======================================================
-@login_required
+#@login_required
 def consulta_lista(request):
     """
     Lista todas as consultas do paciente logado.
     """
     try:
-        paciente = Paciente.objects.get(usuario=request.user)
+        paciente = Paciente.objects.get(user=request.user)
     except Paciente.DoesNotExist:
         messages.error(request, "Paciente não encontrado.")
         return redirect('pagina-inicial')
@@ -77,13 +77,13 @@ def consulta_lista(request):
 # ======================================================
 # 🔹 CRIAR CONSULTA (ATUALIZADA)
 # ======================================================
-@login_required
+#@login_required
 def consulta_criar(request):
     """
     Cria uma nova consulta para o paciente logado.
     """
     try:
-        paciente = Paciente.objects.get(usuario=request.user)
+        paciente = Paciente.objects.get(user=request.user)
     except Paciente.DoesNotExist:
         messages.error(request, "Paciente não encontrado.")
         return redirect('pagina-inicial')
@@ -114,13 +114,13 @@ def consulta_criar(request):
 # ======================================================
 # 🔹 EDITAR CONSULTA (ATUALIZADA)
 # ======================================================
-@login_required
+#@login_required
 def consulta_editar(request, consulta_id):
     """
     Edita uma consulta existente do paciente logado.
     """
     try:
-        paciente = Paciente.objects.get(usuario=request.user)
+        paciente = Paciente.objects.get(user=request.user)
         consulta = get_object_or_404(Consulta, id=consulta_id, paciente=paciente)
     except Paciente.DoesNotExist:
         messages.error(request, "Paciente não encontrado.")
@@ -149,13 +149,13 @@ def consulta_editar(request, consulta_id):
 # ======================================================
 # 🔹 EXCLUIR CONSULTA (ATUALIZADA)
 # ======================================================
-@login_required
+#@login_required
 def consulta_excluir(request, consulta_id):
     """
     Exclui uma consulta do paciente logado.
     """
     try:
-        paciente = Paciente.objects.get(usuario=request.user)
+        paciente = Paciente.objects.get(user=request.user)
         consulta = get_object_or_404(Consulta, id=consulta_id, paciente=paciente)
     except Paciente.DoesNotExist:
         messages.error(request, "Paciente não encontrado.")

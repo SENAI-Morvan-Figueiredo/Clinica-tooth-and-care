@@ -16,15 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-import medicos
-import consultas
-import pacientes
-import appadmin
+from appadmin import views as adm_views
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    # path('medico/', include('medicos.urls')),
-    # path('consulta/', include('consultas.urls')),
+    path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
+
+    # rotas do app
+    path('', include('website.urls')),
+    path('medico/', include('medicos.urls')),
+    path('consulta/', include('consultas.urls')),
     path('paciente/', include('pacientes.urls')),
-    # path('appadmin/', include('appadmin.urls')),
+    path('appadmin/', include('appadmin.urls')),
+    path('deletar-medicos/', adm_views.deletar_medico, name="deletar-medicos"),
+    path('deletar-pacientes/', adm_views.deletar_paciente, name="deletar-pacientes")
+
 ]

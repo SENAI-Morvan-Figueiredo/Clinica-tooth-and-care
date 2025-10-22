@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.widgets import SplitDateTimeWidget 
 from .models import Consulta, Exame, Diagnostico, Anamnese
 
 class ConsultaForm(forms.ModelForm):
@@ -6,6 +7,18 @@ class ConsultaForm(forms.ModelForm):
         model= Consulta
         fields = ['data', 'sala', 'servico', 'valor', 'status', 'paciente', 'medico']
         widgets = {}
+
+class ConsultaAdiar(forms.ModelForm):
+    class Meta:
+        model= Consulta
+        fields = ['data', 'medico']
+        # widgets = {
+        #     'data': forms.SplitDateTimeWidget(
+        #         # Definindo os widgets internos para Data e Hora
+        #         date_attrs={'type': 'date'},
+        #         time_attrs={'type': 'time'},
+        #     )
+        # }
 
 class ExameForm(forms.ModelForm):
     class Meta:
@@ -16,7 +29,7 @@ class ExameForm(forms.ModelForm):
 class DiagnosticoForm(forms.ModelForm):
     class Meta:
         model = Diagnostico
-        fields = ['tipo', 'plano_de_tratamento', 'detalhes', 'consultas']
+        fields = ['tipo', 'plano_de_tratamento', 'detalhes', 'consulta']
         widgets = {}
 
 class AnamneseForm(forms.ModelForm):

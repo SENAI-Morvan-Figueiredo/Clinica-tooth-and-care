@@ -1,0 +1,67 @@
+{% extends "basedashboards.html" %}
+{% load static %}
+
+{% block title %}Consultas{% endblock %}
+
+{% block content %}
+<div class="container border p-4 mt-3 rounded-4">
+    <h3>Consultas</h3>
+    <div class="row">
+        <div id="table-container" class="col-12 col-md-9">
+            <table class="table" id="tabela-consultas">
+                <thead>
+                    <tr>
+                        <th>Nome do paciente</th>
+                        <th>Médico</th>
+                        <th>Data</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for consulta in consultas %}
+                    <tr class="position-relative" data-search="{{ consulta.paciente.user.username }} {{ consulta.medico.user.username }} {{ consulta.data|date:'Y-m-d' }} {{ consulta.servico }} {{ consulta.status }}">
+                        <td>{{ consulta.paciente.user.username }}</td>
+                        <td>
+                            {{ consulta.medico.user.username }}
+                            <a href="{% url 'adm-detalhe-consulta' consulta.id %}" class="stretched-link"></a>
+                        </td>
+                        <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
+                        <td>{{ consulta.servico }}</td>
+                        <td>{{ consulta.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12 col-md-3 border border-dark" id="filtros">
+            <div id="filtro-header" class="p-2">
+                <h6>Filtros</h6>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <input type="text" placeholder="Nome do paciente ou médico" id="searchInput">
+                <input type="date" id="data">
+                <select name="tipos" id="tipos">
+                    <option value="" disabled selected>Selecione um tipo</option>
+                    {% for tipo in servicos %}
+                    <option value="{{ tipo.0 }}">{{ tipo.1 }}</option>
+                    {% endfor %}
+                </select>
+                <select name="status" id="status">
+                    <option value="" disabled selected>Selecione um status</option>
+                    <option value="marcada">Marcada</option>
+                    <option value="realizada">Realizada</option>
+                    <option value="cancelada">Cancelada</option>
+                    <option value="remarcada">Remarcada</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
+<script src="{% static 'js/consultas.js' %}"></script>
+{% endblock %}
