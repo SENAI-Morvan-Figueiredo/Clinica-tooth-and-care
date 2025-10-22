@@ -172,8 +172,8 @@
             <div class="logo">🦷 Tooth & Care</div>
             <nav>
                 <ul>
-                    <li><a href="{% url 'consultas-lista' %}" class="{% if request.path == '/consultas/' %}active{% endif %}">Consultas</a></li>
-                    <li><a href="{% url 'historico-paciente' paciente_id=1 %}">Histórico</a></li>
+                    <li><a href="{% url 'paciente-consultas' %}" class="{% if request.path == '/consultas/' %}active{% endif %}">Consultas</a></li>
+                    <li><a href="#">Histórico</a></li>
                     <li><a href="#">Perfil</a></li>
                 </ul>
             </nav>

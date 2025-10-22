@@ -5,42 +5,42 @@
   <h3>Informações pessoais</h3>
   {% if not editing %}
     <!-- Modo View: Mostra dados e botão para editar -->
-    <a href="{% url 'editar_informacoes_pessoais' paciente.id %}" class="edit-button">Editar dados</a>
+    <a href="#" class="edit-button">Editar dados</a>
     <div id="view-mode">
-      <p><strong>Nome completo:</strong> {{ dados.nome }}</p>
-      <p><strong>Data de Nascimento:</strong> {{ dados.data_nascimento }}</p>
-      <p><strong>Sexo:</strong> {{ dados.sexo }}</p>
-      <p><strong>CPF:</strong> {{ dados.cpf }} | <strong>RG:</strong> {{ dados.rg }}</p>
-      <p><strong>Endereço:</strong> {{ dados.endereco }}</p>
+      <p><strong>Nome completo:</strong> {{ paciente.user.username }}</p>
+      <p><strong>Data de Nascimento:</strong> {{ paciente.data_nascimento }}</p>
+      <p><strong>Sexo:</strong> {{ paciente.sexo }}</p>
+      <p><strong>CPF:</strong> {{ paciente.cpf }} | <strong>RG:</strong> {{ paciente.rg }}</p>
+      <p><strong>Endereço:</strong> {{ paciente.endereco }}</p>
       <br>
-      <p><strong>Telefone:</strong> {{ dados.telefone }}</p>
-      <p><strong>Email:</strong> {{ dados.email }}</p>
+      <p><strong>Telefone:</strong> {{ paciente.telefone }}</p>
+      <p><strong>Email:</strong> {{ paciente.user.email }}</p>
     </div>
   {% else %}
     <!-- Modo Edit: Mostra form -->
-    <form method="post" action="{% url 'editar_informacoes_pessoais' paciente.id %}">
+    <form method="post" action="#">
       {% csrf_token %}  <!-- Protege contra CSRF -->
       <label>Nome completo:</label>
-      <input type="text" name="nome" value="{{ dados.nome }}" required><br>
+      <input type="text" name="nome" value="{{ paciente.user.username }}" required><br>
       <label>Data de Nascimento:</label>
-      <input type="date" name="data_nascimento" value="{{ dados.data_nascimento|date:'Y-m-d' }}" required><br>
+      <input type="date" name="data_nascimento" value="{{ paciente.data_nascimento|date:'Y-m-d' }}" required><br>
       <label>Sexo:</label>
       <select name="sexo" required>
-        <option value="Masculino" {% if dados.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
-        <option value="Feminino" {% if dados.sexo == 'Feminino' %}selected{% endif %}>Feminino</option>
+        <option value="Masculino" {% if paciente.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
+        <option value="Feminino" {% if paciente.sexo == 'Feminino' %}selected{% endif %}>Feminino</option>
       </select><br>
       <label>CPF:</label>
-      <input type="text" name="cpf" value="{{ dados.cpf }}" required><br>
+      <input type="text" name="cpf" value="{{ paciente.cpf }}" required><br>
       <label>RG:</label>
-      <input type="text" name="rg" value="{{ dados.rg }}" required><br>
+      <input type="text" name="rg" value="{{ paciente.rg }}" required><br>
       <label>Endereço:</label>
-      <input type="text" name="endereco" value="{{ dados.endereco }}" required><br>
+      <input type="text" name="endereco" value="{{ paciente.endereco }}" required><br>
       <label>Telefone:</label>
-      <input type="tel" name="telefone" value="{{ dados.telefone }}" required><br>
+      <input type="tel" name="telefone" value="{{ paciente.telefone }}" required><br>
       <label>Email:</label>
-      <input type="email" name="email" value="{{ dados.email }}" required><br>
+      <input type="email" name="email" value="{{ paciente.user.email }}" required><br>
       <button type="submit">Salvar</button>
-      <a href="{% url 'historico-paciente' dados.id %}" class="cancel-button">Cancelar</a>
+      <a href="#" class="cancel-button">Cancelar</a>
     </form>
   {% endif %}
 </div>

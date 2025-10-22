@@ -196,8 +196,8 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Imagem do Usuário">
-        <h2>Nome Do Usuário</h2>
-        <a href="#">Página inicial</a>
+        <h2>{{ paciente.user.username }}</h2>
+        <a href="{% url 'paciente-consultas' %}">Página inicial</a>
         <a href="#">Informações pessoais</a>
     </aside>
 
@@ -205,11 +205,13 @@
     <main class="main-content">
         <div class="section">
             <h2>Suas consultas</h2>
+            {% for consulta in consultas %}
             <div class="card">
-                <p><strong>Data:</strong> 24/12/2025 Terça Feira <strong>Horário:</strong> 10:50</p>
-                <p>👨‍⚕️ <strong>Doutor:</strong> nome do médico</p>
-                <p>💊 <strong>Tipo de consulta:</strong> tipo de consulta</p>
+                <p><strong>Data:</strong> {{ consulta.data|date:"d/m/Y" }} <strong>Horário:</strong> {{ consulta.data|time:"H:i" }}</p>
+                <p>👨‍⚕️ <strong>Doutor:</strong> {{ consulta.medico.user.username }}</p>
+                <p>💊 <strong>Tipo de consulta:</strong> {{ consulta.servico }}</p>
             </div>
+            {% endfor %}
         </div>
 
         <div class="section agendar">

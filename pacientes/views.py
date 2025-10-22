@@ -9,7 +9,7 @@ from pacientes.models import Paciente
 # ======================================================
 # 🔹 AGENDAR CONSULTA (PACIENTE)
 # ======================================================
-#@login_required
+@login_required
 def agendar_consulta(request):
     """
     Permite ao paciente agendar uma nova consulta.
@@ -52,7 +52,7 @@ def agendar_consulta(request):
 # ======================================================
 # 🔹 LISTA DE CONSULTAS DO PACIENTE
 # ======================================================
-#@login_required
+@login_required
 def consulta_lista(request):
     """
     Lista todas as consultas do paciente logado.
@@ -61,23 +61,22 @@ def consulta_lista(request):
         paciente = Paciente.objects.get(user=request.user)
     except Paciente.DoesNotExist:
         messages.error(request, "Paciente não encontrado.")
-        return redirect('pagina-inicial')
+        return redirect('/')
 
-    consultas = Consulta.objects.filter(paciente=paciente).order_by("-data", "-horario")
+    consultas = Consulta.objects.filter(paciente=paciente)
     form = ConsultaForm()
     
     contexto = {
         "consultas": consultas,
         "form": form,
         "paciente": paciente,
-        "nome_usuario": paciente.nome,
     }
     return render(request, "paciente/consulta/crud.html", contexto)
 
 # ======================================================
 # 🔹 CRIAR CONSULTA (ATUALIZADA)
 # ======================================================
-#@login_required
+@login_required
 def consulta_criar(request):
     """
     Cria uma nova consulta para o paciente logado.
@@ -108,13 +107,23 @@ def consulta_criar(request):
         "form": form,
         "consultas": consultas,
         "paciente": paciente,
-        "nome_usuario": paciente.nome,
     })
+
+@login_required
+def informacoes_pessoais(request):
+    paciente = Paciente.objects.get(user=request.user)
+    editing = False
+    
+    context = {
+        "paciente": paciente,
+        "editing": editing,
+    }
+    return render(request, "paciente/consulta/historico_paciente.html")
 
 # ======================================================
 # 🔹 EDITAR CONSULTA (ATUALIZADA)
 # ======================================================
-#@login_required
+@login_required
 def consulta_editar(request, consulta_id):
     """
     Edita uma consulta existente do paciente logado.
@@ -149,7 +158,7 @@ def consulta_editar(request, consulta_id):
 # ======================================================
 # 🔹 EXCLUIR CONSULTA (ATUALIZADA)
 # ======================================================
-#@login_required
+@login_required
 def consulta_excluir(request, consulta_id):
     """
     Exclui uma consulta do paciente logado.
