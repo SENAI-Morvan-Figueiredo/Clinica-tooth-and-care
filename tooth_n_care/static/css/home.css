@@ -1,0 +1,472 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+header{
+    background-color: #2C8E89;
+    display: flex;
+    width: 100% ;
+    height: 6rem;
+    justify-content: space-between;
+   
+}
+
+#logo{
+    margin-top: 1rem;
+    margin-left: 3rem;
+
+}
+
+.menu{
+    display: flex;
+    gap: 1.4rem;
+    list-style:none
+    
+ 
+}
+
+.menu li a{
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+    display: inline-block;
+    margin-right: 2.5rem;
+    margin-top: 2rem;
+    
+}
+
+
+
+
+#banner{
+    position: relative;
+    
+}
+
+#fundo{
+    width: 100%;
+    height: auto;
+    filter: brightness(0.5);
+}
+
+#banner_apresentacao{
+    position: absolute;
+    top: 30%;
+    left: 7%;
+}
+
+section p{
+    color: white;
+    font-size: 1.5rem;
+
+}
+
+section h1{
+    color: white;
+    font-size: 3rem;
+
+}
+section button{
+    margin-top: 1.5rem;
+    padding: 1.2rem 2rem;
+    font-size: 1.4rem;
+    background-color: #245f70;;
+    border: none;
+    border-radius: 7rem;
+    cursor: pointer;
+    color: white;
+}
+
+
+
+
+#banner_espaco{
+    width: 190vh;
+    height: 60vh;
+    background-color: #9ac5c3;
+    border-radius: 5rem;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7%;
+    margin-left: 5%;
+}
+
+#apresentacao_espaco h1{
+    font-size: 3rem;
+    margin-top: 2rem;
+    margin-left: 7rem;
+    color: #000000;
+    
+
+}
+
+#apresentacao_espaco p{
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-left: 7rem;
+    color: #000000;
+    
+}
+#apresentacao_espaco button{
+    margin-top: 2rem;
+    margin-left: 7rem;
+    padding: 1.2rem 2rem;
+    font-size: 1.4rem;
+    background-color: #245f70;;
+    border: none;
+    border-radius: 7rem;
+    cursor: pointer;
+    color: white;
+}
+
+#img_espaco{
+    width: 40%;
+    height: 80%;
+    margin-right: 5rem;
+    margin-top: 2.8rem;
+
+}
+
+
+
+
+#banner_especialidades{
+    padding: 40px 20px;
+    min-height: 90vh;
+    background-color: #216966;
+    text-align: center;
+    color: white;
+    margin-top: 7%;
+}
+#banner_especialidades h1{
+    margin-bottom: 10px;
+    font-size: 4rem;
+}
+
+#banner_especialidades p{
+    font-size: 2rem;
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+}
+
+#cards{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    padding: 0 10px;
+
+}
+
+.card_especialidades{
+    flex-basis: 450px; 
+    flex-grow: 1; 
+    max-width: 450px;
+    
+    background-color: #374948;
+    border-radius: 5rem;
+    padding: 20px;
+    color: white; 
+    
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;
+}
+
+
+#btn_agendar{
+    padding: 1.2rem 2rem;
+    font-size: 1.4rem;
+    background-color: #58D3CD;
+    border: none;
+    border-radius: 7rem;
+    cursor: pointer;
+    color: white;
+}
+
+#cards img{
+    width: 100%;
+    height: auto;
+}
+#cards h2{
+    margin-top: 1.5rem;
+    font-size: 2.6rem;
+    color: white;
+}
+
+#cards p{
+    padding: 2rem;
+    padding-bottom: 7rem;
+    font-size: 1.5rem;
+    color: white;
+}
+
+
+
+#banner_contato{
+    position: relative;
+    width: 100%;
+    margin-top: 20%;
+}
+
+#fundo_contato{
+    display: block;
+    width: 100%;
+    height: 700px;
+    filter: brightness(0.5);
+}
+
+#banner_contato h1{
+    position: absolute;
+    top: 12%;
+    left: 10%;
+    color: white;
+    font-size: 5rem;
+    font-weight: 500;
+}
+
+#informacoes_contato{
+    position: absolute;
+    width: 100rem;
+    height: 30rem;
+    background-color:white;
+    border: 8px solid #1DB7B4;
+    top: 24rem;
+    left: 8%;
+    
+
+}
+
+.container_contato{
+    display: flex;
+    justify-content: space-around;
+    padding-top: 6rem;
+}
+
+.icon{
+    border-right: 2px solid #1DB7B4;
+    padding-right: 2rem;
+
+}
+
+.icon img{
+    width: 10rem;
+    height: auto;
+
+    
+}
+.icon p{
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+
+#familia{
+    position: relative;
+    margin-top: 400px;
+}
+#slogan_agendar{
+    position: absolute;
+    top: 160px;
+    right: 100px;
+    background-color: rgba(0, 28, 53, 0.70);
+    color: white;
+    border-radius: 20px;
+    font-size: 2rem;    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 44rem;
+    height: 30rem;
+}
+
+#img_familia{
+    width: 100%;
+    height: auto;
+    filter: brightness(0.8);
+    
+    
+}
+#slogan_agendar h1{
+    font-size: 3rem;
+    margin-top: 4rem;
+    margin-left: 6rem;
+    font-family: 'Times New Roman', Times, serif;
+}
+#slogan_agendar h2{
+    margin-top: 3rem;
+    font-size: 2rem;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#btn_agendar_familia{
+    font-size: 1.4rem;
+    background-color: #58D3CD;
+    border: none;
+    border-radius: 7rem;
+    cursor: pointer;
+    color: white;
+    padding: 1rem 2.5rem;
+    margin-top: 4rem;
+
+}
+
+
+#local_banner{
+    margin-top: 300px;
+    width: 100%;
+    position: relative;
+    
+
+}
+
+#paulista{
+    width: 100%;
+    height: auto;
+    filter: brightness(0.7);
+   
+    
+}
+.cards_local{
+    position: absolute;
+    top: 22%;
+    left: 16%;
+    display: flex;
+    gap: 4rem;
+    height: 24rem;
+    color: white;
+}
+
+.card_esquerda{
+    background-color: #75ACAE;
+    padding: 2rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 6%;
+   
+}
+
+.card_direita{
+    background-color: #75ACAE;
+    padding: 2rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 6%;
+}
+
+.botoes_contato{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.botoes_contato button{
+    padding: 1rem 6rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 7rem;
+    cursor: pointer;
+    color: white;
+}
+#btn_ligar{
+    background-color: #2C8E89;
+}
+
+#btn_whats{
+    background-color: #25D366;
+}
+
+
+.footer {
+    background-color: #176B76; 
+    color: #ffffff; 
+    margin-top: 160px;
+    font-family: Arial, sans-serif;
+}
+
+.footer-logo {
+    max-width: 400px; 
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 25px;
+}
+
+
+
+.footer-content-row {
+    display: flex; 
+    align-items: flex-start; 
+    margin-top: 30px; 
+    margin-bottom: 30px; 
+}
+
+
+.footer-col {
+    text-align: left; 
+}
+
+
+.footer-socials {
+    text-align: right; 
+}
+
+
+.footer-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ffffff; 
+    padding-bottom: 5px;
+    display: inline-block;
+    margin-right: 50px; 
+}
+
+
+.footer-socials .social-icons {
+    justify-content: flex-end; 
+    margin-top: 15px;
+}
+
+.footer-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+   
+}
+
+.footer-content-row {
+    display: flex; 
+    align-items: flex-start;
+    margin-top: 30px; 
+    margin-bottom: 30px; 
+    
+    justify-content: center; 
+    gap: 50px; 
+
+    margin-right: 0; 
+    margin-left: 0;
+}
+
+
+.copyright {
+    text-align: center; 
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+#maps{
+    position: absolute;
+}

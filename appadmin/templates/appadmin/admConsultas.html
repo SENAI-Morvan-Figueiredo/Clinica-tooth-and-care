@@ -1,6 +1,10 @@
 {% extends "basedashboards.html" %}
 {% load static %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/adm_consultas.css' %}">
+{% endblock %}
+
 {% block title %}Consultas{% endblock %}
 
 {% block content %}
@@ -38,7 +42,7 @@
             <div id="filtro-header" class="p-2">
                 <h6>Filtros</h6>
             </div>
-            <div class="d-flex flex-column gap-2">
+            <div id="filtro-content">
                 <input type="text" placeholder="Nome do paciente ou médico" id="searchInput">
                 <input type="date" id="data">
                 <select name="tipos" id="tipos">
