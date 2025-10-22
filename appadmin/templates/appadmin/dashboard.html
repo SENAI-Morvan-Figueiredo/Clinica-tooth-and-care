@@ -1,0 +1,70 @@
+{% extends 'basedashboards.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container border p-3 mt-3 rounded-4">
+    <h3>N° de pacientes cadastrados</h3>
+    <li><strong>{{ qtd_pacientes }}</strong> pacientes.</li>
+
+    <h3>Medicos Ativos</h3>
+    <div class="row p-3">
+        <!-- TODO: adicionar a função de filtro nos médicos -->
+        <input class="col" type="text" placeholder="Pesquisar médico" id="searchInput">
+        <select class="col" name="especialidade" id="especialidade">
+            <option value="" disabled selected>Selecione uma especialidade</option>
+            {% for especialidade in especialidades %}
+            <option value="{{ especialidade.nome }}">{{ especialidade.nome }}</option>
+            {% endfor %}
+        </select>
+        <table class="table" id="medicosTable">
+            <thead>
+                <tr>
+                    <th scope="col">Médico</th>
+                    <th scope="col">CRM</th>
+                    <th scope="col">Especialidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for Medico in medicos_ativos %}
+                <tr data-search="{{ Medico.user.username }} {{ Medico.crm }} {{ Medico.especialidades.all|join:' ' }}">
+                    <td>{{ Medico.user.username }}</td>
+                    <td>{{ Medico.crm }}</td>
+                    <td>{{ Medico.especialidades.all|join:", " }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="container border -3 mt-4 rounded-4">
+    <h3>Consultas de hoje:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col">Nome do paciente</th>
+                <th class="col">Médico</th>
+                <th class="col">Horário</th>
+                <th class="col">Tipo</th>
+                <th class="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for consulta in proximas_consultas %}
+            <tr>
+                <td>{{ consulta.paciente.user.username }}</td>
+                <td>{{ consulta.medico.user.username }}</td>
+                <td>{{ consulta.data|date:"H:i" }}</td>
+                <td>{{ consulta.servico }}</td>
+                <td>{{ consulta.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

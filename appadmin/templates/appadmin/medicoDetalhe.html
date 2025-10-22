@@ -1,0 +1,57 @@
+{% extends "basedashboards.html" %}
+{% load static %}
+
+{% block title %}Detalhe do Médico{% endblock %}
+
+{% block content %}
+<div class="container border p-4 mt-3 rounded-4">
+    <div class="d-flex justify-content-between">
+        <h3>{{ medico.user.username }}</h3>
+        <a href="{% url 'adm-deletar-medico' medico.id %}" class="btn btn-danger">Deletar médico</a>
+    </div>
+    <div id="detalhes">
+        <div class="info">
+            <strong>Especialidades: </strong>
+            <ul>
+                {% for especialidade in medico.especialidades.all %}
+                <li>{{ especialidade.nome }}</li>
+                {% endfor %}
+            </ul>
+        
+        </div>
+        <div class="info"><strong>CRM: </strong>{{ medico.crm }}</div>
+        <div class="info"><strong>E-mail: </strong>{{ medico.user.email }}</div>
+        <div class="info"><strong>Telefone: </strong>{{ medico.telefone }}</div>
+    </div>
+</div>
+<div class="container border p-4 mt-3 rounded-4">
+    <h3>Consultas</h3>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome do paciente</th>
+                    <th>Médico</th>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                <tr class="position-relative">
+                    <td>{{ consulta.paciente.user.username }}</td>
+                    <td>
+                        {{ consulta.medico.user.username }}
+                        <a href="{% url 'adm-detalhe-consulta' consulta.id %}" class="stretched-link"></a>
+                    </td>
+                    <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
+                    <td>{{ consulta.servico }}</td>
+                    <td>{{ consulta.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "basedashboards.html" %}
+{% load static %}
+
+{% block title %}Detalhe da Consulta{% endblock %}
+
+{% block content %}
+<div class="container border rounded-4 mt-3" id="medico-container">
+    <div class="campo d-flex justify-content-start gap-2 align-items-center">
+        <img src="" alt="" c>
+        <p><strong>Médico:</strong> {{ consulta.medico.user.username }}</p>
+    </div>
+    <div class="campo d-flex justify-content-start gap-2 align-items-center">
+        <p><strong>CRM:</strong> {{ consulta.medico.crm }}</p>
+    </div>
+    <div class="campo d-flex justify-content-start gap-2 align-items-center">
+        <p>
+            <strong>Especialidades:</strong> 
+            {% for especialidade in consulta.medico.especialidades.all %}
+                {{ especialidade.nome }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    </div>
+</div>
+<div class="container border rounded-4 mt-3" id="paciente-container">
+    <div class="campo d-flex justify-content-start gap-2 align-items-center">
+        <img src="" alt="" class="profile-picture">
+        <p><strong>Paciente:</strong> {{ consulta.paciente.user.username }}</p>
+    </div>
+    <div class="campo d-flex justify-content-start gap-2 align-items-center">
+        <p><strong>CPF:</strong> {{ consulta.paciente.cpf }}</p>
+    </div>
+    <div class="campo d-flex justify-content-start gap-2 align-items-center">
+        <p><strong>Data de nascimento:</strong> {{ consulta.paciente.data_nasc }}</p>
+    </div>
+</div>
+<div class="container border rounded-4 mt-3" id="consulta-container">
+    <h2>Detalhes da Consulta:</h2>
+    <div class="campo mt-3">
+        <p class="mb-0"><strong>Data:</strong></p>
+        <li>{{ consulta.data|date:"d/m/Y" }}</li>
+    </div>
+    <div class="campo mt-3">
+        <p class="mb-0"><strong>Horário:</strong></p>
+        <li>{{ consulta.data|date:"H:i" }}</li>
+    </div>
+    <div class="campo mt-3">
+        <p class="mb-0"><strong>Serviço:</strong></p>
+        <li>{{ consulta.servico }}</li>
+    </div>
+    <div class="campo mt-3">
+        <p class="mb-0"><strong>Status:</strong></p>
+        <li>{{ consulta.status }}</li>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-secondary" id="adiar-btn">Adiar consulta</button>
+        <a href="{% url 'deletar-consulta' consulta.id %}" class="btn btn-primary">Excluir Consulta</a>
+    </div>
+</div>
+
+<dialog id="adiar-modal">
+    <h4>Para quando deseja adiar?</h4>
+    <form action="#" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="button" class="btn btn-secondary mt-3" id="cancelar-btn">Cancelar</button>
+        <button type="submit" class="btn btn-primary mt-3" id="confirmar-btn">Confirmar</button>
+    </form>
+</dialog>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Modal:
+const modal = document.getElementById('adiar-modal');
+document.getElementById('adiar-btn').addEventListener('click', () => {
+    modal.showModal();
+});
+document.getElementById('cancelar-btn').addEventListener('click', () => {
+    modal.close();
+});
+</script>
+{% endblock %}

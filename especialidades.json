@@ -1,0 +1,46 @@
+[
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Clínico Geral" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Odontopediatria" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Ortodontia" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Endodontia" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Periodontia" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Implantodontia" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Cirurgia Bucomaxilofacial" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Estomatologia" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Prótese Dentária" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Radiologia Odontológica" }
+  },
+  {
+    "model": "medicos.Especialidade",
+    "fields": { "nome": "Odontologia Estética" }
+  }
+]
