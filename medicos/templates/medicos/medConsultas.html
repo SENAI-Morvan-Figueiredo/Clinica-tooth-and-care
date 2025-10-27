@@ -3,9 +3,10 @@
 
 
 {% block content %}
-    <h1>Consultas do Primeiro Médico</h1>
+    <h1>Consultas</h1>
 
-    {% if medico_encontrado %}
+    <div class="container">
+           {% if medico_encontrado %}
         <p>Exibindo consultas para o médico: <strong>{{ primeiro_medico.user.get_full_name|default:primeiro_medico.user.username }}</strong> (CRM: {{ primeiro_medico.crm }})</p>
 
         {% if consultas %}
@@ -39,6 +40,7 @@
     {% else %}
         <p>Nenhum médico encontrado no banco de dados.</p>
     {% endif %}
+    </div>
 
 {% endblock content %}
 

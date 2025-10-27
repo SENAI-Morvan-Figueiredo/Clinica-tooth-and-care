@@ -1,0 +1,53 @@
+#login-container {
+    width: 100%;
+    height: 80%;
+}
+
+#login-container #background-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+#form-container {
+    min-height: 600px; 
+    min-width: 800px;
+    background: white;
+}
+
+#form-container .col:nth-child(1) {
+    background: #2C8E89;
+}
+
+form {
+    justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
+}
+
+#inputs {
+    width: 100%;
+}
+
+.field-container {
+    width: 80%;
+}
+
+form input {
+    border: 1px solid #888;
+    border-radius: 5px;
+    background-color: #eee;
+    height: 35px;
+    width: 100%;
+}
+form input:focus {
+    outline: none;
+    border: 1px solid #2C8E89;
+    background-color: #fff;
+}
+
+form button {
+    background-color: #2C8E89;
+}

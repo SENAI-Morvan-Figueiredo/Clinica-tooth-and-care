@@ -38,12 +38,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django.contrib.sites',
+
     # Apps da clínica
     'appadmin',
     'consultas',
     'medicos',
     'pacientes',
-    'website'
+    'website',
+
+    # Apps do allauth
+    'allauth',
+    'allauth.account',       # Gerencia Login/Logout/Signup/Senha
+    'allauth.socialaccount', # Gerencia Login Social (se for usar)
 ]
 
 MIDDLEWARE = [
@@ -54,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'tooth_n_care.urls'
@@ -134,4 +143,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/get_user_type'
 
-LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+# Opcional: E-mail deve ser único
+ACCOUNT_EMAIL_REQUIRED = True
+
+# Opcional: Não requer um username, usa o e-mail
+ACCOUNT_USERNAME_REQUIRED = False
+
+# Opcional: Processo de logout via GET (não requer um formulário POST)
+ACCOUNT_LOGOUT_ON_GET = True
+
+SITE_ID = 1
+
+# settings.py
+
+AUTHENTICATION_BACKENDS = [
+    # Requerido pelo Django Admin
+    'django.contrib.auth.backends.ModelBackend',
+    
+    # Requerido pelo allauth
+    'allauth.account.auth_backends.AuthenticationBackend',
+]

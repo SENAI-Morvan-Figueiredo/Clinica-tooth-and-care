@@ -31,5 +31,7 @@ urlpatterns = [
     path('appadmin/', include('appadmin.urls')),
     path('deletar-medicos/', adm_views.deletar_medico, name="deletar-medicos"),
     path('deletar-pacientes/', adm_views.deletar_paciente, name="deletar-pacientes"),
-
+    
+    #allauth
+    path('accounts/', include('allauth.urls')),
 ]

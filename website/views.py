@@ -6,7 +6,7 @@ import logging
 from medicos.models import Medico
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'website/home.html')
 
 def login(request):
     return redirect('/accounts/login/')

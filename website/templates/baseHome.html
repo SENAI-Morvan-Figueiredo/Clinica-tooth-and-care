@@ -1,0 +1,96 @@
+ {% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    {% block extra_head %}
+    {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home Page{% endblock %}</title>
+</head>
+<body>
+
+     <header>
+        
+        <img id='logo' src="{% static 'img/page_home/tc_logo.png' %}">
+
+        <ul class="menu">
+
+            <li><a href="{% url 'home' %}">Início</a></li>
+            <li><a href="#">Sobre</li></a>
+            <li><a href="#">Nosso espaço</li></a>
+            <li><a href="#">Profissionais</li></a>
+            <li><a href="#">Tratamentos</li></a>
+            <li><a href="#">Contato</li></a>
+            <li><a href="{% url 'login' %}">Cadastre-se</li></a>
+
+        </ul>
+    </header>
+
+    {% block content %}
+    {% endblock content %}
+
+    <footer class="footer">
+    <div class="container">
+        <div class="text-center mb-4">
+            <div class="col-12">
+                <img src="{% static 'img/page_home/tc_logo.png' %}" alt="Tooth & Care Logo" class="footer-logo">
+            </div>
+        </div>
+
+        <div class="footer-content-row">
+            <div class="col-md-2 footer-col">
+                <h3 class="footer-title">Sobre</h3>
+                <ul class="list-unstyled">
+                    <li><a>Nosso espaço</a></li>
+                    <li><a>Quem somos</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-2 footer-col">
+                <h3 class="footer-title">Contato</h3>
+                <ul class="list-unstyled">
+                    <li><a>Nosso espaço</a></li>
+                    <li><a>Quem somos</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3 footer-col text-left">
+                <h3 class="footer-title">Local:</h3>
+                <iframe id="map" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14628.371347861243!2d-46.652812!3d-23.565109!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c7c6e02771%3A0x5e82818f4f215e0a!2sAv.%20Paulista%2C%20999%20-%20Jardins%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001311-100!5e0!3m2!1spt-BR!2sbr!4v1761151884141!5m2!1spt-BR!2sbr" width="200" height="200" style="border:0;"></iframe>
+            </div>
+
+            <div class="col-md-3 footer-col">
+                <h3 class="footer-title">Funcionamento:</h3>
+                <p>Segunda a Sexta</p>
+                <p>06:00 às 18:00</p>
+            </div>
+
+            <div class="col-md-2 footer-col footer-socials">
+                <h3 class="footer-title">Redes sociais</h3>
+                <div class="social-icons">
+                    <a><img src="{% static 'img/page_home/icon_x.png' %}" ></a>
+                    <a><img src="{% static 'img/page_home/icon_facebook.png' %}"></a>
+                    <a><img src="{% static 'img/page_home/icon_instagram.png' %}"></a>
+                    <a><img src="{% static 'img/page_home/icon_youtube.png' %}"></a>
+                </div>
+            </div>
+        </div>
+
+        <hr class="footer-divider">
+
+        <div class="row mt-3">
+            <div class="col-12 text-center copyright">
+                <p>&copy; 2024 Tooth & Care. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </div>
+    </footer>
+   
+
+</body>
+</html>
