@@ -3,13 +3,13 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseForbidden
 import logging
 
-from medicos.models import Medico
+from .forms import CustomLoginForm
 
 def home(request):
     return render(request, 'website/home.html')
 
-def login(request):
-    return redirect('/accounts/login/')
+def login_view(request):
+    return render(request, 'registration/login.html', {"form": CustomLoginForm})
 
 logger = logging.getLogger(__name__)
 

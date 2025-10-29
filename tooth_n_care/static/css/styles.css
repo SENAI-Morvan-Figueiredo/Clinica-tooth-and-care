@@ -41,6 +41,10 @@ body {
   color: white;
   padding: 10px 20px;
 }
+#dashboard-navbar img {
+  height: 60px;
+  width: auto; 
+}
 
 #main {
   height: 100%;
