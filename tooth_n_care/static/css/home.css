@@ -11,7 +11,7 @@ header{
     width: 100% ;
     height: 6rem;
     justify-content: space-between;
-   
+
 }
 
 #logo{
@@ -24,8 +24,8 @@ header{
     display: flex;
     gap: 1.4rem;
     list-style:none
-    
- 
+
+
 }
 
 .menu li a{
@@ -35,7 +35,7 @@ header{
     display: inline-block;
     margin-right: 2.5rem;
     margin-top: 2rem;
-    
+
 }
 
 
@@ -43,7 +43,7 @@ header{
 
 #banner{
     position: relative;
-    
+
 }
 
 #fundo{
@@ -99,7 +99,7 @@ section button{
     margin-top: 2rem;
     margin-left: 7rem;
     color: #000000;
-    
+
 
 }
 
@@ -108,7 +108,7 @@ section button{
     margin-top: 2rem;
     margin-left: 7rem;
     color: #000000;
-    
+
 }
 #apresentacao_espaco button{
     margin-top: 2rem;
@@ -163,18 +163,18 @@ section button{
 }
 
 .card_especialidades{
-    flex-basis: 450px; 
-    flex-grow: 1; 
+    flex-basis: 450px;
+    flex-grow: 1;
     max-width: 450px;
-    
+
     background-color: #374948;
     border-radius: 5rem;
     padding: 20px;
-    color: white; 
-    
-    display: flex; 
+    color: white;
+
+    display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
     text-align: center;
 }
 
@@ -238,7 +238,7 @@ section button{
     border: 8px solid #1DB7B4;
     top: 24rem;
     left: 8%;
-    
+
 
 }
 
@@ -258,7 +258,7 @@ section button{
     width: 10rem;
     height: auto;
 
-    
+
 }
 .icon p{
     font-size: 1.3rem;
@@ -279,7 +279,7 @@ section button{
     background-color: rgba(0, 28, 53, 0.70);
     color: white;
     border-radius: 20px;
-    font-size: 2rem;    
+    font-size: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -291,8 +291,8 @@ section button{
     width: 100%;
     height: auto;
     filter: brightness(0.8);
-    
-    
+
+
 }
 #slogan_agendar h1{
     font-size: 3rem;
@@ -323,7 +323,7 @@ section button{
     margin-top: 300px;
     width: 100%;
     position: relative;
-    
+
 
 }
 
@@ -331,8 +331,8 @@ section button{
     width: 100%;
     height: auto;
     filter: brightness(0.7);
-   
-    
+
+
 }
 .cards_local{
     position: absolute;
@@ -352,7 +352,7 @@ section button{
     flex-direction: column;
     align-items: center;
     padding-top: 6%;
-   
+
 }
 
 .card_direita{
@@ -390,14 +390,14 @@ section button{
 
 
 .footer {
-    background-color: #176B76; 
-    color: #ffffff; 
+    background-color: #176B76;
+    color: #ffffff;
     margin-top: 160px;
     font-family: Arial, sans-serif;
 }
 
 .footer-logo {
-    max-width: 400px; 
+    max-width: 400px;
     height: auto;
     display: block;
     margin-left: auto;
@@ -408,35 +408,35 @@ section button{
 
 
 .footer-content-row {
-    display: flex; 
-    align-items: flex-start; 
-    margin-top: 30px; 
-    margin-bottom: 30px; 
+    display: flex;
+    align-items: flex-start;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 
 .footer-col {
-    text-align: left; 
+    text-align: left;
 }
 
 
 .footer-socials {
-    text-align: right; 
+    text-align: right;
 }
 
 
 .footer-title {
     font-size: 1.1rem;
     margin-bottom: 10px;
-    border-bottom: 1px solid #ffffff; 
+    border-bottom: 1px solid #ffffff;
     padding-bottom: 5px;
     display: inline-block;
-    margin-right: 50px; 
+    margin-right: 50px;
 }
 
 
 .footer-socials .social-icons {
-    justify-content: flex-end; 
+    justify-content: flex-end;
     margin-top: 15px;
 }
 
@@ -444,25 +444,25 @@ section button{
     display: block;
     margin-left: auto;
     margin-right: auto;
-   
+
 }
 
 .footer-content-row {
-    display: flex; 
+    display: flex;
     align-items: flex-start;
-    margin-top: 30px; 
-    margin-bottom: 30px; 
-    
-    justify-content: center; 
-    gap: 50px; 
+    margin-top: 30px;
+    margin-bottom: 30px;
 
-    margin-right: 0; 
+    justify-content: center;
+    gap: 50px;
+
+    margin-right: 0;
     margin-left: 0;
 }
 
 
 .copyright {
-    text-align: center; 
+    text-align: center;
     padding-top: 15px;
     padding-bottom: 15px;
 }
