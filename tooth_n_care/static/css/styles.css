@@ -65,7 +65,22 @@ body {
   padding-inline: 0;
 }
 
+#searchInput:active {
+  border: none;
+}
+
 #searchInput,
+.dataInput,
 select {
   max-width: 400px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 4px 14px;
+}
+
+#searchInput:focus,
+.dataInput:focus,
+select:focus {
+  outline: none;
+  border-color: #58D3CD;
 }

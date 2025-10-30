@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',       # Gerencia Login/Logout/Signup/Senha
     'allauth.socialaccount', # Gerencia Login Social (se for usar)
+
+    # para o front-end
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -141,6 +144,11 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+ACCOUNT_LOGOUT_ON_GET = True
+
+LOGIN_URL = '/login'
+ACCOUNT_LOGIN_URL = '/login'
+
 LOGIN_REDIRECT_URL = '/get_user_type'
 
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
@@ -167,3 +175,7 @@ AUTHENTICATION_BACKENDS = [
     # Requerido pelo allauth
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+ACCOUNT_FORMS = {
+    'signup': 'pacientes.forms.PacienteSignupForm',
+}

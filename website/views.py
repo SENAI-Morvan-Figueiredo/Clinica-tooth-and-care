@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth import login
+from django.conf import settings
 from django.http import HttpResponseForbidden
 import logging
 
@@ -9,7 +11,21 @@ def home(request):
     return render(request, 'website/home.html')
 
 def login_view(request):
-    return render(request, 'registration/login.html', {"form": CustomLoginForm})
+    if request.method == 'POST':
+        # Instancia o formulário com os dados do POST e o request
+        form = CustomLoginForm(request, data=request.POST) 
+        if form.is_valid():
+            # Autentica e loga o usuário
+            user = form.get_user()
+            login(request, user)
+            # Redireciona para a URL de sucesso após o login
+            return redirect(settings.LOGIN_REDIRECT_URL) 
+        else:
+            return render(request, 'registration/login.html', {"form": form})
+    else:
+        form = CustomLoginForm()
+    
+    return render(request, 'registration/login.html', {"form": form})
 
 logger = logging.getLogger(__name__)
 

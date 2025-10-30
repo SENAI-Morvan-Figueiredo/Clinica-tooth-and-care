@@ -14,4 +14,4 @@ class CustomLoginForm(AuthenticationForm):
         self.fields['password'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'Senha',
-        })  
+        })
