@@ -31,21 +31,22 @@ def medico_update(request, pk):
 def consultas_primeiro_medico(request):
     # 1. Tenta obter o primeiro médico do banco de dados (ordenando por id para garantir consistência)
     try:
-        primeiro_medico = Medico.objects.order_by('id').first()
+        user = request.user
+        medico = Medico.objects.get(user=user)
     except Medico.DoesNotExist:
-        primeiro_medico = None
+        medico = None
 
     consultas = []
     medico_encontrado = False
 
-    if primeiro_medico:
+    if medico:
         # 2. Se um médico for encontrado, obtenha todas as suas consultas
-        consultas = Consulta.objects.filter(medico=primeiro_medico).order_by('data')
+        consultas = Consulta.objects.filter(medico=medico).order_by('data')
         medico_encontrado = True
 
     # 3. Prepara o contexto para o template
     context = {
-        'primeiro_medico': primeiro_medico,
+        'medico': medico,
         'consultas': consultas,
         'medico_encontrado': medico_encontrado,
     }
@@ -54,7 +55,8 @@ def consultas_primeiro_medico(request):
     return render(request, 'medicos/medConsultas.html', context)
 
 def medico_update_teste(request):
-    medico = Medico.objects.first()
+    user = request.user
+    medico = Medico.objects.get(user=user)
 
     if request.method == "POST":
         form = MedicoUserForm(request.POST, instance=medico)
