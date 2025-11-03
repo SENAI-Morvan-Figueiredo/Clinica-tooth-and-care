@@ -1,8 +1,12 @@
 {% load static %}
-<nav id="dashboard-navbar" class="d-flex align-items-center px-3">
-    <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo">
-    <h3 class="ms-3">Tooth & Care Dashboard</h3>
-    <form method="post" action="{% url 'logout' %}" class="justify-self-end">
-    {% csrf_token %} <button type="submit" class="btn">Sair</button>
+<nav id="dashboard-navbar" class="d-flex align-items-center justify-content-between p-3">
+    <div class="d-flex align-items-center">
+        <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo">
+        <h3 class="ms-3 mb-0 fs-5 fw-bold">Tooth & Care Dashboard</h3>
+    </div>
+    
+    <form method="post" action="{% url 'logout' %}" class="d-flex align-items-center">
+        {% csrf_token %} 
+        <button type="submit" class="btn btn-light fw-bold">Sair</button>
     </form>
 </nav>

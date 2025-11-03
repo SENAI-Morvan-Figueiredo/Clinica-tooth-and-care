@@ -1,20 +1,23 @@
 {% load static %}
-<div class="col-2 d-flex flex-column" id="sidebar">
-    <!-- links para as outras páginas -->
-    <a href="{% url 'dashboard' %}" class="text-decoration-none mb-3">
-        <img src="{% static 'img/home.png' %}" alt="">
+<div class="col-auto d-flex flex-column p-4 gap-4" id="sidebar">
+    <div class="mb-4 text-center">
+        <h4 class="text-uppercase fw-bold text-white border-bottom border-light pb-3 mb-0">Menu Admin</h4>
+    </div>
+    
+    <a href="{% url 'dashboard' %}" class="text-decoration-none d-flex align-items-center p-2 rounded">
+        <img src="{% static 'img/home.png' %}" alt="" class="me-3">
         Página inicial
     </a>
-    <a href="{% url 'adm-pacientes' %}" class="text-decoration-none mb-3">
-        <img src="{% static 'img/people.png' %}" alt="">
+    <a href="{% url 'adm-pacientes' %}" class="text-decoration-none d-flex align-items-center p-2 rounded">
+        <img src="{% static 'img/people.png' %}" alt="" class="me-3">
         Pacientes
     </a>
-    <a href="{% url 'adm-medicos' %}" class="text-decoration-none mb-3">
-        <img src="{% static 'img/medic.png' %}" alt="">
+    <a href="{% url 'adm-medicos' %}" class="text-decoration-none d-flex align-items-center p-2 rounded">
+        <img src="{% static 'img/medic.png' %}" alt="" class="me-3">
         Médicos
     </a>
-    <a href="{% url 'adm-consultas' %}" class="text-decoration-none mb-3">
-        <img src="{% static 'img/calendar.png' %}" alt="">
+    <a href="{% url 'adm-consultas' %}" class="text-decoration-none d-flex align-items-center p-2 rounded">
+        <img src="{% static 'img/calendar.png' %}" alt="" class="me-3">
         Consultas
     </a>
 </div>
