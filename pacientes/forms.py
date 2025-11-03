@@ -1,4 +1,5 @@
 from django import forms
+from django.db import transaction
 from .models import Paciente, GENERO_CHOICES
 from allauth.account.forms import SignupForm
 
@@ -8,7 +9,18 @@ class PacienteSignupForm(SignupForm):
     adiciona os campos Paciente (exceto 'nome' para se adequar ao model atual).
     """
 
-        
+    first_name = forms.CharField(
+        max_length=150, 
+        label=('Nome'), 
+        widget=forms.TextInput(attrs={'placeholder': ('Nome'), 'class': 'form-control'})
+    )
+
+    last_name = forms.CharField(
+        max_length=150, 
+        label=('Sobrenome'), 
+        widget=forms.TextInput(attrs={'placeholder': ('Sobrenome'), 'class': 'form-control'})
+    )
+
     cpf = forms.CharField(
         max_length=14, 
         label='CPF', 
@@ -33,7 +45,6 @@ class PacienteSignupForm(SignupForm):
         widget=forms.TextInput(attrs={'placeholder': 'Endereço Completo', 'class': 'form-control'})
     )
     
-    # 2. Corrigido: Usando GENERO_CHOICES diretamente.
     genero = forms.ChoiceField(
         choices=GENERO_CHOICES,
         label='Gênero', 
@@ -45,34 +56,32 @@ class PacienteSignupForm(SignupForm):
         widget=forms.DateInput(attrs={"type": "date", 'class': 'form-control'})
     )
 
-    # Para ajustar os campos já existentes
     def __init__(self, *args, **kwargs):
-        #  Chama o construtor da classe base (SignupForm)
         super().__init__(*args, **kwargs)
-        # Email
         if 'email' in self.fields:
             self.fields['email'].widget.attrs.update({'class': 'form-control'})
         
-        # Senha (e Confirmação de Senha)
-        if 'password' in self.fields:
-            self.fields['password'].widget.attrs.update({'class': 'form-control'})
+        if 'password1' in self.fields:
+            self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'senha'})
+            self.fields['password1'].label = ('Senha')
         
         if 'password2' in self.fields:
-            self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+            self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirme a senha'})
+            self.fields['password2'].label = ("Confirme sua senha")
 
+    @transaction.atomic
     def save(self, request):
         
-        # Chama o save() do formulário base para criar o objeto User (email, senha)
         user = super(PacienteSignupForm, self).save(request)
+        
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.save() # Salva as alterações no objeto User
 
-        # Cria e popula o objeto Paciente
         paciente = Paciente.objects.create(
             user=user,
-            # Campo 'nome' removido, pois não existe no modelo Paciente fornecido
             cpf=self.cleaned_data['cpf'],
             rg=self.cleaned_data['rg'],
-            # O modelo Paciente não tem campo email, mas se tivesse, seria: 
-            # email=user.email,
             telefone=self.cleaned_data['telefone'],
             data_nasc=self.cleaned_data['data_nasc'],
             genero=self.cleaned_data['genero'],

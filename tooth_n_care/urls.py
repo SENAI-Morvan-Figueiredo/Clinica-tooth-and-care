@@ -21,7 +21,6 @@ from appadmin import views as adm_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
 
     # rotas do app
     path('', include('website.urls')),

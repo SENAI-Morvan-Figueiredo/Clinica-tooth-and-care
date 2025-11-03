@@ -21,11 +21,11 @@ def login_view(request):
             # Redireciona para a URL de sucesso após o login
             return redirect(settings.LOGIN_REDIRECT_URL) 
         else:
-            return render(request, 'registration/login.html', {"form": form})
+            return render(request, 'account/login.html', {"form": form})
     else:
         form = CustomLoginForm()
     
-    return render(request, 'registration/login.html', {"form": form})
+    return render(request, 'account/login.html', {"form": form})
 
 logger = logging.getLogger(__name__)
 

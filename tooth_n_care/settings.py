@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@g3beiu!p588c@p91!2@*30s#67v0v+n=$97%7noq(k6iqrm)d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',       # Gerencia Login/Logout/Signup/Senha
     'allauth.socialaccount', # Gerencia Login Social (se for usar)
+    'allauth.socialaccount.providers.google',
 
     # para o front-end
     'widget_tweaks',
@@ -121,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -144,25 +145,23 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ACCOUNT_LOGOUT_ON_GET = True
-
 LOGIN_URL = '/login'
 ACCOUNT_LOGIN_URL = '/login'
 
 LOGIN_REDIRECT_URL = '/get_user_type'
 
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/login'
+# Opcional: Processo de logout via GET (não requer um formulário POST)
+ACCOUNT_LOGOUT_ON_GET = True
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 # Opcional: E-mail deve ser único
 ACCOUNT_EMAIL_REQUIRED = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Opcional: Não requer um username, usa o e-mail
 ACCOUNT_USERNAME_REQUIRED = False
-
-# Opcional: Processo de logout via GET (não requer um formulário POST)
-ACCOUNT_LOGOUT_ON_GET = True
 
 SITE_ID = 1
 
