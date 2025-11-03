@@ -154,14 +154,13 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/login'
 # Opcional: Processo de logout via GET (não requer um formulário POST)
 ACCOUNT_LOGOUT_ON_GET = True
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_LOGIN_METHODS = {'email'}
 
 # Opcional: E-mail deve ser único
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Opcional: Não requer um username, usa o e-mail
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
 SITE_ID = 1
 
