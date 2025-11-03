@@ -2,7 +2,11 @@
 <nav id="dashboard-navbar" class="d-flex align-items-center px-3">
     <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo">
     <h3 class="ms-3">Tooth & Care Dashboard</h3>
+<<<<<<< HEAD
     <form method="post" action="{% url 'logout' %}" class="justify-self-end">
+=======
+    <form method="post" action="{% url 'account_logout' %}" class="justify-self-end">
+>>>>>>> login
     {% csrf_token %} <button type="submit" class="btn">Sair</button>
     </form>
 </nav>

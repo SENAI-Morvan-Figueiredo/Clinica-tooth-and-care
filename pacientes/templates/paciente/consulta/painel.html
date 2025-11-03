@@ -186,7 +186,9 @@
     <!-- ======== BARRA SUPERIOR ======== -->
     <header>
         <h1>Painel do Paciente</h1>
-        <a href="#" class="logout">Log-out</a>
+        <form method="post" action="{% url 'account_logout' %}" class="justify-self-end">
+        {% csrf_token %} <button type="submit" class="btn">Log-out</button>
+        </form>
     </header>
 
     <main class="main-content">

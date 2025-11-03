@@ -190,7 +190,9 @@
     <!-- HEADER -->
     <header>
         <h1>Painel do Usuário</h1>
-        <a href="{% url 'logout' %}" class="logout">Log-out</a>
+        <form method="post" action="{% url 'account_logout' %}" class="justify-self-end">
+            {% csrf_token %} <button type="submit" class="btn">Log-out</button>
+        </form>
     </header>
 
     <!-- SIDEBAR -->
