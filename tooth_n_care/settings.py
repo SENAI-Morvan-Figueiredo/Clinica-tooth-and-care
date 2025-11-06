@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@g3beiu!p588c@p91!2@*30s#67v0v+n=$97%7noq(k6iqrm)d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -38,12 +38,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django.contrib.sites',
+
     # Apps da clínica
     'appadmin',
     'consultas',
     'medicos',
     'pacientes',
-    'website'
+    'website',
+
+    # Apps do allauth
+    'allauth',
+    'allauth.account',       # Gerencia Login/Logout/Signup/Senha
+    'allauth.socialaccount', # Gerencia Login Social (se for usar)
+    'allauth.socialaccount.providers.google',
+
+    # para o front-end
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'tooth_n_care.urls'
@@ -109,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -132,6 +144,38 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_URL = '/login'
+ACCOUNT_LOGIN_URL = '/login'
+
 LOGIN_REDIRECT_URL = '/get_user_type'
 
-LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_REDIRECT_URL = '/login'
+# Opcional: Processo de logout via GET (não requer um formulário POST)
+ACCOUNT_LOGOUT_ON_GET = True
+
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+# Opcional: E-mail deve ser único
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+SITE_ID = 1
+
+# settings.py
+
+AUTHENTICATION_BACKENDS = [
+    # Requerido pelo Django Admin
+    'django.contrib.auth.backends.ModelBackend',
+    
+    # Requerido pelo allauth
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_FORMS = {
+    'signup': 'pacientes.forms.PacienteSignupForm',
+}

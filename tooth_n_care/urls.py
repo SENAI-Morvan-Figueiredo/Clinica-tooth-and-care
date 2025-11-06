@@ -21,7 +21,6 @@ from appadmin import views as adm_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
 
     # rotas do app
     path('', include('website.urls')),
@@ -31,5 +30,7 @@ urlpatterns = [
     path('appadmin/', include('appadmin.urls')),
     path('deletar-medicos/', adm_views.deletar_medico, name="deletar-medicos"),
     path('deletar-pacientes/', adm_views.deletar_paciente, name="deletar-pacientes"),
-
+    
+    #allauth
+    path('accounts/', include('allauth.urls')),
 ]
