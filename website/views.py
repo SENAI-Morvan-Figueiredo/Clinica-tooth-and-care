@@ -1,17 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
-<<<<<<< HEAD
-from django.http import HttpResponseForbidden
-import logging
-
-from medicos.models import Medico
-
-def home(request):
-    return render(request, 'home.html')
-
-def login(request):
-    return redirect('/accounts/login/')
-=======
 from django.contrib.auth import login
 from django.conf import settings
 from django.http import HttpResponseForbidden
@@ -38,7 +26,6 @@ def login_view(request):
         form = CustomLoginForm()
     
     return render(request, 'account/login.html', {"form": form})
->>>>>>> login
 
 logger = logging.getLogger(__name__)
 
