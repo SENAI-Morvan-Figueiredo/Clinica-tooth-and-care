@@ -1,8 +1,6 @@
 // Função utilitária para exibir a mensagem de sucesso/erro (em substituição a alert())
 function showMessage(type, message) {
-    // Implementar aqui uma função para exibir mensagens na UI (ex: Toast do Bootstrap)
     console.log(`[${type.toUpperCase()}]: ${message}`);
-    // Exemplo Simples (A ser melhorado com um Toast real)
     const alertPlaceholder = document.getElementById('content-area');
     if (!alertPlaceholder) return;
 
@@ -18,6 +16,21 @@ function showMessage(type, message) {
     setTimeout(() => wrapper.remove(), 5000);
 }
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // O nome 'csrftoken' começa com este prefixo?
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const removeButton = document.getElementById('remove-paciente');
@@ -68,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Lógica do MODAL de Exclusão e Fetch API ---
     const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-    const deleteMessage = document.getElementById('deleteMessage');
     const confirmDeleteButton = document.getElementById('confirmDeleteButton');
 
     // 1. Abrir Modal ao clicar em "Remover Selecionados"
@@ -80,19 +92,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        deleteMessage.innerHTML = `Você está prestes a deletar <strong>${checkedCount}</strong> paciente(s) selecionado(s).`;
         deleteModal.show();
     });
 
     // 2. Executar Exclusão ao confirmar no Modal
     confirmDeleteButton.addEventListener('click', () => {
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Usando seletor CSS para o token
+        const csrfToken = getCookie('csrftoken')
         const ids = Array.from(document.querySelectorAll('.paciente-checkbox:checked'))
             .map(cb => parseInt(cb.value));
 
+        console.log(ids);
+
         deleteModal.hide(); // Fecha o modal imediatamente
 
-        fetch("{% url 'deletar-pacientes' %}", {
+        fetch("http://127.0.0.1:8000/deletar-pacientes/", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -106,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             showMessage('success', data.mensagem || `Exclusão de ${ids.length} paciente(s) realizada com sucesso.`);
-            document.location.reload(); // Recarrega a página após o sucesso
+            // document.location.reload(); // Recarrega a página após o sucesso
         })
         .catch(error => {
             showMessage('danger', `Falha ao processar a exclusão: ${error.message}`);

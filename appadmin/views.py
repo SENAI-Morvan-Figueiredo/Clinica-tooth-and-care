@@ -253,16 +253,18 @@ def deletar_paciente(request, pk=-1):
                     "Requisição inválida. Conteúdo recebido não está correto"
                 )
             
-            # busca todos os médicos da lista
+            # busca todos os pacientes da lista
             pacientes_deletar = Medico.objects.filter(pk__in=p_ids)
             users_ids = pacientes_deletar.values_list('user_id', flat=True)
             usuarios_deletar = User.objects.filter(pk__in=users_ids)
 
-            count, _ = usuarios_deletar.delete() # deleta os usuários dos médicos
+            count, _ = usuarios_deletar.delete() # deleta os usuários dos pacientes
 
             return JsonResponse(
                 {"status": "sucesso",
-                "mensagem": f"{count} pacientes(s) excluído(s) com sucesso!"},
+                "mensagem": f"{count} pacientes(s) excluído(s) com sucesso!",
+                "teste":pacientes_deletar
+                },
                 status=200
             )
 

@@ -51,8 +51,11 @@
                 </thead>
                 <tbody>
                     {% for Medico in medicos_ativos %}
-                    <tr data-search="{{ Medico.user.username|lower }} {{ Medico.crm }} {% for esp in Medico.especialidades.all %}{{ esp.nome|lower }} {% endfor %}">
-                        <td>{{ Medico.user.username }}</td>
+                    <tr class="position-relative" data-search="{{ Medico.user.username|lower }} {{ Medico.crm }} {% for esp in Medico.especialidades.all %}{{ esp.nome|lower }} {% endfor %}">
+                        <td>
+                            {{ Medico.user.username }}
+                            <a href="{% url 'adm-detalhe-medico' Medico.id %}" class="stretched-link"></a>
+                        </td>
                         <td><span class="badge bg-secondary">{{ Medico.crm }}</span></td>
                         <td>{{ Medico.especialidades.all|join:", " }}</td>
                     </tr>
