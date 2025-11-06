@@ -14,7 +14,7 @@
 html, body {
   margin: 0;
   padding: 0; 
-  height: 100%; /* Essencial para que o layout flex funcione em 100% da tela */
+  height: 100vh; /* Essencial para que o layout flex funcione em 100% da tela */
 }
 
 body {
@@ -22,7 +22,7 @@ body {
 }
 
 #wrapper {
-  min-height: 100vh; /* Garante que o conteúdo ocupe toda a altura da tela, mesmo com pouco conteúdo */
+  height: 100vh; /* Garante que o conteúdo ocupe toda a altura da tela, mesmo com pouco conteúdo */
 }
 
 /* Sidebar Styling (Cores e Ícones) */
@@ -69,7 +69,6 @@ body {
 }
 
 #searchInput,
-<<<<<<< HEAD
 select.form-select,
 input.form-control[type="date"],
 input.form-control[type="text"] {
@@ -78,19 +77,4 @@ input.form-control[type="text"] {
 
 #adiar-modal::backdrop {
   background-color: rgba(0, 0, 0, 0.6); 
-=======
-.dataInput,
-select {
-  max-width: 400px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 4px 14px;
-}
-
-#searchInput:focus,
-.dataInput:focus,
-select:focus {
-  outline: none;
-  border-color: #58D3CD;
->>>>>>> main
 }

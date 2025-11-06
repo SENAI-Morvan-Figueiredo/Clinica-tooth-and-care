@@ -3,13 +3,13 @@
 {% block title %}Adicionar Médico - Tooth & Care{% endblock %}
 
 {% block content %}
-
-<div class="container border p-4 mt-3 rounded-4">
-    <form method="POST" action="{% url 'adicionar-medico' %}">
-        {% csrf_token %}
-        <h3 class="mb-4">Adicionar Médico</h3>
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary mt-3">Salvar médico</button>
-    </form>
-</div>
+    <h3 class="mb-4 text-primary fw-bold">Adicionar Médico</h3>
+    <div class="card border p-4 mt-3 rounded-4">
+        <form method="POST" action="{% url 'adicionar-medico' %}">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary mt-3">Salvar médico</button>
+        </form>
+    </div>
 {% endblock %}

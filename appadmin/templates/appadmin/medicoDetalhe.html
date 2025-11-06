@@ -8,54 +8,129 @@
 {% block title %}Detalhe do Médico{% endblock %}
 
 {% block content %}
-<div class="container border pd-4 mt-3 rounded-4" id="info-medico">
-    <div class="d-flex justify-content-between">
-        <h3>{{ medico.user.username }}</h3>
-        <a href="{% url 'adm-deletar-medico' medico.id %}" class="btn btn-danger">Deletar médico</a>
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="text-primary fw-bold">Detalhe do Médico</h2>
     </div>
-    <div id="detalhes">
-        <div class="info">
-            <strong>Especialidades: </strong>
-            <ul>
-                {% for especialidade in medico.especialidades.all %}
-                <li>{{ especialidade.nome }}</li>
-                {% endfor %}
-            </ul>
+</div>
 
+<!-- CARD DE INFORMAÇÕES DO MÉDICO -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold"><i class="fas fa-user-md me-2 text-info"></i> {{ medico.user.username }}</h3>
+            <!-- Novo Botão de Deletar com Modal -->
+            <button 
+                type="button" 
+                id="delete-medico-button" 
+                class="btn btn-outline-danger" 
+                data-delete-url="{% url 'adm-deletar-medico' medico.id %}"
+                data-medico-nome="{{ medico.user.username }}"
+            >
+                <i class="fas fa-trash-alt me-1"></i> Deletar Médico
+            </button>
         </div>
-        <div class="info"><strong>CRM: </strong>{{ medico.crm }}</div>
-        <div class="info"><strong>E-mail: </strong>{{ medico.user.email }}</div>
-        <div class="info"><strong>Telefone: </strong>{{ medico.telefone }}</div>
+        
+        <hr class="mb-4">
+
+        <div id="detalhes" class="row">
+            <div class="col-md-6 mb-3">
+                <p class="mb-1 text-muted small">Especialidades:</p>
+                <div class="fw-bold">
+                    {% for especialidade in medico.especialidades.all %}
+                        <span class="badge bg-primary me-1">{{ especialidade.nome }}</span>
+                    {% empty %}
+                        <span class="text-muted small">Nenhuma especialidade cadastrada.</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <p class="mb-1 text-muted small">CRM:</p>
+                <p class="fw-bold">{{ medico.crm }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+                <p class="mb-1 text-muted small">E-mail:</p>
+                <p class="fw-bold">{{ medico.user.email }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+                <p class="mb-1 text-muted small">Telefone:</p>
+                <p class="fw-bold">{{ medico.telefone }}</p>
+            </div>
+        </div>
     </div>
 </div>
-<div class="container border pd-4 mt-3 rounded-4">
-    <h3>Consultas</h3>
-    <div class="row">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nome do paciente</th>
-                    <th>Médico</th>
-                    <th>Data</th>
-                    <th>Tipo</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for consulta in consultas %}
-                <tr class="position-relative">
-                    <td>{{ consulta.paciente.user.username }}</td>
-                    <td>
-                        {{ consulta.medico.user.username }}
-                        <a href="{% url 'adm-detalhe-consulta' consulta.id %}" class="stretched-link"></a>
-                    </td>
-                    <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
-                    <td>{{ consulta.servico }}</td>
-                    <td>{{ consulta.status }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+<!-- CARD DE CONSULTAS DO MÉDICO -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+        <h3>Consultas Agendadas</h3>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover align-middle">
+                <thead class="table-header-custom">
+                    <tr>
+                        <th scope="col">Paciente</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Serviço</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for consulta in consultas %}
+                    <tr class="position-relative">
+                        <td class="fw-bold">
+                            <i class="fas fa-user-circle me-2 text-primary"></i> {{ consulta.paciente.user.username }}
+                            <!-- Link clicável em toda a linha -->
+                            <a href="{% url 'adm-detalhe-consulta' consulta.id %}" class="stretched-link" title="Ver Detalhes da Consulta"></a>
+                        </td>
+                        <td class="text-nowrap">{{ consulta.data|date:"d/m/Y \à\s H:i" }}</td>
+                        <td>{{ consulta.servico }}</td>
+                        <td>
+                            <!-- Exemplo de como estilizar o status -->
+                            {% if consulta.status == 'AGENDADA' %}
+                                <span class="badge bg-success">{{ consulta.status }}</span>
+                            {% elif consulta.status == 'CANCELADA' %}
+                                <span class="badge bg-danger">{{ consulta.status }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ consulta.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-3">Nenhuma consulta encontrada para este médico.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO (NOVO ELEMENTO) -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteModalLabel"><i class="fas fa-exclamation-triangle me-2"></i> Confirmação de Exclusão</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você está prestes a deletar permanentemente o médico <strong id="medicoNomePlaceholder"></strong>.</p>
+                <div class="alert alert-warning small mt-3">
+                    <i class="fas fa-info-circle me-1"></i> Esta ação é **irreversível**. Todos os dados relacionados a este médico (incluindo consultas) serão excluídos.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Excluir Médico</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+    <!-- Script de Lógica Específica da Página de Detalhes do Médico -->
+    <script src="{% static 'js/adm/medicoDetalhe.js' %}"></script>
 {% endblock %}

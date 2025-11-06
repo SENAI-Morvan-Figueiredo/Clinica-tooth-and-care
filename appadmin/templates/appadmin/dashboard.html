@@ -1,10 +1,6 @@
 {% extends 'basedashboards.html' %}
 {% load static %}
 
-{% block extra_head %}
-    <link rel="stylesheet" href="{% static 'css/adm_dashboard.css' %}">
-{% endblock %}
-
 {% block title %}Dashboard Admin - Visão Geral{% endblock %}
 
 {% block content %}
@@ -119,5 +115,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-    <script src="{% static 'js/dashboard.js' %}"></script> 
+    <script src="{% static 'js/adm/dashboard.js' %}"></script> 
 {% endblock %}
