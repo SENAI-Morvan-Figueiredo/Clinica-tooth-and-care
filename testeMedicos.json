@@ -1,0 +1,251 @@
+[
+  {
+    "model": "auth.User",
+    "pk": 101,
+    "fields": {
+      "username": "dra_beatriz",
+      "first_name": "Beatriz",
+      "last_name": "Almeida",
+      "email": "beatriz@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 101,
+    "fields": {
+      "user": 101,
+      "cpf": "111.111.111-11",
+      "rg": "11.111.111-1",
+      "crm": "CRM/SP 11111",
+      "telefone": "(11) 91111-1111",
+      "especialidades": [1, 5]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 102,
+    "fields": {
+      "username": "dr_ricardo",
+      "first_name": "Ricardo",
+      "last_name": "Gomes",
+      "email": "ricardo@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 102,
+    "fields": {
+      "user": 102,
+      "cpf": "222.222.222-22",
+      "rg": "22.222.222-2",
+      "crm": "CRM/RJ 22222",
+      "telefone": "(21) 92222-2222",
+      "especialidades": [6, 9]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 103,
+    "fields": {
+      "username": "dra_claudia",
+      "first_name": "Cláudia",
+      "last_name": "Lima",
+      "email": "claudia@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 103,
+    "fields": {
+      "user": 103,
+      "cpf": "333.333.333-33",
+      "rg": "33.333.333-3",
+      "crm": "CRM/MG 33333",
+      "telefone": "(31) 93333-3333",
+      "especialidades": [3]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 104,
+    "fields": {
+      "username": "dr_eduardo",
+      "first_name": "Eduardo",
+      "last_name": "Ferreira",
+      "email": "eduardo@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 104,
+    "fields": {
+      "user": 104,
+      "cpf": "444.444.444-44",
+      "rg": "44.444.444-4",
+      "crm": "CRM/PR 44444",
+      "telefone": "(41) 94444-4444",
+      "especialidades": [4, 5]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 105,
+    "fields": {
+      "username": "dra_fernanda",
+      "first_name": "Fernanda",
+      "last_name": "Castro",
+      "email": "fernanda@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 105,
+    "fields": {
+      "user": 105,
+      "cpf": "555.555.555-55",
+      "rg": "55.555.555-5",
+      "crm": "CRM/SC 55555",
+      "telefone": "(48) 95555-5555",
+      "especialidades": [7, 8]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 106,
+    "fields": {
+      "username": "dr_gabriel",
+      "first_name": "Gabriel",
+      "last_name": "Nunes",
+      "email": "gabriel@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 106,
+    "fields": {
+      "user": 106,
+      "cpf": "666.666.666-66",
+      "rg": "66.666.666-6",
+      "crm": "CRM/BA 66666",
+      "telefone": "(71) 96666-6666",
+      "especialidades": [2]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 107,
+    "fields": {
+      "username": "dra_helena",
+      "first_name": "Helena",
+      "last_name": "Costa",
+      "email": "helena@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 107,
+    "fields": {
+      "user": 107,
+      "cpf": "777.777.777-77",
+      "rg": "77.777.777-7",
+      "crm": "CRM/PE 77777",
+      "telefone": "(81) 97777-7777",
+      "especialidades": [1, 10]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 108,
+    "fields": {
+      "username": "dr_igor",
+      "first_name": "Igor",
+      "last_name": "Mendes",
+      "email": "igor@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 108,
+    "fields": {
+      "user": 108,
+      "cpf": "888.888.888-88",
+      "rg": "88.888.888-8",
+      "crm": "CRM/DF 88888",
+      "telefone": "(61) 98888-8888",
+      "especialidades": [11, 3, 6]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 109,
+    "fields": {
+      "username": "dra_julia",
+      "first_name": "Júlia",
+      "last_name": "Ramos",
+      "email": "julia@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 109,
+    "fields": {
+      "user": 109,
+      "cpf": "999.999.999-99",
+      "rg": "99.999.999-9",
+      "crm": "CRM/CE 99999",
+      "telefone": "(85) 99999-9999",
+      "especialidades": [9, 8]
+    }
+  },
+
+  {
+    "model": "auth.User",
+    "pk": 110,
+    "fields": {
+      "username": "dr_luiz",
+      "first_name": "Luiz",
+      "last_name": "Motta",
+      "email": "luiz@exemplo.com",
+      "is_active": true,
+      "password": "pbkdf2_sha256$..."
+    }
+  },
+  {
+    "model": "medicos.Medico",
+    "pk": 110,
+    "fields": {
+      "user": 110,
+      "cpf": "000.000.000-00",
+      "rg": "00.000.000-0",
+      "crm": "CRM/GO 00000",
+      "telefone": "(62) 90000-0000",
+      "especialidades": [2, 3, 4, 11]
+    }
+  }
+]

@@ -18,7 +18,7 @@
 
 <body>
 
-    <div class="d-flex" id="wrapper">
+    <div class="d-flex position-relative" id="wrapper">
         {% include 'partials/sidebar.html' %} 
 
         <div id="page-content-wrapper" class="flex-grow-1">
@@ -35,12 +35,10 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
-
-    {% block extra_scripts %}
-    {% endblock %}
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
         xintegrity="sha384-Yh5I0g0gNqE5gD1aH7J5Jp7C4G4Q7V4U6I3G2S9R8N1H8E2C6S4T6R4V5X7X6I3H5J7T8U6I3H5J7T8U6I3" 
         crossorigin="anonymous"></script>
+    {% block extra_scripts %}
+    {% endblock %}
 </body>
 </html>

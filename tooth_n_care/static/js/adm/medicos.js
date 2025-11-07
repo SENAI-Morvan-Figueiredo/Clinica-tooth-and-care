@@ -21,6 +21,22 @@ function showMessage(type, message) {
     setTimeout(() => wrapper.remove(), 5000);
 }
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // O nome 'csrftoken' começa com este prefixo?
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const removeButton = document.getElementById('remove-medico');
@@ -92,8 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Executar Exclusão ao confirmar no Modal
     confirmDeleteButton.addEventListener('click', () => {
-        const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
-        const csrfToken = csrfTokenElement ? csrfTokenElement.value : null;
+        const csrfToken = getCookie('csrftoken');
 
         if (!csrfToken) {
             showMessage('danger', 'Token CSRF não encontrado. Falha de segurança.');
@@ -107,7 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         deleteModal.hide(); // Fecha o modal imediatamente
 
-        fetch("{% url 'deletar-medicos' %}", {
+        //TODO: modificar a url quando hospedar
+        fetch("http://127.0.0.1:8000/deletar-medicos/", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',

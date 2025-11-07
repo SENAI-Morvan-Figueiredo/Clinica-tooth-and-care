@@ -156,8 +156,6 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-
 # Opcional: E-mail deve ser único
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

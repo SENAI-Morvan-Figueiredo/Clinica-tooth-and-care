@@ -19,15 +19,9 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="fw-bold">{{ paciente.user.username }}</h3>
             <!-- Novo Botão de Deletar com Modal (URL no data-delete-url) -->
-            <a 
-                type="button" 
-                id="remove-paciente" 
-                class="btn btn-outline-danger" 
-                data-delete-url="{% url 'adm-deletar-paciente' paciente.id %}"
-                data-paciente-nome="{{ paciente.user.username }}"
-            >
+            <a type="button" id="remove-paciente" class="btn btn-outline-danger">
                 <i class="fas fa-trash-alt me-1"></i> Deletar Paciente
-        </a>
+            </a>
         </div>
         
         <hr class="mb-4">
@@ -110,7 +104,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Excluir Paciente</button>
+                <a href="{% url 'adm-deletar-paciente' paciente.id %}" class="btn btn-danger" id="confirmDeleteButton">Excluir Paciente</a>
             </div>
         </div>
     </div>
@@ -120,5 +114,5 @@
 
 {% block extra_scripts %}
     <!-- Script de Lógica Específica da Página de Detalhes -->
-    <script src="{% static 'js/adm/acienteDetalhe.js' %}"></script>
+    <script src="{% static 'js/adm/pacienteDetalhe.js' %}"></script>
 {% endblock %}

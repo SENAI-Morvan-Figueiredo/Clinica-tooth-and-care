@@ -101,10 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const ids = Array.from(document.querySelectorAll('.paciente-checkbox:checked'))
             .map(cb => parseInt(cb.value));
 
-        console.log(ids);
-
         deleteModal.hide(); // Fecha o modal imediatamente
 
+        //TODO: modificar a url quando hospedar
         fetch("http://127.0.0.1:8000/deletar-pacientes/", {
             method: 'POST',
             headers: {

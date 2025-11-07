@@ -21,9 +21,24 @@ function showMessage(type, message) {
     setTimeout(() => wrapper.remove(), 5000);
 }
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // O nome 'csrftoken' começa com este prefixo?
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    const deleteButton = document.getElementById('delete-paciente-button');
+    const deleteButton = document.getElementById('remove-paciente');
     const deleteModalElement = document.getElementById('confirmDeleteModal');
     
     // Verifica se os elementos necessários existem
@@ -35,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Inicializa o modal do Bootstrap
     const deleteModal = new bootstrap.Modal(deleteModalElement);
-    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
     const pacienteNomePlaceholder = document.getElementById('pacienteNomePlaceholder');
 
     // 1. Abrir Modal ao clicar em "Deletar Paciente"
@@ -50,56 +64,4 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteModal.show();
     });
 
-    // 2. Executar Exclusão ao confirmar no Modal
-    confirmDeleteButton.addEventListener('click', () => {
-        const deleteUrl = deleteButton.getAttribute('data-delete-url');
-        
-        // Obtém o token CSRF do DOM
-        const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
-        const csrfToken = csrfTokenElement ? csrfTokenElement.value : null;
-
-        if (!csrfToken) {
-            showMessage('danger', 'Token CSRF não encontrado. Falha de segurança.');
-            console.error('CSRF Token missing.');
-            deleteModal.hide();
-            return;
-        }
-
-        deleteModal.hide(); // Fecha o modal imediatamente
-
-        fetch(deleteUrl, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-                'X-CSRFToken': csrfToken
-            },
-            // Não precisamos de body, a URL já carrega o ID do paciente
-        })
-        .then(response => {
-            if (response.status === 204) {
-                 // Resposta 204 (No Content) é comum para exclusão bem-sucedida sem retorno de JSON
-                return { mensagem: "Paciente deletado com sucesso." };
-            }
-            if (!response.ok) {
-                return response.json().then(error => { 
-                    throw new Error(error.mensagem || `Erro ${response.status}: Falha inesperada na exclusão.`); 
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            // O paciente foi excluído, redirecionamos para a lista de pacientes
-            showMessage('success', data.mensagem || 'Paciente deletado com sucesso. Redirecionando...');
-            
-            // Redireciona após um pequeno delay para que a mensagem seja visível
-            setTimeout(() => {
-                // Assume que a URL 'adm-pacientes' é a lista de pacientes
-                window.location.href = "{% url 'adm-pacientes' %}"; 
-            }, 1500);
-        })
-        .catch(error => {
-            showMessage('danger', `Falha ao processar a exclusão: ${error.message}`);
-            console.error('Falha ao processar a exclusão', error);
-        });
-    });
 });
