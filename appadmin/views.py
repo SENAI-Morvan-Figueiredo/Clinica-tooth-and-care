@@ -116,7 +116,12 @@ def detalhe_consulta(request, pk):
 @login_required
 def detalhe_medico(request, pk):
     medico = get_object_or_404(Medico, pk=pk)
-    consultas = Consulta.objects.filter(medico=medico)
+    hoje = timezone.now().date()
+    consultas = Consulta.objects.filter(
+        medico=medico,
+        data__gte=hoje,
+        status__in=["marcada", "remarcada"]
+    )
 
     return render(request, 'appadmin/medicoDetalhe.html', {'medico': medico, 'consultas': consultas})
 
@@ -124,7 +129,12 @@ def detalhe_medico(request, pk):
 @login_required
 def detalhe_paciente(request, pk):
     paciente = get_object_or_404(Paciente, pk=pk)
-    consultas = Consulta.objects.filter(paciente=paciente)
+    hoje = timezone.now().date()
+    consultas = Consulta.objects.filter(
+        paciente=paciente, 
+        data__gte=hoje,
+        status__in=["marcada", "remarcada"]
+    )
 
     return render(request, "appadmin/pacienteDetalhe.html", {"paciente": paciente, "consultas": consultas})
 

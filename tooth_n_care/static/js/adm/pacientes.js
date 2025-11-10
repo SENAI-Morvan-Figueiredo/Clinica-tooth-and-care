@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
     const confirmDeleteButton = document.getElementById('confirmDeleteButton');
 
-    // 1. Abrir Modal ao clicar em "Remover Selecionados"
+    // Abrir Modal ao clicar em "Remover Selecionados"
     removeButton.addEventListener('click', () => {
         const checkedCount = Array.from(document.querySelectorAll('.paciente-checkbox:checked')).length;
 
@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteModal.show();
     });
 
-    // 2. Executar Exclusão ao confirmar no Modal
     confirmDeleteButton.addEventListener('click', () => {
         const csrfToken = getCookie('csrftoken')
         const ids = Array.from(document.querySelectorAll('.paciente-checkbox:checked'))
@@ -118,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             showMessage('success', data.mensagem || `Exclusão de ${ids.length} paciente(s) realizada com sucesso.`);
-            // document.location.reload(); // Recarrega a página após o sucesso
+            document.location.reload(); // Recarrega a página após o sucesso
         })
         .catch(error => {
             showMessage('danger', `Falha ao processar a exclusão: ${error.message}`);

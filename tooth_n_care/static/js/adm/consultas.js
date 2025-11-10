@@ -1,5 +1,3 @@
-
-
 $(document).ready(function () {
     const tabela = $('#tabela-consultas').DataTable({
         dom: 'lrtip',
@@ -31,6 +29,14 @@ $(document).ready(function () {
 
     // detecta alterações no filtro
     $('#searchInput, #tipos, #status, #data').on('keyup change', filtrar);
+
+    $('#clean-filter').on('click', () => {
+        $('#searchInput').val('');
+        $('#tipos').val('');
+        $('#status').val('');
+        $('#data').val('');
+        filtrar();
+    });
 });
 
 
