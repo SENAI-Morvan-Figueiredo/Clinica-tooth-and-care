@@ -2,63 +2,171 @@
 {% load static %}
 
 {% block content %}
-        <div class="container mt-5">
-        <h1 class="mb-4">Editar Médico</h1>
+<div class="container py-5">
 
-        <div class="card shadow-sm p-4">
-            <form method="POST">
-                {% csrf_token %}
+    <h1 class="mb-4 fw-bold text-main text-center">Editar Médico</h1>
 
-                    {% if form.errors %}
-        <div class="alert alert-danger">
-            {{ form.errors }}
-        </div>
-    {% endif %}
+    <div class="card shadow-sm border-0 p-4 form-card mx-auto">
+        <form method="POST" novalidate>
+            {% csrf_token %}
 
-                <div class="mb-3">
-                    {{ form.username.label_tag }}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Verifique os campos abaixo:</strong>
+                    <ul class="mb-0 mt-2">
+                        {% for field, errors in form.errors.items %}
+                            <li><strong>{{ field|capfirst }}:</strong> {{ errors|join:", " }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.username.label }}</label>
                     {{ form.username }}
                 </div>
 
-                <div class="mb-3">
-                    {{ form.email.label_tag }}
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.email.label }}</label>
                     {{ form.email }}
                 </div>
 
-                <div class="mb-3">
-                    {{ form.cpf.label_tag }}
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.cpf.label }}</label>
                     {{ form.cpf }}
                 </div>
 
-                <div class="mb-3">
-                    {{ form.rg.label_tag }}
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.rg.label }}</label>
                     {{ form.rg }}
                 </div>
 
-                <div class="mb-3">
-                    {{ form.crm.label_tag }}
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.crm.label }}</label>
                     {{ form.crm }}
                 </div>
 
-                <div class="mb-3">
-                    {{ form.telefone.label_tag }}
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.telefone.label }}</label>
                     {{ form.telefone }}
                 </div>
 
-                <div class="mb-3">
+                <div class="col-12">
                     <label class="form-label">Especialidades</label>
                     {{ form.especialidades }}
                 </div>
+            </div>
 
-                <button type="submit" class="btn btn-primary">Salvar</button>
-                <a href="{% url 'medIndex' %}" class="btn btn-secondary">Cancelar</a>
-            </form>
-        </div>
+            <div class="d-flex justify-content-end mt-4">
+                <a href="{% url 'medIndex' %}" class="btn btn-outline-secondary me-2">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn save-btn">
+                    <i class="bi bi-check-circle me-1"></i> Salvar
+                </button>
+            </div>
+        </form>
     </div>
-
+</div>
 {% endblock %}
 
 
 {% block extra_scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    /* ======= Paleta e fontes ======= */
+    :root {
+        --main-color: #2C8E89;
+        --hover-color: #267873;
+        --light-bg: #f8f9fa;
+    }
+
+    body {
+        background-color: var(--light-bg);
+        font-family: "Inter", Arial, sans-serif;
+        color: #333;
+    }
+
+    .text-main {
+        color: var(--main-color);
+    }
+
+    /* ======= Card ======= */
+    .form-card {
+        max-width: 700px;
+        border-top: 6px solid var(--main-color);
+        border-radius: 12px;
+        background-color: white;
+        transition: 0.3s;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 6px 18px rgba(44, 142, 137, 0.2);
+    }
+
+    /* ======= Formulário ======= */
+    .form-label {
+        font-weight: 500;
+        color: #444;
+    }
+
+    input.form-control,
+    select.form-select {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 10px 12px;
+        transition: all 0.3s;
+    }
+
+    input.form-control:focus,
+    select.form-select:focus {
+        border-color: var(--main-color);
+        box-shadow: 0 0 0 0.2rem rgba(44, 142, 137, 0.25);
+    }
+
+    /* ======= Botões ======= */
+    .save-btn {
+        background-color: var(--main-color);
+        color: white;
+        font-weight: 500;
+        padding: 10px 24px;
+        border-radius: 8px;
+        border: none;
+        transition: all 0.3s;
+    }
+
+    .save-btn:hover {
+        background-color: var(--hover-color);
+        transform: scale(1.03);
+    }
+
+    .btn-outline-secondary {
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: all 0.3s;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #e9ecef;
+    }
+
+    /* ======= Alertas ======= */
+    .alert {
+        border-radius: 8px;
+    }
+
+    /* ======= Responsividade ======= */
+    @media (max-width: 768px) {
+        .form-card {
+            padding: 2rem 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
 {% endblock %}

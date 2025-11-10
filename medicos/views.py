@@ -70,8 +70,9 @@ def medico_update_teste(request):
 
 
 def index(request):
-    user = request.user
-    medico = Medico.objects.get(user=user)
+    # user = request.user
+    # medico = Medico.objects.get(user=user)
+    medico = Medico.objects.first()
 
     # Obtém a data de hoje
     hoje = date.today() 

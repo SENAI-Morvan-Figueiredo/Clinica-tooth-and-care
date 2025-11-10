@@ -116,7 +116,12 @@ def detalhe_consulta(request, pk):
 @login_required
 def detalhe_medico(request, pk):
     medico = get_object_or_404(Medico, pk=pk)
-    consultas = Consulta.objects.filter(medico=medico)
+    hoje = timezone.now().date()
+    consultas = Consulta.objects.filter(
+        medico=medico,
+        data__gte=hoje,
+        status__in=["marcada", "remarcada"]
+    )
 
     return render(request, 'appadmin/medicoDetalhe.html', {'medico': medico, 'consultas': consultas})
 
@@ -124,7 +129,12 @@ def detalhe_medico(request, pk):
 @login_required
 def detalhe_paciente(request, pk):
     paciente = get_object_or_404(Paciente, pk=pk)
-    consultas = Consulta.objects.filter(paciente=paciente)
+    hoje = timezone.now().date()
+    consultas = Consulta.objects.filter(
+        paciente=paciente, 
+        data__gte=hoje,
+        status__in=["marcada", "remarcada"]
+    )
 
     return render(request, "appadmin/pacienteDetalhe.html", {"paciente": paciente, "consultas": consultas})
 
@@ -179,7 +189,6 @@ def adicionar_medico(request):
     return render(request, 'appadmin/medicoCriar.html', {"form": form})
 
 #------------------------delete views--------------------------
-#TODO: garantir que o usuário é válido
 @permission_required(['medicos.delete_medico'])
 @login_required
 def deletar_medico(request, pk=-1):
@@ -253,16 +262,17 @@ def deletar_paciente(request, pk=-1):
                     "Requisição inválida. Conteúdo recebido não está correto"
                 )
             
-            # busca todos os médicos da lista
-            pacientes_deletar = Medico.objects.filter(pk__in=p_ids)
+            # busca todos os pacientes da lista
+            pacientes_deletar = Paciente.objects.filter(pk__in=p_ids)
             users_ids = pacientes_deletar.values_list('user_id', flat=True)
             usuarios_deletar = User.objects.filter(pk__in=users_ids)
 
-            count, _ = usuarios_deletar.delete() # deleta os usuários dos médicos
+            usuarios_deletar.delete()
 
             return JsonResponse(
                 {"status": "sucesso",
-                "mensagem": f"{count} pacientes(s) excluído(s) com sucesso!"},
+                "mensagem": f"pacientes(s) excluído(s) com sucesso!"
+                },
                 status=200
             )
 

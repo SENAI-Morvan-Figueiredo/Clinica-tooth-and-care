@@ -1,76 +1,125 @@
 {% extends 'basedashboards.html' %}
 {% load static %}
 
-{% block extra_head %}
-    <link rel="stylesheet" href="{% static 'css/adm_dashboard.css' %}">
-{% endblock %}
-
-{% block title %}Dashboard Admin{% endblock %}
+{% block title %}Dashboard Admin - Visão Geral{% endblock %}
 
 {% block content %}
-<div class="container border p-3 mt-3 rounded-4">
-    <h3>N° de pacientes cadastrados</h3>
-    <li><strong>{{ qtd_pacientes }}</strong> pacientes.</li>
+<h1 class="mb-4 text-primary">Dashboard Administrativo</h1>
 
-    <h3>Medicos Ativos</h3>
-    <div class="row p-3">
-        <!-- TODO: adicionar a função de filtro nos médicos -->
-        <input class="col m-2" type="text" placeholder="Pesquisar médico" id="searchInput">
-        <select class="col m-2" name="especialidade" id="especialidade">
-            <option value="" disabled selected>Selecione uma especialidade</option>
-            {% for especialidade in especialidades %}
-            <option value="{{ especialidade.nome }}">{{ especialidade.nome }}</option>
-            {% endfor %}
-        </select>
-        <table class="table" id="medicosTable">
-            <thead>
-                <tr>
-                    <th scope="col">Médico</th>
-                    <th scope="col">CRM</th>
-                    <th scope="col">Especialidade</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for Medico in medicos_ativos %}
-                <tr data-search="{{ Medico.user.username }} {{ Medico.crm }} {{ Medico.especialidades.all|join:' ' }}">
-                    <td>{{ Medico.user.username }}</td>
-                    <td>{{ Medico.crm }}</td>
-                    <td>{{ Medico.especialidades.all|join:", " }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 bg-light">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-users fa-3x text-primary me-3"></i>
+                    <div>
+                        <h5 class="card-title text-muted fw-bold mb-0">Pacientes Cadastrados</h5>
+                        <p class="card-text fs-2 fw-bolder">{{ qtd_pacientes }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+<div class="card shadow-sm mb-5">
+    <div class="card-header bg-white border-bottom">
+        <h4 class="mb-0 d-flex align-items-center"><i class="fa-solid fa-user-doctor me-2"></i> Médicos Ativos</h4>
+    </div>
+    <div class="card-body dashboard-cards">
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6 mb-2 mb-md-0">
+                <input class="form-control" type="text" placeholder="🔍 Pesquisar médico por nome ou CRM" id="searchInput">
+            </div>
+            <div class="col-md-4 mb-2 mb-md-0">
+                <select class="form-select" name="especialidade" id="especialidade">
+                    <option value="" selected>Todas as Especialidades</option>
+                    {% for especialidade in especialidades %}
+                    <option value="{{ especialidade.nome }}">{{ especialidade.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="medicosTable">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Médico</th>
+                        <th scope="col">CRM</th>
+                        <th scope="col">Especialidade(s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for Medico in medicos_ativos %}
+                    <tr class="position-relative" data-search="{{ Medico.user.username|lower }} {{ Medico.crm }} {% for esp in Medico.especialidades.all %}{{ esp.nome|lower }} {% endfor %}">
+                        <td>
+                            {{ Medico.user.username }}
+                            <a href="{% url 'adm-detalhe-medico' Medico.id %}" class="stretched-link"></a>
+                        </td>
+                        <td><span class="badge bg-secondary">{{ Medico.crm }}</span></td>
+                        <td>{{ Medico.especialidades.all|join:", " }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">Nenhum médico ativo encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-<div class="container border -3 mt-4 rounded-4">
-    <h3>Consultas de hoje:</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="col">Nome do paciente</th>
-                <th class="col">Médico</th>
-                <th class="col">Horário</th>
-                <th class="col">Tipo</th>
-                <th class="col">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for consulta in proximas_consultas %}
-            <tr>
-                <td>{{ consulta.paciente.user.username }}</td>
-                <td>{{ consulta.medico.user.username }}</td>
-                <td>{{ consulta.data|date:"H:i" }}</td>
-                <td>{{ consulta.servico }}</td>
-                <td>{{ consulta.status }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white border-bottom">
+        <h4 class="mb-0 d-flex align-items-center"><i class="fa-solid fa-calendar-check me-2"></i> Próximas Consultas de Hoje</h4>
+    </div>
+    <div class="card-body dashboard-cards">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle" id="consultasTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Paciente</th>
+                        <th scope="col">Médico</th>
+                        <th scope="col">Horário</th>
+                        <th scope="col">Serviço/Tipo</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for consulta in proximas_consultas %}
+                    <tr class="position-relative">
+                        <td>
+                            {{ consulta.paciente.user.username }}
+                            <a href="{% url 'adm-detalhe-consulta' consulta.id %}" class="stretched-link"></a>
+                        </td>
+                        <td>{{ consulta.medico.user.username }}</td>
+                        <td><span class="badge bg-info text-dark">{{ consulta.data|date:"H:i" }}</span></td>
+                        <td>{{ consulta.servico }}</td>
+                        <td>
+                            {% if consulta.status == 'AGENDADA' %}
+                                <span class="badge bg-primary">{{ consulta.status }}</span>
+                            {% elif consulta.status == 'EM_ANDAMENTO' %}
+                                <span class="badge bg-warning text-dark">{{ consulta.status }}</span>
+                            {% elif consulta.status == 'CANCELADA' %}
+                                <span class="badge bg-danger">{{ consulta.status }}</span>
+                            {% else %}
+                                <span class="badge bg-success">{{ consulta.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Nenhuma consulta agendada para hoje.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
-    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="{% static 'js/adm/dashboard.js' %}"></script> 
 {% endblock %}

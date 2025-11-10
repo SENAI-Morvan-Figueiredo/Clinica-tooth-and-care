@@ -2,36 +2,175 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
-    <h1>Informações pessoais</h1>
-    <p>Nome: {{medico.user.username}}</p>
-    <p>Email: {{medico.user.email}}</p>
-    <p>CRM: {{medico.crm}}</p>
-    <p>Telefone: {{medico.telefone}}</p>
-    <a href="{% url 'medDetalhesMed' %}" class="text-decoration-none mb-3">Editar</a>
-</div>
-<div class="container">
-    <h1>Próximas Consultas</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Paciente</th>
-                <th>Data</th>
-                <th>Serviço</th>
-            </tr>
-        </thed>
-        {% for consulta in consultas %}
-        <tr>
-            <td style="border: 1px solid black;">{{consulta.paciente}}</td>
-            <td style="border: 1px solid black;">{{consulta.data}}</td>
-            <td style="border: 1px solid black;">{{consulta.servico}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+<div class="container py-5">
 
+    <!-- Seção de informações pessoais -->
+    <div class="card shadow-sm mb-5 border-0 info-card">
+        <div class="card-body d-flex align-items-center flex-wrap">
+            <!-- Avatar / Ícone -->
+            <div class="avatar me-4 mb-3 mb-md-0">
+                <div class="avatar-circle">
+                    {{ medico.user.username|slice:":1" }}
+                </div>
+            </div>
+
+            <!-- Dados do médico -->
+            <div>
+                <h2 class="fw-bold mb-3 text-main">Informações Pessoais</h2>
+                <p class="fs-5 mb-2"><strong>Nome:</strong> {{ medico.user.username }}</p>
+                <p class="fs-5 mb-2"><strong>Email:</strong> {{ medico.user.email }}</p>
+                <p class="fs-5 mb-2"><strong>CRM:</strong> {{ medico.crm }}</p>
+                <p class="fs-5 mb-4"><strong>Telefone:</strong> {{ medico.telefone }}</p>
+
+                <a href="{% url 'medDetalhesMed' %}" class="btn edit-btn px-4">
+                    <i class="bi bi-pencil-square me-1"></i> Editar Informações
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de próximas consultas -->
+    <div class="card shadow-sm border-0 consult-card">
+        <div class="card-body">
+            <h2 class="fw-bold mb-4 text-main">Próximas Consultas</h2>
+
+            {% if consultas %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle shadow-sm text-center">
+                        <thead style="background-color: #2C8E89; color: white;">
+                            <tr>
+                                <th>Paciente</th>
+                                <th>Data</th>
+                                <th>Serviço</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for consulta in consultas %}
+                            <tr>
+                                <td>{{ consulta.paciente }}</td>
+                                <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
+                                <td>{{ consulta.servico }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert text-center mt-3 empty-alert">
+                    Nenhuma consulta agendada no momento.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
 
+
 {% block extra_scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    /* ======= Cores e base ======= */
+    :root {
+        --main-color: #2C8E89;
+        --light-bg: #f8f9fa;
+        --hover-bg: #eaf8f7;
+    }
+
+    body {
+        background-color: var(--light-bg);
+        font-family: "Inter", Arial, sans-serif;
+        color: #333;
+    }
+
+    .text-main {
+        color: var(--main-color);
+    }
+
+    /* ======= Cartões ======= */
+    .card {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 4px 15px rgba(44, 142, 137, 0.15);
+    }
+
+    .info-card {
+        border-left: 6px solid var(--main-color);
+    }
+
+    .consult-card {
+        border-top: 4px solid var(--main-color);
+    }
+
+    /* ======= Avatar ======= */
+    .avatar-circle {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background-color: var(--main-color);
+        color: white;
+        font-size: 36px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(44, 142, 137, 0.3);
+    }
+
+    /* ======= Botão ======= */
+    .edit-btn {
+        background-color: var(--main-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .edit-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.03);
+    }
+
+    /* ======= Tabela ======= */
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: var(--hover-bg);
+        transition: 0.3s;
+    }
+
+    th {
+        font-weight: 600;
+    }
+
+    /* ======= Alert ======= */
+    .empty-alert {
+        background-color: #e3f7f6;
+        color: var(--main-color);
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 1rem;
+    }
+
+    /* ======= Responsividade ======= */
+    @media (max-width: 768px) {
+        .avatar-circle {
+            width: 70px;
+            height: 70px;
+            font-size: 28px;
+        }
+
+        .fs-5 {
+            font-size: 1rem !important;
+        }
+    }
+</style>
 {% endblock %}

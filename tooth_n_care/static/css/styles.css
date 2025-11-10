@@ -1,9 +1,11 @@
 :root {
   --sidebar-background: #257470;
   --navbar-background: #2C8E89;
+  --primary-color: #2C8E89; /* Cor principal para botões, etc. */
   --fonte: Arial, sans-serif;
 }
 
+/* Base e Layout */
 * {
   box-sizing: border-box;
   font-family: var(--fonte);
@@ -12,57 +14,52 @@
 html, body {
   margin: 0;
   padding: 0; 
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 100vh; /* Essencial para que o layout flex funcione em 100% da tela */
 }
+
 body {
   background-color: #C4E4DF;
 }
 
+#wrapper {
+  height: 100vh; /* Garante que o conteúdo ocupe toda a altura da tela, mesmo com pouco conteúdo */
+}
+
+/* Sidebar Styling (Cores e Ícones) */
 #sidebar {
   background-color: var(--sidebar-background);
   color: white;
-  padding: 50px 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-
-  a {
-    color: white;
-    text-decoration: none;
-    margin-bottom: 10px;
-    display: block;
-  }
+  min-width: 250px; /* Largura fixa para a sidebar (UI/UX) */
 }
 
+#sidebar a {
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s; 
+}
+
+#sidebar a:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Efeito hover sutil */
+}
+
+#sidebar img {
+  width: 30px; 
+  height: 30px;
+}
+
+/* Navbar Styling */
 #dashboard-navbar {
   background-color: var(--navbar-background);
   color: white;
-  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  z-index: 10;
 }
 #dashboard-navbar img {
   height: 60px;
-  width: auto; 
 }
 
-#main {
-  height: 100%;
-  width: 100%;
-}
-
-.td-checkbox {
-    z-index: 2;
-}
-
-.container {
-  height: 100%;
-  background-color: white;
-}
-
-#content-area {
-  padding-block: 10px;
-  padding-inline: 0;
+#page-content-wrapper {
+  overflow-y: auto;
 }
 
 #searchInput:active {
@@ -70,17 +67,24 @@ body {
 }
 
 #searchInput,
-.dataInput,
-select {
-  max-width: 400px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 4px 14px;
+select.form-select,
+input.form-control[type="date"],
+input.form-control[type="text"] {
+  border-color: var(--primary-color) !important;
 }
 
-#searchInput:focus,
-.dataInput:focus,
-select:focus {
-  outline: none;
-  border-color: #58D3CD;
+#adiar-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.6); 
+}
+
+/* dashboard */
+.dashboard-cards {
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+/* listas */
+#tableWrapper {
+    max-height: 80vh;
+    overflow-y: auto;
 }

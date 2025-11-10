@@ -1,7 +1,6 @@
 {% extends "baseMed.html" %}
 {% load static %}
 
-
 {% block content %}
     <h1>Consultas do Médico</h1>
 
@@ -9,47 +8,107 @@
         <p>Exibindo consultas para o médico: <strong>{{ medico.user.get_full_name|default:medico.user.username }}</strong> (CRM: {{ medico.crm }})</p>
 
         {% if consultas %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Data e Hora</th>
-                        <th>Paciente</th>
-                        <th>Serviço</th>
-                        <th>Sala</th>
-                        <th>Valor</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for consulta in consultas %}
-                    <tr>
-                        <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
-                        <td>{{ consulta.paciente.user.get_full_name|default:consulta.paciente.user.username }}</td>
-                        <td>{{ consulta.get_servico_display }}</td>
-                        <td>{{ consulta.sala }}</td>
-                        <td>R$ {{ consulta.valor|floatformat:2 }}</td>
-                        <td>{{ consulta.get_status_display }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle shadow-sm">
+                    <thead class="text-center">
+                        <tr class="a" style="background-color: #2C8E89; color: white;">
+                            <th>Data e Hora</th>
+                            <th>Paciente</th>
+                            <th>Serviço</th>
+                            <th>Sala</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for consulta in consultas %}
+                        <tr>
+                            <td class="text-center">{{ consulta.data|date:"d/m/Y H:i" }}</td>
+                            <td>{{ consulta.paciente.user.get_full_name|default:consulta.paciente.user.username }}</td>
+                            <td class="text-center">{{ consulta.get_servico_display }}</td>
+                            <td class="text-center">{{ consulta.sala }}</td>
+                            <td class="text-center text-success fw-semibold">R$ {{ consulta.valor|floatformat:2 }}</td>
+                            <td class="text-center">
+                                {% if consulta.get_status_display == "Concluída" %}
+                                    <span class="badge" style="background-color: #2C8E89;">{{ consulta.get_status_display }}</span>
+                                {% elif consulta.get_status_display == "Pendente" %}
+                                    <span class="badge bg-warning text-dark">{{ consulta.get_status_display }}</span>
+                                {% elif consulta.get_status_display == "Cancelada" %}
+                                    <span class="badge bg-danger">{{ consulta.get_status_display }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ consulta.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
+<<<<<<< HEAD
+            <div class="alert text-center mt-4" style="background-color: #e3f7f6; color: #2C8E89;" role="alert">
+                O médico <strong>{{ primeiro_medico.user.username }}</strong> não possui consultas agendadas.
+            </div>
+=======
 <<<<<<< HEAD
             <p>O médico **{{ medico.user.username }}** não possui consultas agendadas.</p>
 =======
             <p>O médico **{{ primeiro_medico.user.username }}** não possui consultas agendadas.</p>
 >>>>>>> login
+>>>>>>> main
         {% endif %}
     {% else %}
-        <p>Nenhum médico encontrado no banco de dados.</p>
+        <div class="alert text-center mt-4" style="background-color: #f8d7da; color: #842029;" role="alert">
+            Nenhum médico encontrado no banco de dados.
+        </div>
     {% endif %}
+<<<<<<< HEAD
+</div>
+=======
 <<<<<<< HEAD
 =======
     </div>
 >>>>>>> login
 
+>>>>>>> main
 {% endblock content %}
 
 {% block extra_scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: "Inter", Arial, sans-serif;
+    }
+
+    h1 {
+        letter-spacing: 0.5px;
+    }
+
+    table {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #2C8E89;
+        transition: 0.3s;
+    }
+
+    .card {
+        border-left: 4px solid #2C8E89;
+        border-radius: 8px;
+    }
+
+    .badge {
+        font-size: 0.9rem;
+        padding: 0.5em 0.75em;
+    }
+
+    .a th{
+        background-color: #2C8E89;
+        color: #ffffff;
+    }
+</style>
 {% endblock %}

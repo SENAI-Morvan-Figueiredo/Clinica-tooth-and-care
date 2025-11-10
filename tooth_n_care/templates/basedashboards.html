@@ -5,7 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Página admin{% endblock %}</title>
+    <title>{% block title %}Painel de Administração{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJqLw1P4n3R7E9Fp1813w8X2J6P3F2WfB1Y0u8H8Q72d1E6b5n6L5V5Z2D4G5V6V7V4G5" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -15,16 +18,27 @@
 
 <body>
 
-    {% include 'partials/navbar.html' %}
-    <div class="row" id="main">
-        {% include 'partials/sidebar.html' %}
-        <div class="col-10 d-flex flex-column" id="content-area">
-            {% block content %}
-            {% endblock %}
+    <div class="d-flex position-relative" id="wrapper">
+        {% include 'partials/sidebar.html' %} 
+
+        <div id="page-content-wrapper" class="flex-grow-1">
+            {% include 'partials/navbar.html' %} 
+
+            <div class="container-fluid p-4" id="content-area">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+        xintegrity="sha384-Yh5I0g0gNqE5gD1aH7J5Jp7C4G4Q7V4U6I3G2S9R8N1H8E2C6S4T6R4V5X7X6I3H5J7T8U6I3H5J7T8U6I3" 
+        crossorigin="anonymous"></script>
     {% block extra_scripts %}
     {% endblock %}
 </body>
-
 </html>

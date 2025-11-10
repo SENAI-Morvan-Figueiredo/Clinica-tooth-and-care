@@ -1,86 +1,119 @@
 {% extends "basedashboards.html" %}
 {% load static %}
 
-{% block extra_head %}
-    <link rel="stylesheet" href="{% static 'css/adm_consultas.css' %}">
-{% endblock %}
-
 {% block title %}Detalhe da Consulta{% endblock %}
 
 {% block content %}
-<div class="container border rounded-4 mt-3" id="medico-container">
-    <div class="campo d-flex justify-content-start gap-2 align-items-center">
-        <img src="" alt="" c>
-        <p><strong>Médico:</strong> {{ consulta.medico.user.username }}</p>
-    </div>
-    <div class="campo d-flex justify-content-start gap-2 align-items-center">
-        <p><strong>CRM:</strong> {{ consulta.medico.crm }}</p>
-    </div>
-    <div class="campo d-flex justify-content-start gap-2 align-items-center">
-        <p>
-            <strong>Especialidades:</strong> 
-            {% for especialidade in consulta.medico.especialidades.all %}
-                {{ especialidade.nome }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-    </div>
-</div>
-<div class="container border rounded-4 mt-3" id="paciente-container">
-    <div class="campo d-flex justify-content-start gap-2 align-items-center">
-        <img src="" alt="" class="profile-picture">
-        <p><strong>Paciente:</strong> {{ consulta.paciente.user.username }}</p>
-    </div>
-    <div class="campo d-flex justify-content-start gap-2 align-items-center">
-        <p><strong>CPF:</strong> {{ consulta.paciente.cpf }}</p>
-    </div>
-    <div class="campo d-flex justify-content-start gap-2 align-items-center">
-        <p><strong>Data de nascimento:</strong> {{ consulta.paciente.data_nasc }}</p>
-    </div>
-</div>
-<div class="container border rounded-4 mt-3" id="consulta-container">
-    <h2>Detalhes da Consulta:</h2>
-    <div class="campo mt-3">
-        <p class="mb-0"><strong>Data:</strong></p>
-        <li>{{ consulta.data|date:"d/m/Y" }}</li>
-    </div>
-    <div class="campo mt-3">
-        <p class="mb-0"><strong>Horário:</strong></p>
-        <li>{{ consulta.data|date:"H:i" }}</li>
-    </div>
-    <div class="campo mt-3">
-        <p class="mb-0"><strong>Serviço:</strong></p>
-        <li>{{ consulta.servico }}</li>
-    </div>
-    <div class="campo mt-3">
-        <p class="mb-0"><strong>Status:</strong></p>
-        <li>{{ consulta.status }}</li>
-    </div>
-    <div class="d-flex gap-2">
-        <button class="btn btn-secondary" id="adiar-btn">Adiar consulta</button>
-        <a href="{% url 'deletar-consulta' consulta.id %}" class="btn btn-primary">Excluir Consulta</a>
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="text-primary fw-bold">Detalhe da Consulta</h2>
     </div>
 </div>
 
-<dialog id="adiar-modal">
-    <h4>Para quando deseja adiar?</h4>
-    <form action="#" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="button" class="btn btn-secondary mt-3" id="cancelar-btn">Cancelar</button>
-        <button type="submit" class="btn btn-primary mt-3" id="confirmar-btn">Confirmar</button>
-    </form>
-</dialog>
+<!-- DETALHES GERAIS E AÇÕES (CARD PRINCIPAL) -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h3 class="fw-bold mb-0"><i class="fas fa-calendar-alt me-2 text-primary"></i> Consulta #{{ consulta.id }}</h3>
+                <p class="text-muted mb-0">{{ consulta.data|date:"d/m/Y \à\s H:i" }}</p>
+            </div>
+            
+            <!-- Botão de Deletar com Modal -->
+            <button 
+                type="button" 
+                id="delete-consulta-button" 
+                class="btn btn-outline-danger" 
+                data-delete-url="{% url 'deletar-consulta' consulta.id %}"
+                data-consulta-id="{{ consulta.id }}"
+                data-consulta-data="{{ consulta.data|date:'d/m/Y H:i' }}"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmDeleteModal"
+            >
+                <i class="fas fa-trash-alt me-1"></i> Deletar Consulta
+            </button>
+        </div>
+        
+        <hr class="mb-4">
+
+        <div class="row g-4">
+            <!-- Coluna de Status e Serviço -->
+            <div class="col-md-4">
+                <div class="p-3 border rounded-3 h-100 bg-light">
+                    <p class="mb-1 text-muted small"><i class="fas fa-hand-holding-medical me-1"></i> Serviço</p>
+                    <p class="fw-bold fs-5">{{ consulta.servico }}</p>
+                    
+                    <p class="mb-1 text-muted small"><i class="fas fa-info-circle me-1"></i> Status</p>
+                    {% if consulta.status == 'agendada' %}
+                        <span class="badge bg-primary fs-6">{{ consulta.status|capfirst }}</span>
+                    {% elif consulta.status == 'realizada' %}
+                        <span class="badge bg-success fs-6">{{ consulta.status|capfirst }}</span>
+                    {% elif consulta.status == 'cancelada' %}
+                        <span class="badge bg-danger fs-6">{{ consulta.status|capfirst }}</span>
+                    {% else %}
+                        <span class="badge bg-secondary fs-6">{{ consulta.status|capfirst }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Coluna de Informações do Paciente -->
+            <div class="col-md-4">
+                <div class="p-3 border rounded-3 h-100">
+                    <p class="mb-1 text-muted small"><i class="fas fa-user me-1"></i> Paciente</p>
+                    <h5 class="fw-bold">{{ consulta.paciente.user.username }}</h5>
+                    <ul class="list-unstyled small mb-0">
+                        <li><i class="fas fa-envelope me-1 text-primary"></i> {{ consulta.paciente.user.email }}</li>
+                        <li><i class="fas fa-phone me-1 text-primary"></i> {{ consulta.paciente.telefone }}</li>
+                    </ul>
+                    <!-- Link para detalhes do paciente -->
+                    <a href="{% url 'adm-detalhe-paciente' consulta.paciente.id %}" class="btn btn-sm btn-link p-0 mt-2">Ver Perfil</a>
+                </div>
+            </div>
+
+            <!-- Coluna de Informações do Médico -->
+            <div class="col-md-4">
+                <div class="p-3 border rounded-3 h-100">
+                    <p class="mb-1 text-muted small"><i class="fas fa-user-md me-1"></i> Médico</p>
+                    <h5 class="fw-bold">{{ consulta.medico.user.username }}</h5>
+                    <ul class="list-unstyled small mb-0">
+                        <li><i class="fas fa-id-card me-1 text-primary"></i> CRM: {{ consulta.medico.crm }}</li>
+                        <!-- Assumindo que especialidades é um campo relacionado e pegando a primeira -->
+                        <li><i class="fas fa-stethoscope me-1 text-primary"></i> {{ consulta.medico.especialidades.first.nome|default:'N/A' }}</li>
+                    </ul>
+                    <!-- Link para detalhes do médico -->
+                    <a href="{% url 'adm-detalhe-medico' consulta.medico.id %}" class="btn btn-sm btn-link p-0 mt-2">Ver Perfil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteModalLabel"><i class="fas fa-exclamation-triangle me-2"></i> Confirmação de Exclusão</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você está prestes a deletar a consulta agendada para <strong id="consultaDataPlaceholder"></strong> (ID: <strong id="consultaIdPlaceholder"></strong>).</p>
+                <div class="alert alert-warning small mt-3">
+                    <i class="fas fa-info-circle me-1"></i> Esta ação é **irreversível**. A exclusão será permanente e não pode ser desfeita.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="{% url 'deletar-consulta' consulta.id %}" class="btn btn-danger" id="confirmDeleteButton">Excluir Consulta</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_scripts %}
-<script>
-// Modal:
-const modal = document.getElementById('adiar-modal');
-document.getElementById('adiar-btn').addEventListener('click', () => {
-    modal.showModal();
-});
-document.getElementById('cancelar-btn').addEventListener('click', () => {
-    modal.close();
-});
-</script>
+    <!-- Script de Lógica Específica da Página de Detalhes da Consulta -->
+    <script src="{% static 'js/adm/consultaDetalhe.js' %}"></script>
 {% endblock %}
