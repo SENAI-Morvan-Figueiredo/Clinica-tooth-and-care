@@ -1,8 +1,8 @@
 {% load static %}
-<nav id="dashboard-navbar" class="d-flex align-items-center px-3 py-2">
+<nav id="dashboard-navbar" class="d-flex justify-content-between align-items-center px-3 py-2">
     <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo">
     <h3 class="ms-3">Tooth & Care Dashboard</h3>
     <form method="post" action="{% url 'account_logout' %}" class="justify-self-end">
-    {% csrf_token %} <button type="submit" class="btn">Sair</button>
+        {% csrf_token %} <button type="submit" class="btn btn-outline-light">Sair</button>
     </form>
 </nav>

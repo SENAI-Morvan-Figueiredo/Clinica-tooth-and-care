@@ -10,7 +10,7 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <h2 class="mb-4 text-primary fw-bold">Gestão de Médicos</h2>
+        <h2 class="mb-4 fw-bold">Gestão de Médicos</h2>
     </div>
 </div>
 
@@ -71,7 +71,7 @@
                         </td>
                     </tr>
                     {% empty %}
-                    <tr>
+                    <tr class="dataTables_empty">
                         <td colspan="5" class="text-center text-muted py-4">Nenhum médico cadastrado.</td>
                     </tr>
                     {% endfor %}

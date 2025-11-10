@@ -39,7 +39,7 @@
                         <th scope="col" class="text-center" style="width: 80px;">Ações</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="table-body">
                     {% for paciente in pacientes %}
                     <tr class="position-relative patient-row" data-search="{{ paciente.user.username|lower }} {{ paciente.cpf|lower}}">
                         <td class="text-center">
@@ -57,8 +57,8 @@
                         </td>
                     </tr>
                     {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-4">Nenhum paciente cadastrado.</td>
+                    <tr class="dataTables_empty">
+                        <td id="no-data" colspan="5" class="text-center text-muted py-4">Nenhum paciente cadastrado.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

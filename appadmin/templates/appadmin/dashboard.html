@@ -4,7 +4,7 @@
 {% block title %}Dashboard Admin - Visão Geral{% endblock %}
 
 {% block content %}
-<h1 class="mb-4 text-primary">Dashboard Administrativo</h1>
+<h1 class="mb-4">Dashboard Administrativo</h1>
 
 <div class="row g-4 mb-5">
     <div class="col-md-4">
@@ -60,7 +60,7 @@
                         <td>{{ Medico.especialidades.all|join:", " }}</td>
                     </tr>
                     {% empty %}
-                    <tr>
+                    <tr class="dataTables_empty">
                         <td colspan="3" class="text-center text-muted">Nenhum médico ativo encontrado.</td>
                     </tr>
                     {% endfor %}

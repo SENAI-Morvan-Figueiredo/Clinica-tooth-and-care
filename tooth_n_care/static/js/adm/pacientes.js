@@ -36,48 +36,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const removeButton = document.getElementById('remove-paciente');
     const allCheckbox = document.getElementById('select-all');
     
-    // Assegura que haja um delay para o DOM ser totalmente carregado
-    setTimeout(() => {
-        const checkboxes = document.querySelectorAll('.paciente-checkbox');
+    const checkboxes = document.querySelectorAll('.paciente-checkbox');
+    
+    function updateRemoveButtonState() {
+        // Filtra apenas os checkboxes que estão checados E cuja linha pai está visível (se filtrada)
+        const checkedCount = Array.from(checkboxes).filter(cb => {
+            return cb.checked && $(cb).closest('tr').is(':visible');
+        }).length;
         
-        // --- Lógica de Habilitar/Desabilitar Botão de Remover ---
-        function updateRemoveButtonState() {
-            const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-            removeButton.disabled = checkedCount === 0;
-            removeButton.textContent = checkedCount > 0 
-                ? `Remover Selecionados (${checkedCount})` 
-                : 'Remover Selecionados';
-        }
+        removeButton.disabled = checkedCount === 0;
+        removeButton.textContent = checkedCount > 0 
+            ? `Remover Selecionados (${checkedCount})` 
+            : 'Remover Selecionados';
+    }
 
-        // --- Lógica de Seleção em Massa ---
-        allCheckbox.addEventListener('change', (e) => { 
-            checkboxes.forEach(cb => cb.checked = e.target.checked);
-            updateRemoveButtonState();
-        });
-
-        function checkAll() {
-            let allChecked = true;
-            let checkedCount = 0;
-            checkboxes.forEach(cb => {
-                if(cb.checked) {
-                    checkedCount++;
-                } else {
-                    allChecked = false;
-                }
-            });
-            
-            allCheckbox.checked = allChecked && checkboxes.length > 0;
-            updateRemoveButtonState();
-        }
-
+    // --- Lógica de Seleção em Massa ---
+    allCheckbox.addEventListener('change', (e) => { 
+        // Seleciona/deseleciona apenas os checkboxes em linhas VISÍVEIS
         checkboxes.forEach(cb => {
-            cb.addEventListener('change', checkAll);
+            if ($(cb).closest('tr').is(':visible')) {
+                cb.checked = e.target.checked;
+            } else if (e.target.checked === false) {
+                 cb.checked = false;
+            }
         });
+        updateRemoveButtonState();
+    });
 
-        // Inicializa o estado do botão
-        checkAll();
-    }, 100); 
+    function checkAll() {
+        let allChecked = true;
+        let checkedCount = 0;
+        checkboxes.forEach(cb => {
+            if(cb.checked) {
+                checkedCount++;
+            } else {
+                allChecked = false;
+            }
+        });
+        
+        allCheckbox.checked = allChecked && checkboxes.length > 0;
+        updateRemoveButtonState();
+    }
 
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', checkAll);
+    });
+
+    // Inicializa o estado do botão
+    checkAll();
     
     // --- Lógica do MODAL de Exclusão e Fetch API ---
     const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
@@ -127,30 +133,54 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// --- Lógica do DataTable e Filtro Customizado ---
 $(document).ready(function() {
-    const tabela = $('#tabela-pacientes').DataTable({
-        dom: 'lrtip',
-        paging: false,      // desativa paginação
-        info: false,        // remove "Mostrando X de Y"
-        searching: false,   // desativa o campo de pesquisa interno
-        ordering: false,    // Desativa a ordenação clicável nas colunas (A ordenação será feita no JavaScript ou Django)
-        columnDefs: [
-            { targets: [0, 4], searchable: false } // Impede busca nas colunas de checkbox e ações
-        ]
-    });
+    // Verifica se a tabela tem linhas de dados válidas (não apenas a mensagem de 'empty')
+    const possuiDados = tabelaElemento.find('tbody tr:not(.dataTables_empty)').length > 0;
+    
+    let tabela;
 
-    // Filtra no JavaScript para cada tecla apertada (mantendo a funcionalidade original)
-    document.getElementById('searchInput').addEventListener('keyup', function() {
+    if (possuiDados) {
+        // Inicializa o DataTables APENAS se houver dados
+        tabela = tabelaElemento.DataTable({
+            dom: 'lrtip',
+            paging: false,
+            info: false,
+            searching: false,
+            ordering: false,
+            columnDefs: [
+                { targets: [0, 4], searchable: false }
+            ]
+        });
+    } else {
+        // Cria um objeto proxy ou trata o caso sem dados para evitar erros no resto do código
+        tabela = {
+            rows: () => ({ every: () => {} }),
+            // Adicione outros métodos mockados (como .rows().every) que você usa abaixo
+        };
+    }
+
+    let debounceTimer; // Variável para controlar o debounce
+
+    function aplicarFiltro() {
         const termo = $('#searchInput').val().toLowerCase().trim();
         
         tabela.rows().every(function() {
             const rowNode = $(this.node());
-            // Usando o atributo data-search definido no HTML
+            // Pega o valor do atributo data-search definido no HTML
             const dataSearch = rowNode.data('search') || ''; 
             const corresponde = dataSearch.toLowerCase().includes(termo);
             
             rowNode.toggle(corresponde);
         });
+
+        if (typeof checkAll === "function") {
+            checkAll();
+        }
+    }
+
+    // Aplica a otimização de Debounce ao evento keyup
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        clearTimeout(debounceTimer); 
+        debounceTimer = setTimeout(aplicarFiltro, 300); 
     });
 });

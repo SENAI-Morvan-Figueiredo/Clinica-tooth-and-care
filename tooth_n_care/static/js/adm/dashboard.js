@@ -1,11 +1,25 @@
 $(document).ready(function() {
-    const tabela = $('#medicosTable').DataTable({
-        dom: 'lrtip',
-        paging: false, // desativa paginação
-        info: false,   // remove "Mostrando X de Y"
-        searching: false, // desativa o campo de pesquisa interno
-        ordering: false    // mantém a ordenação clicável nas colunas
-    });
+    const tabelaElemento = $('#tabela-consultas');
+    // Verifica se há linhas de dados válidas (ignora a linha de mensagem 'empty' se ela existir)
+    const possuiDados = tabelaElemento.find('tbody tr').length > 0 && !tabelaElemento.find('tbody tr').hasClass('dataTables_empty');
+    
+    let tabela;
+
+    if (possuiDados) {
+        // Inicializa o DataTables APENAS se houver dados para evitar o erro.
+        tabela = tabelaElemento.DataTable({
+            dom: 'lrtip',
+            paging: false,      // desativa paginação
+            info: false,        // remove "Mostrando X de Y"
+            searching: false,   // desativa o campo de pesquisa interno
+            ordering: false     // mantém a ordenação clicável nas colunas
+        });
+    } else {
+        // Objeto mock para evitar que o restante do código falhe se a tabela estiver vazia
+        tabela = {
+            rows: () => ({ every: () => {} }),
+        };
+    }
 
     // função filtro
     function filtrar() {
