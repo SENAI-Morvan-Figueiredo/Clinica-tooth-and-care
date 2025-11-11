@@ -9,16 +9,26 @@ class ConsultaForm(forms.ModelForm):
         widgets = {}
 
 class ConsultaAdiar(forms.ModelForm):
+    data_widget = SplitDateTimeWidget( # widget para usar no campo
+        date_attrs={'type': 'date', 'class': 'form-control mb-3 mx-3'},
+        time_attrs={'type': 'time', 'class': 'form-control mb-3 mx-3'},
+    )
+    # cria o campo para evitar o DateTimeField comum
+    data = forms.SplitDateTimeField( 
+        widget=data_widget
+    )
     class Meta:
-        model= Consulta
-        fields = ['data', 'medico']
-        # widgets = {
-        #     'data': forms.SplitDateTimeWidget(
-        #         # Definindo os widgets internos para Data e Hora
-        #         date_attrs={'type': 'date'},
-        #         time_attrs={'type': 'time'},
-        #     )
-        # }
+        model = Consulta
+        fields = ['data']
+        widgets = {}
+
+    def save(self, commit=True):
+        consulta = super().save(commit=False) 
+        consulta.status = 'remarcada'
+        if commit:
+            consulta.save()
+            
+        return consulta
 
 class ExameForm(forms.ModelForm):
     class Meta:

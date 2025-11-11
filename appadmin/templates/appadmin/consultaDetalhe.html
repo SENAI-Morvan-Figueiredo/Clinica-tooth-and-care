@@ -19,7 +19,8 @@
                 <p class="text-muted mb-0">{{ consulta.data|date:"d/m/Y \à\s H:i" }}</p>
             </div>
             
-            <!-- Botão de Deletar com Modal -->
+            <div id="buttons" class="d-flex gap-2">
+                <!-- Botão de Deletar com Modal -->
             <button 
                 type="button" 
                 id="delete-consulta-button" 
@@ -32,6 +33,16 @@
             >
                 <i class="fas fa-trash-alt me-1"></i> Deletar Consulta
             </button>
+                <!-- Botão de Adiar com Modal -->
+                <button 
+                    type="button" 
+                    class="btn btn-outline-secondary" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#delayConsultationModal"
+                >
+                    <i class="fas fa-clock me-1"></i> Adiar Consulta
+                </button>
+            </div>
         </div>
         
         <hr class="mb-4">
@@ -110,7 +121,35 @@
         </div>
     </div>
 </div>
-
+<!-- MODAL DE ADIAR CONSULTA -->
+<div class="modal fade" id="delayConsultationModal" tabindex="-1" aria-labelledby="delayConsultationModalLabel" aria-hidden="true">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delayConsultationModalLabel"><i class="fas fa-clock me-2"></i> Adiar Consulta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Selecione a nova data e hora para a consulta agendada para <strong>{{ consulta.data|date:"d/m/Y H:i" }}</strong>:</p>
+                    <form action="" method="POST">
+                        <div class="mx-5 px-3">
+                            {{ form.as_p }}
+                        </div>
+                        {% if form.data.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.data.errors }}
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary">Adiar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}

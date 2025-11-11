@@ -296,3 +296,5 @@ def deletar_paciente(request, pk=-1):
         user.delete() # deleta o usuário
         
         return redirect('adm-pacientes')
+
+# ------------------update views ----------------------------
