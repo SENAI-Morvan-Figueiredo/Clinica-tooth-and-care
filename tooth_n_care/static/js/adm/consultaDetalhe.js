@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    const deleteModal = new bootstrap.Modal(deleteModalElement);
     const confirmDeleteButton = document.getElementById('confirmDeleteButton');
     const consultaDataPlaceholder = document.getElementById('consultaDataPlaceholder');
     const consultaIdPlaceholder = document.getElementById('consultaIdPlaceholder');

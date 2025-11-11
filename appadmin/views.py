@@ -298,3 +298,12 @@ def deletar_paciente(request, pk=-1):
         return redirect('adm-pacientes')
 
 # ------------------update views ----------------------------
+@login_required
+def cancelar_consulta(request, pk):
+    consulta = Consulta.objects.get(pk=pk)
+    
+    #altera e salva o status
+    consulta.status = 'cancelada'
+    consulta.save()
+
+    return redirect('adm-detalhe-consulta', pk)

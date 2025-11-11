@@ -12,5 +12,6 @@ urlpatterns = [
     path('adicionar-medico', views.adicionar_medico, name="adicionar-medico"),
     path('deletar-medico/<int:pk>/', views.deletar_medico, name="adm-deletar-medico"),
     path('deletar-consulta/<int:pk>/', views.deletar_consulta, name="deletar-consulta"),
-    path('deletar-paciente/<int:pk>/', views.deletar_paciente, name="adm-deletar-paciente")
+    path('deletar-paciente/<int:pk>/', views.deletar_paciente, name="adm-deletar-paciente"),
+    path('cancelar-consulta/<int:pk>', views.cancelar_consulta, name="adm-cancelar-consulta"),
 ]

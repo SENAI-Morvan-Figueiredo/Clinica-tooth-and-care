@@ -18,33 +18,29 @@
                 <h3 class="fw-bold mb-0"><i class="fas fa-calendar-alt me-2 text-primary"></i> Consulta #{{ consulta.id }}</h3>
                 <p class="text-muted mb-0">{{ consulta.data|date:"d/m/Y \à\s H:i" }}</p>
             </div>
-            
+
             <div id="buttons" class="d-flex gap-2">
                 <!-- Botão de Deletar com Modal -->
-            <button 
-                type="button" 
-                id="delete-consulta-button" 
-                class="btn btn-outline-danger" 
-                data-delete-url="{% url 'deletar-consulta' consulta.id %}"
-                data-consulta-id="{{ consulta.id }}"
-                data-consulta-data="{{ consulta.data|date:'d/m/Y H:i' }}"
-                data-bs-toggle="modal"
-                data-bs-target="#confirmDeleteModal"
-            >
-                <i class="fas fa-trash-alt me-1"></i> Deletar Consulta
-            </button>
+                <button type="button" id="delete-consulta-button" class="btn btn-outline-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirmDeleteModal">
+                    Deletar Consulta
+                </button>
+                <!-- Botão de cancelar consulta -->
+                <button type="button" class="btn btn-outline-danger" id="cancelar-btn"
+                    data-bs-target="#cancelarConsulta"
+                    data-bs-toggle="modal">
+                    Cancelar Consulta
+                </button>
                 <!-- Botão de Adiar com Modal -->
-                <button 
-                    type="button" 
-                    class="btn btn-outline-secondary" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#delayConsultationModal"
-                >
-                    <i class="fas fa-clock me-1"></i> Adiar Consulta
+                <button type="button" class="btn btn-outline-secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delayConsultationModal">
+                    Adiar Consulta
                 </button>
             </div>
         </div>
-        
+
         <hr class="mb-4">
 
         <div class="row g-4">
@@ -53,16 +49,16 @@
                 <div class="p-3 border rounded-3 h-100 bg-light">
                     <p class="mb-1 text-muted small"><i class="fas fa-hand-holding-medical me-1"></i> Serviço</p>
                     <p class="fw-bold fs-5">{{ consulta.servico }}</p>
-                    
+
                     <p class="mb-1 text-muted small"><i class="fas fa-info-circle me-1"></i> Status</p>
                     {% if consulta.status == 'agendada' %}
-                        <span class="badge bg-primary fs-6">{{ consulta.status|capfirst }}</span>
+                    <span class="badge bg-primary fs-6">{{ consulta.status|capfirst }}</span>
                     {% elif consulta.status == 'realizada' %}
-                        <span class="badge bg-success fs-6">{{ consulta.status|capfirst }}</span>
+                    <span class="badge bg-success fs-6">{{ consulta.status|capfirst }}</span>
                     {% elif consulta.status == 'cancelada' %}
-                        <span class="badge bg-danger fs-6">{{ consulta.status|capfirst }}</span>
+                    <span class="badge bg-danger fs-6">{{ consulta.status|capfirst }}</span>
                     {% else %}
-                        <span class="badge bg-secondary fs-6">{{ consulta.status|capfirst }}</span>
+                    <span class="badge bg-secondary fs-6">{{ consulta.status|capfirst }}</span>
                     {% endif %}
                 </div>
             </div>
@@ -77,7 +73,8 @@
                         <li><i class="fas fa-phone me-1 text-primary"></i> {{ consulta.paciente.telefone }}</li>
                     </ul>
                     <!-- Link para detalhes do paciente -->
-                    <a href="{% url 'adm-detalhe-paciente' consulta.paciente.id %}" class="btn btn-sm btn-link p-0 mt-2">Ver Perfil</a>
+                    <a href="{% url 'adm-detalhe-paciente' consulta.paciente.id %}"
+                        class="btn btn-sm btn-link p-0 mt-2">Ver Perfil</a>
                 </div>
             </div>
 
@@ -92,7 +89,8 @@
                         <li><i class="fas fa-stethoscope me-1 text-primary"></i> {{ consulta.medico.especialidades.first.nome|default:'N/A' }}</li>
                     </ul>
                     <!-- Link para detalhes do médico -->
-                    <a href="{% url 'adm-detalhe-medico' consulta.medico.id %}" class="btn btn-sm btn-link p-0 mt-2">Ver Perfil</a>
+                    <a href="{% url 'adm-detalhe-medico' consulta.medico.id %}" class="btn btn-sm btn-link p-0 mt-2">Ver
+                        Perfil</a>
                 </div>
             </div>
         </div>
@@ -101,58 +99,90 @@
 
 
 <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="confirmDeleteModalLabel"><i class="fas fa-exclamation-triangle me-2"></i> Confirmação de Exclusão</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="confirmDeleteModalLabel"><i class="fas fa-exclamation-triangle me-2"></i>
+                    Confirmação de Exclusão</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Você está prestes a deletar a consulta agendada para <strong id="consultaDataPlaceholder"></strong> (ID: <strong id="consultaIdPlaceholder"></strong>).</p>
+                <p>Você está prestes a deletar a consulta agendada para <strong>{{ consulta.data|date:"d/m/Y H:i" }}</strong>
+                    (ID: <strong>{{ consulta.id }}</strong>).</p>
                 <div class="alert alert-warning small mt-3">
-                    <i class="fas fa-info-circle me-1"></i> Esta ação é **irreversível**. A exclusão será permanente e não pode ser desfeita.
+                    <i class="fas fa-info-circle me-1"></i> Esta ação é <strong>irreversível</strong>. A exclusão será permanente e
+                    não pode ser desfeita.
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <a href="{% url 'deletar-consulta' consulta.id %}" class="btn btn-danger" id="confirmDeleteButton">Excluir Consulta</a>
+                <a href="{% url 'deletar-consulta' consulta.id %}" class="btn btn-danger"
+                    id="confirmDeleteButton">Excluir Consulta</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL DE CANCELAR CONSULTA -->
+<div class="modal fade" id="cancelarConsulta" tabindex="-1" aria-labelledby="cancelarConsultaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="cancelarConsultaLabel"><i class="fas fa-exclamation-triangle me-2"></i>
+                    Cancelar Consulta</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você está prestes a cancelar a consulta agendada para <strong>{{ consulta.data|date:"d/m/Y H:i" }}</strong>.</p>
+                <div class="alert alert-warning small mt-3">
+                    <i class="fas fa-info-circle me-1"></i> Esta ação é irreversível. O status da consulta será alterado para "Cancelada".
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <a href="{% url 'adm-cancelar-consulta' consulta.id %}" class="btn btn-danger"
+                    id="confirmCancelButton">Cancelar Consulta</a>
             </div>
         </div>
     </div>
 </div>
 <!-- MODAL DE ADIAR CONSULTA -->
-<div class="modal fade" id="delayConsultationModal" tabindex="-1" aria-labelledby="delayConsultationModalLabel" aria-hidden="true">
+<div class="modal fade" id="delayConsultationModal" tabindex="-1" aria-labelledby="delayConsultationModalLabel"
+    aria-hidden="true">
     <form method="POST" action="">
         {% csrf_token %}
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="delayConsultationModalLabel"><i class="fas fa-clock me-2"></i> Adiar Consulta</h5>
+                    <h5 class="modal-title" id="delayConsultationModalLabel"><i class="fas fa-clock me-2"></i> Adiar
+                        Consulta</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Selecione a nova data e hora para a consulta agendada para <strong>{{ consulta.data|date:"d/m/Y H:i" }}</strong>:</p>
+                    <p>Selecione a nova data e hora para a consulta agendada para <strong>{{ consulta.data|date:"d/m/YH:i" }}</strong>:</p>
                     <form action="" method="POST">
                         <div class="mx-5 px-3">
                             {{ form.as_p }}
                         </div>
                         {% if form.data.errors %}
-                            <div class="text-danger small mt-1">
-                                {{ form.data.errors }}
-                            </div>
+                        <div class="text-danger small mt-1">
+                            {{ form.data.errors }}
+                        </div>
                         {% endif %}
                         <button type="submit" class="btn btn-primary">Adiar</button>
                     </form>
                 </div>
             </div>
         </div>
-        
+
     </form>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
-    <!-- Script de Lógica Específica da Página de Detalhes da Consulta -->
-    <script src="{% static 'js/adm/consultaDetalhe.js' %}"></script>
+<!-- Script de Lógica Específica da Página de Detalhes da Consulta -->
+<script src="{% static 'js/adm/consultaDetalhe.js' %}"></script>
 {% endblock %}
