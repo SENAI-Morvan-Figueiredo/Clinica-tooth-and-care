@@ -1,418 +1,119 @@
 {% extends 'paciente/base.html' %}
 
+{% load widget_tweaks %}
+
 {% block title %}Minhas Consultas{% endblock %}
 
 {% block content %}
-<div class="consultas-container">
+<div class="container py-4">
 
-    <!-- Seção: Consultas do usuário -->
-    <section class="consultas-lista">
-        <h2>📋 Suas Consultas Agendadas</h2>
+    <h2 class="mb-4 text-center">📋 Suas Consultas Agendadas</h2>
 
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
+    <!-- Mensagens de feedback -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                 {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+        {% endfor %}
+    {% endif %}
 
-        {% if consultas %}
-            <div class="consultas-cards">
-                {% for consulta in consultas %}
-                <div class="consulta-card {% if consulta.data >= today %}futura{% else %}passada{% endif %}">
-                    <div class="consulta-header">
-                        <h3>{{ consulta.data|date:"d/m/Y" }} - {{ consulta.horario }}</h3>
-                        <span class="status {% if consulta.data >= today %}agendada{% else %}realizada{% endif %}">
-                            {% if consulta.data >= today %}🟢 Agendada{% else %}🔵 Realizada{% endif %}
-                        </span>
-                    </div>
-                    
-                    <div class="consulta-info">
-                        <p><strong>👨‍⚕️ Médico:</strong> {{ consulta.medico.nome }}</p>
-                        <p><strong>🩺 Especialidade:</strong> {{ consulta.medico.especialidade }}</p>
-                        <p><strong>📋 Tipo:</strong> {{ consulta.tipo_consulta }}</p>
+    <!-- Lista de Consultas -->
+    {% if consultas %}
+        <div class="row g-4">
+            {% for consulta in consultas %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm 
+                        {% if consulta.data >= today %}border-success{% else %}border-secondary{% endif %}">
                         
-                        {% if consulta.observacoes %}
-                        <p><strong>📝 Observações:</strong> {{ consulta.observacoes }}</p>
+                        <div class="card-header 
+                            {% if consulta.data >= today %}bg-success text-white{% else %}bg-secondary text-white{% endif %}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>{{ consulta.data|date:"d/m/Y" }} - {{ consulta.horario|time:"H:i" }}</strong>
+                                <span class="badge 
+                                    {% if consulta.data >= today %}bg-light text-success{% else %}bg-light text-secondary{% endif %}">
+                                    {% if consulta.data >= today %}Agendada{% else %}Realizada{% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <p><strong>👨‍⚕️ Médico:</strong> {{ consulta.medico.nome }}</p>
+                            <p><strong>🩺 Especialidade:</strong> {{ consulta.medico.especialidade }}</p>
+                            <p><strong>📋 Tipo:</strong> {{ consulta.tipo_consulta }}</p>
+                            {% if consulta.observacoes %}
+                                <p><strong>📝 Observações:</strong> {{ consulta.observacoes }}</p>
+                            {% endif %}
+                        </div>
+
+                        {% if consulta.data >= today %}
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{% url 'consultas-editar' consulta.id %}" class="btn btn-sm btn-outline-primary">
+                                ✏️ Editar
+                            </a>
+                            <a href="{% url 'consultas-excluir' consulta.id %}"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('Tem certeza que deseja cancelar esta consulta?');">
+                                ❌ Cancelar
+                            </a>
+                        </div>
                         {% endif %}
                     </div>
-
-                    {% if consulta.data >= today %}
-                    <div class="consulta-acoes">
-                        <a href="{% url 'consultas-editar' consulta.id %}" class="btn-editar">✏️ Editar</a>
-                        <a href="{% url 'consultas-excluir' consulta.id %}" class="btn-excluir"
-                           onclick="return confirm('Tem certeza que deseja cancelar esta consulta?');">❌ Cancelar</a>
-                    </div>
-                    {% endif %}
                 </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="sem-consultas">
-                <p>📭 Nenhuma consulta agendada.</p>
-                <p>Agende sua primeira consulta usando o formulário abaixo!</p>
-            </div>
-        {% endif %}
-    </section>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center my-5">
+            <p class="fs-5">📭 Nenhuma consulta agendada.</p>
+            <p>Agende sua primeira consulta abaixo!</p>
+        </div>
+    {% endif %}
 
-    <!-- Seção: Agendar nova consulta -->
-    <section class="consultas-nova">
-        <h2>📅 {% if consulta_editando %}Editar Consulta{% else %}Agendar Nova Consulta{% endif %}</h2>
+    <hr class="my-5">
 
-        <form method="post" 
-              action="{% if consulta_editando %}{% url 'consultas-editar' consulta.id %}{% else %}{% url 'consultas-criar' %}{% endif %}" 
-              class="form-consulta">
-            
-            {% csrf_token %}
-            
-            <div class="form-campos">
-                {% for field in form %}
-                <div class="form-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                    <div class="error-list">
-                        {% for error in field.errors %}
-                        <span class="error">{{ error }}</span>
+    <!-- Formulário de Agendamento -->
+    <section class="mt-4">
+        <h2 class="text-center mb-4">
+            📅 {% if consulta_editando %}Editar Consulta{% else %}Agendar Nova Consulta{% endif %}
+        </h2>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="post"
+                      action="{% if consulta_editando %}{% url 'consultas-editar' consulta.id %}{% else %}{% url 'agendar-consulta' %}{% endif %}">
+                    {% csrf_token %}
+
+                    <div class="row g-3">
+                        {% for field in form %}
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field|add_class:"form-control" }}
+                                    {% if field.errors %}
+                                        <div class="text-danger small">
+                                            {% for error in field.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
-                    {% endif %}
-                    {% if field.help_text %}
-                    <small class="help-text">{{ field.help_text }}</small>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
 
-            <div class="form-botoes">
-                <button type="submit" class="btn-salvar">
-                    {% if consulta_editando %}💾 Atualizar Consulta{% else %}✅ Agendar Consulta{% endif %}
-                </button>
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <button type="submit" class="btn btn-success">
+                            {% if consulta_editando %}💾 Atualizar Consulta{% else %}✅ Agendar Consulta{% endif %}
+                        </button>
 
-                {% if consulta_editando %}
-                <a href="{% url 'consultas-lista' %}" class="btn-cancelar">↩️ Voltar</a>
-                {% endif %}
+                        {% if consulta_editando %}
+                            <a href="{% url 'paciente-consultas' %}" class="btn btn-secondary">↩️ Cancelar</a>
+                        {% endif %}
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </section>
-
 </div>
-{% endblock %}
-
-{% block extra_css %}
-<style>
-/* ======== Variáveis ======== */
-:root {
-    --primary-color: #008c8c;
-    --primary-dark: #006f6f;
-    --secondary-color: #bde0dc;
-    --danger-color: #d9534f;
-    --danger-dark: #b52b27;
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-}
-
-/* ======== Layout geral ======== */
-.consultas-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    background-color: var(--secondary-color);
-    padding: 2rem;
-    min-height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-}
-
-/* ======== Mensagens ======== */
-.messages {
-    margin-bottom: 1.5rem;
-}
-
-.alert {
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    border-left: 4px solid;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border-left-color: var(--success-color);
-}
-
-.alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-left-color: var(--danger-color);
-}
-
-/* ======== Títulos ======== */
-.consultas-container h2 {
-    color: var(--primary-color);
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-}
-
-/* ======== Seção Suas Consultas ======== */
-.consultas-lista {
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    padding: 2rem;
-}
-
-.sem-consultas {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
-}
-
-.sem-consultas p {
-    margin-bottom: 0.5rem;
-}
-
-.consultas-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-}
-
-.consulta-card {
-    background-color: #f7fdfd;
-    border: 1px solid #dcebea;
-    border-radius: 12px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-    padding: 1.5rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.consulta-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-}
-
-.consulta-card.futura {
-    border-left: 4px solid var(--success-color);
-}
-
-.consulta-card.passada {
-    border-left: 4px solid #6c757d;
-    opacity: 0.8;
-}
-
-.consulta-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-}
-
-.consulta-header h3 {
-    color: var(--primary-color);
-    margin: 0;
-    font-size: 1.1rem;
-}
-
-.status {
-    font-size: 0.8rem;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-weight: 500;
-}
-
-.status.agendada {
-    background-color: #e8f5e8;
-    color: var(--success-color);
-}
-
-.status.realizada {
-    background-color: #e9ecef;
-    color: #6c757d;
-}
-
-.consulta-info p {
-    margin: 0.5rem 0;
-    font-size: 0.95rem;
-}
-
-.consulta-acoes {
-    margin-top: 1.2rem;
-    display: flex;
-    gap: 0.8rem;
-}
-
-.btn-editar,
-.btn-excluir {
-    text-decoration: none;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-    flex: 1;
-    text-align: center;
-}
-
-.btn-editar {
-    background-color: var(--primary-color);
-}
-
-.btn-editar:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
-}
-
-.btn-excluir {
-    background-color: var(--danger-color);
-}
-
-.btn-excluir:hover {
-    background-color: var(--danger-dark);
-    transform: translateY(-1px);
-}
-
-/* ======== Seção Agendar Nova Consulta ======== */
-.consultas-nova {
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    padding: 2rem;
-}
-
-.form-consulta {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.form-campos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: 0.8rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    font-size: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 140, 140, 0.1);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.error-list {
-    margin-top: 0.3rem;
-}
-
-.error {
-    color: var(--danger-color);
-    font-size: 0.85rem;
-}
-
-.help-text {
-    color: #666;
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-}
-
-/* ======== Botões ======== */
-.form-botoes {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #eee;
-}
-
-.btn-salvar {
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    padding: 0.9rem 2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s;
-    flex: 1;
-}
-
-.btn-salvar:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 140, 140, 0.3);
-}
-
-.btn-cancelar {
-    background-color: #6c757d;
-    color: #fff;
-    text-decoration: none;
-    padding: 0.9rem 2rem;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.3s;
-    text-align: center;
-}
-
-.btn-cancelar:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-    color: #fff;
-}
-
-/* ======== Responsividade ======== */
-@media (max-width: 768px) {
-    .consultas-container {
-        padding: 1rem;
-    }
-    
-    .consultas-cards {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-campos {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-botoes {
-        flex-direction: column;
-    }
-    
-    .consulta-header {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-</style>
 {% endblock %}

@@ -10,6 +10,7 @@ GENERO_CHOICES = [
 # Create your models here.
 class Paciente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente')
+    nome = models.CharField(max_length=100)
     cpf = models.CharField(null=False, blank=False, unique=True)
     rg = models.CharField(null=False, blank=False, unique=True)
     telefone = models.CharField(null=False, blank=False)
@@ -18,4 +19,4 @@ class Paciente(models.Model):
     endereco = models.CharField(max_length=255, null=False, blank=False)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username 

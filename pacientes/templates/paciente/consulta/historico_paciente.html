@@ -1,157 +1,119 @@
-// {% extends 'paciente/consulta/painel.html' %}
+{% extends 'paciente/base.html' %}
+
+{% block title %}Informações Pessoais{% endblock %}
 
 {% block content %}
-<div class="section">
-  <h3>Informações pessoais</h3>
-  {% if not editing %}
-    <!-- Modo View: Mostra dados e botão para editar -->
-    <a href="#" class="edit-button">Editar dados</a>
-    <div id="view-mode">
-      <p><strong>Nome completo:</strong> {{ paciente.user.username }}</p>
-      <p><strong>Data de Nascimento:</strong> {{ paciente.data_nascimento }}</p>
-      <p><strong>Sexo:</strong> {{ paciente.sexo }}</p>
-      <p><strong>CPF:</strong> {{ paciente.cpf }} | <strong>RG:</strong> {{ paciente.rg }}</p>
-      <p><strong>Endereço:</strong> {{ paciente.endereco }}</p>
-      <br>
-      <p><strong>Telefone:</strong> {{ paciente.telefone }}</p>
-      <p><strong>Email:</strong> {{ paciente.user.email }}</p>
+<div class="container mt-4">
+
+    <!-- Informações Pessoais -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">👤 Informações Pessoais</h4>
+            {% if not editing %}
+                <a href="{% url 'informacoes-pessoais' %}?edit=true" class="btn btn-light btn-sm">✏️ Editar</a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            {% if not editing %}
+                <p><strong>Nome completo:</strong> {{ paciente.user }}</p>
+                <p><strong>Data de Nascimento:</strong> {{ paciente.data_nasc|date:"d/m/Y" }}</p>
+                <p><strong>Sexo:</strong> {{ paciente.genero }}</p>
+                <p><strong>CPF:</strong> {{ paciente.cpf }}</p>
+                <p><strong>RG:</strong> {{ paciente.rg }}</p>
+                <p><strong>Endereço:</strong> {{ paciente.endereco }}</p>
+                <p><strong>Telefone:</strong> {{ paciente.telefone }}</p>
+                <p><strong>Email:</strong> {{ paciente.user.email }}</p>
+            {% else %}
+                <form method="post" action="{% url 'informacoes-pessoais' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nome completo:</label>
+                            <input type="text" name="nome" value="{{ paciente.user }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Data de Nascimento:</label>
+                            <input type="date" name="data_nasc" value="{{ paciente.data_nasc|date:'Y-m-d' }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Sexo:</label>
+                            <select name="genero" class="form-select" required>
+                                <option value="Masculino" {% if paciente.genero == 'Masculino' %}selected{% endif %}>Masculino</option>
+                                <option value="Feminino" {% if paciente.genero == 'Feminino' %}selected{% endif %}>Feminino</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CPF:</label>
+                            <input type="text" name="cpf" value="{{ paciente.cpf }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">RG:</label>
+                            <input type="text" name="rg" value="{{ paciente.rg }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Endereço:</label>
+                            <input type="text" name="endereco" value="{{ paciente.endereco }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Telefone:</label>
+                            <input type="tel" name="telefone" value="{{ paciente.telefone }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email:</label>
+                            <input type="email" name="email" value="{{ paciente.user.email }}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success me-2">💾 Salvar</button>
+                        <a href="{% url 'informacoes-pessoais' %}" class="btn btn-secondary">↩️ Cancelar</a>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
     </div>
-  {% else %}
-    <!-- Modo Edit: Mostra form -->
-    <form method="post" action="#">
-      {% csrf_token %}  <!-- Protege contra CSRF -->
-      <label>Nome completo:</label>
-      <input type="text" name="nome" value="{{ paciente.user.username }}" required><br>
-      <label>Data de Nascimento:</label>
-      <input type="date" name="data_nascimento" value="{{ paciente.data_nascimento|date:'Y-m-d' }}" required><br>
-      <label>Sexo:</label>
-      <select name="sexo" required>
-        <option value="Masculino" {% if paciente.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
-        <option value="Feminino" {% if paciente.sexo == 'Feminino' %}selected{% endif %}>Feminino</option>
-      </select><br>
-      <label>CPF:</label>
-      <input type="text" name="cpf" value="{{ paciente.cpf }}" required><br>
-      <label>RG:</label>
-      <input type="text" name="rg" value="{{ paciente.rg }}" required><br>
-      <label>Endereço:</label>
-      <input type="text" name="endereco" value="{{ paciente.endereco }}" required><br>
-      <label>Telefone:</label>
-      <input type="tel" name="telefone" value="{{ paciente.telefone }}" required><br>
-      <label>Email:</label>
-      <input type="email" name="email" value="{{ paciente.user.email }}" required><br>
-      <button type="submit">Salvar</button>
-      <a href="#" class="cancel-button">Cancelar</a>
-    </form>
-  {% endif %}
+
+    <!-- Histórico de Consultas -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">📋 Histórico de Consultas</h4>
+        </div>
+        <div class="card-body">
+            {% if consultas %}
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Médico</th>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for consulta in consultas %}
+                            <tr>
+                                <td>{{ consulta.medico.nome }}</td>
+                                <td>{{ consulta.data|date:"d/m/Y" }}</td>
+                                <td>{{ consulta.tipo_consulta }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Nenhuma consulta encontrada.</p>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 
-<div class="section">
-  <h3>Outras informações</h3>
-  <p><strong>Histórico de consultas:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Nome do Médico</th>
-        <th>Data</th>
-        <th>Tipo de consulta</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for consulta in consultas %}
-      <tr>
-        <td>{{ consulta.medico }}</td>
-        <td>{{ consulta.data }}</td>
-        <td>{{ consulta.tipo }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-<style>
-  .section {
-    background-color: #E9F7F5;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 25px;
-    padding: 20px;
-  }
-
-  .section h3 {
-    margin-bottom: 15px;
-    color: #1F6F70;
-    border-bottom: 2px solid #2C8E89;
-    padding-bottom: 5px;
-  }
-
-  .section p {
-    margin: 6px 0;
-    font-size: 15px;
-  }
-
-  .edit-button, .cancel-button {
-    background-color: #2C8E89;
-    color: white;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 13px;
-    display: inline-block;
-  }
-
-  .edit-button:hover, .cancel-button:hover {
-    background-color: #1F6F70;
-  }
-
-  .cancel-button {
-    margin-left: 10px;
-  }
-
-  form input, form select {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    background-color: #f4fefb;
-  }
-
-  th, td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #aaa;
-  }
-
-  th {
-    background-color: #2C8E89;
-    color: white;
-  }
-
-  /* Responsividade */
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-    }
-    .sidebar {
-      width: 100%;
-      flex-direction: row;
-      justify-content: space-around;
-    }
-  }
-</style>
-
-<!-- Exibir mensagens de sucesso/erro (opcional) -->
 {% if messages %}
-  <ul class="messages">
+<div class="container mt-3">
     {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
     {% endfor %}
-  </ul>
+</div>
 {% endif %}
 {% endblock %}

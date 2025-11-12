@@ -6,52 +6,9 @@ from consultas.models import Consulta
 from consultas.forms import ConsultaForm
 from pacientes.models import Paciente
 
-# ======================================================
-# 🔹 AGENDAR CONSULTA (PACIENTE)
-# ======================================================
-@login_required
-def agendar_consulta(request):
-    """
-    Permite ao paciente agendar uma nova consulta.
-    """
-    # Obter o paciente associado ao usuário logado
-    try:
-        paciente = Paciente.objects.get(user=request.user)
-    except Paciente.DoesNotExist:
-        messages.error(request, "Paciente não encontrado.")
-        return redirect('pagina-inicial')
 
-    if request.method == "POST":
-        form = ConsultaForm(request.POST)
-        if form.is_valid():
-            consulta = form.save(commit=False)
-            consulta.paciente = paciente  # 🔹 ASSOCIA AO PACIENTE LOGADO
-            consulta.save()
-            
-            messages.success(request, f"Consulta agendada com sucesso para {consulta.data}!")
-            return redirect("consultas-lista")
-        else:
-            messages.error(request, "Erro ao agendar consulta. Verifique os dados.")
-    else:
-        form = ConsultaForm()
+# ===================== CONSULTAS =====================
 
-    # Consultas futuras do paciente
-    consultas_futuras = Consulta.objects.filter(
-        paciente=paciente, 
-        data__gte=timezone.now().date()
-    ).order_by("data", "horario")
-
-    contexto = {
-        "form": form,
-        "consultas": consultas_futuras,
-        "paciente": paciente,
-        "nome_usuario": paciente.nome,
-    }
-    return render(request, "paciente/consulta/crud.html", contexto)
-
-# ======================================================
-# 🔹 LISTA DE CONSULTAS DO PACIENTE
-# ======================================================
 @login_required
 def consulta_lista(request):
     """
@@ -63,101 +20,58 @@ def consulta_lista(request):
         messages.error(request, "Paciente não encontrado.")
         return redirect('/')
 
-    consultas = Consulta.objects.filter(paciente=paciente)
+    consultas = Consulta.objects.filter(paciente=paciente).order_by("-data")
     form = ConsultaForm()
-    
+
     contexto = {
         "consultas": consultas,
         "form": form,
         "paciente": paciente,
+        "today": timezone.now().date(),
     }
     return render(request, "paciente/consulta/crud.html", contexto)
 
-# ======================================================
-# 🔹 CRIAR CONSULTA (ATUALIZADA)
-# ======================================================
+
 @login_required
-def consulta_criar(request):
+def consulta_criar_ou_editar(request, consulta_id=None):
     """
-    Cria uma nova consulta para o paciente logado.
+    Cria ou edita uma consulta para o paciente logado.
     """
     try:
         paciente = Paciente.objects.get(user=request.user)
     except Paciente.DoesNotExist:
         messages.error(request, "Paciente não encontrado.")
-        return redirect('pagina-inicial')
+        return redirect('/')
 
-    if request.method == "POST":
-        form = ConsultaForm(request.POST)
-        if form.is_valid():
-            consulta = form.save(commit=False)
-            consulta.paciente = paciente  # 🔹 ASSOCIA AO PACIENTE
-            consulta.save()
-            
-            messages.success(request, f"Consulta agendada com sucesso para {consulta.data}!")
-            return redirect("consultas-lista")
-        else:
-            messages.error(request, "Erro ao agendar consulta. Verifique os dados.")
-    else:
-        form = ConsultaForm()
-
-    consultas = Consulta.objects.filter(paciente=paciente).order_by("-data", "-horario")
-    
-    return render(request, "paciente/consulta/crud.html", {
-        "form": form,
-        "consultas": consultas,
-        "paciente": paciente,
-    })
-
-@login_required
-def informacoes_pessoais(request):
-    paciente = Paciente.objects.get(user=request.user)
-    editing = False
-    
-    context = {
-        "paciente": paciente,
-        "editing": editing,
-    }
-    return render(request, "paciente/consulta/historico_paciente.html")
-
-# ======================================================
-# 🔹 EDITAR CONSULTA (ATUALIZADA)
-# ======================================================
-@login_required
-def consulta_editar(request, consulta_id):
-    """
-    Edita uma consulta existente do paciente logado.
-    """
-    try:
-        paciente = Paciente.objects.get(user=request.user)
+    consulta = None
+    if consulta_id:
         consulta = get_object_or_404(Consulta, id=consulta_id, paciente=paciente)
-    except Paciente.DoesNotExist:
-        messages.error(request, "Paciente não encontrado.")
-        return redirect('pagina-inicial')
 
     if request.method == "POST":
         form = ConsultaForm(request.POST, instance=consulta)
         if form.is_valid():
-            form.save()
-            messages.success(request, f"Consulta atualizada com sucesso!")
-            return redirect("consultas-lista")
+            consulta = form.save(commit=False)
+            consulta.paciente = paciente
+            consulta.save()
+            messages.success(request, f"Consulta {'atualizada' if consulta_id else 'agendada'} com sucesso!")
+            return redirect("paciente-consultas")
+        else:
+            messages.error(request, "Erro ao salvar consulta. Verifique os dados.")
     else:
         form = ConsultaForm(instance=consulta)
 
-    consultas = Consulta.objects.filter(paciente=paciente).order_by("-data", "-horario")
+    consultas = Consulta.objects.filter(paciente=paciente).order_by("-data")
 
     return render(request, "paciente/consulta/crud.html", {
         "form": form,
         "consultas": consultas,
         "consulta": consulta,
-        "consulta_editando": True,
+        "consulta_editando": bool(consulta_id),
         "paciente": paciente,
-        "nome_usuario": paciente.nome,
+        "today": timezone.now().date(),
     })
 
-# ======================================================
-# 🔹 EXCLUIR CONSULTA (ATUALIZADA)
-# ======================================================
+
 @login_required
 def consulta_excluir(request, consulta_id):
     """
@@ -168,8 +82,47 @@ def consulta_excluir(request, consulta_id):
         consulta = get_object_or_404(Consulta, id=consulta_id, paciente=paciente)
     except Paciente.DoesNotExist:
         messages.error(request, "Paciente não encontrado.")
-        return redirect('pagina-inicial')
+        return redirect('/')
 
     consulta.delete()
     messages.success(request, "Consulta excluída com sucesso!")
-    return redirect("consultas-lista")
+    return redirect("paciente-consultas")
+
+
+# ===================== INFORMAÇÕES PESSOAIS =====================
+
+@login_required
+def informacoes_pessoais(request):
+    """
+    Exibe/edita informações pessoais do paciente.
+    """
+    try:
+        paciente = Paciente.objects.get(user=request.user)
+    except Paciente.DoesNotExist:
+        messages.error(request, "Paciente não encontrado.")
+        return redirect('/')
+
+    editing = request.GET.get('edit', 'false').lower() == 'true'
+    consultas = Consulta.objects.filter(paciente=paciente).order_by("-data")
+
+    if request.method == "POST" and editing:
+        # Atualiza os campos do paciente
+        paciente.nome = request.POST.get('nome')
+        paciente.data_nasc = request.POST.get('data_nascimento')
+        paciente.genero = request.POST.get('sexo')
+        paciente.cpf = request.POST.get('cpf')
+        paciente.rg = request.POST.get('rg')
+        paciente.endereco = request.POST.get('endereco')
+        paciente.telefone = request.POST.get('telefone')
+        paciente.user.email = request.POST.get('email')
+        paciente.user.save()
+        paciente.save()
+        messages.success(request, "Informações atualizadas com sucesso!")
+        return redirect('informacoes-pessoais')
+
+    context = {
+        "paciente": paciente,
+        "editing": editing,
+        "consultas": consultas,
+    }
+    return render(request, "paciente/consulta/historico_paciente.html", context)
