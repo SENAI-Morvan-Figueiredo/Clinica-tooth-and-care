@@ -160,3 +160,9 @@ input.form-control[type="text"] {
       position: relative;
   }
 }
+
+@media (max-width: 425px) {
+  #nav-left img {
+    display: none;
+  }
+}
