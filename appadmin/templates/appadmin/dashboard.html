@@ -97,11 +97,11 @@
                         <td><span class="badge bg-info text-dark">{{ consulta.data|date:"H:i" }}</span></td>
                         <td>{{ consulta.servico }}</td>
                         <td>
-                            {% if consulta.status == 'AGENDADA' %}
+                            {% if consulta.status == 'marcada' %}
                                 <span class="badge bg-primary">{{ consulta.status }}</span>
-                            {% elif consulta.status == 'EM_ANDAMENTO' %}
+                            {% elif consulta.status == 'remarcada' %}
                                 <span class="badge bg-warning text-dark">{{ consulta.status }}</span>
-                            {% elif consulta.status == 'CANCELADA' %}
+                            {% elif consulta.status == 'cancelada' %}
                                 <span class="badge bg-danger">{{ consulta.status }}</span>
                             {% else %}
                                 <span class="badge bg-success">{{ consulta.status }}</span>
