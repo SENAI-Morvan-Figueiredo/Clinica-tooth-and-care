@@ -33,7 +33,40 @@ class Exame(models.Model):
         return self.nome
     
 class Diagnostico(models.Model):
-    tipo = models.CharField(max_length=100,choices=[],null=False,blank=False)
+    tipo = models.CharField(max_length=100,choices=[
+                # 🦷 Condições dentárias
+        ("CÁRIE DENTÁRIA", "Cárie dentária"),
+        ("PULPITE", "Pulpite"),
+        ("ABSCESSO DENTÁRIO", "Abscesso dentário"),
+        ("PERIODONTITE", "Periodontite"),
+        ("GENGIVITE", "Gengivite"),
+        ("HIPERSENSIBILIDADE DENTINÁRIA", "Hipersensibilidade dentinária"),
+
+        # 😬 Problemas de oclusão e ortodontia
+        ("MÁ OCLUSÃO", "Má oclusão"),
+        ("APINHAMENTO DENTÁRIO", "Apinhamento dentário"),
+        ("MORDIDA CRUZADA", "Mordida cruzada"),
+        ("SOBREMORDIDA", "Sobremordida"),
+        ("MORDIDA ABERTA", "Mordida aberta"),
+
+        # 🦴 Alterações ósseas e articulares
+        ("DISFUNÇÃO TEMPOROMANDIBULAR", "Disfunção temporomandibular (DTM)"),
+        ("BRUXISMO", "Bruxismo"),
+        ("PERDA ÓSSEA", "Perda óssea alveolar"),
+
+        # 🦷 Lesões e alterações em tecidos moles
+        ("ULCERAÇÃO ORAL", "Ulceração oral"),
+        ("CANDIDÍASE ORAL", "Candidíase oral"),
+        ("LEUCOPLASIA", "Leucoplasia"),
+        ("LÍQUEN PLANO ORAL", "Líquen plano oral"),
+
+        # 🧬 Diagnósticos gerais
+        ("ALTERAÇÃO ESTÉTICA", "Alteração estética"),
+        ("FRATURA DENTÁRIA", "Fratura dentária"),
+        ("RETENÇÃO DE DENTE DECÍDUO", "Retenção de dente decíduo"),
+        ("DENTE INCLUSO", "Dente incluso"),
+        ("OUTRO", "Outro"),
+    ],null=False,blank=False)
     plano_de_tratamento = models.TextField(null=False,blank=False)
     detalhes = models.TextField(null=False,blank=False)
     consulta = models.ManyToManyField(Consulta, related_name="diagnosticos")

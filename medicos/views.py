@@ -8,6 +8,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from datetime import date # Importe a classe date
 
+from django.contrib import messages
+from consultas.models import  Diagnostico, Anamnese
+from consultas.forms import DiagnosticoForm, AnamneseForm
+
 
 # ✅ Detalhar médico
 def medico_detail(request, pk):
@@ -84,6 +88,42 @@ def index(request):
     
     return render(request, 'medicos/medIndex.html', context={"medico": medico, "consultas": consultas})
 
-def diagnostico(request, pk):
+def consulta_detalhes(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+    diagnosticos = consulta.diagnosticos.all()
+    anamnese = consulta.anamnese.first()  # cada consulta tem uma anamnese
 
-    return render(request, 'medicos/medDiagnostico.html')
+    # Inicialização dos formulários
+    diagnostico_form = DiagnosticoForm()
+    anamnese_form = AnamneseForm()
+
+    # Processamento de POST (salvar dados)
+    if request.method == 'POST':
+        if 'submit_diagnostico' in request.POST:
+            diagnostico_form = DiagnosticoForm(request.POST)
+            if diagnostico_form.is_valid():
+                novo_diag = diagnostico_form.save(commit=False)
+                novo_diag.save()
+                novo_diag.consulta.add(consulta)
+                messages.success(request, 'Diagnóstico adicionado com sucesso!')
+                return redirect('medDiagnostico', consulta_id=consulta.id)
+
+        elif 'submit_anamnese' in request.POST:
+            anamnese_form = AnamneseForm(request.POST)
+            if anamnese_form.is_valid():
+                nova_anamnese = anamnese_form.save(commit=False)
+                nova_anamnese.consulta = consulta
+                nova_anamnese.paciente = consulta.paciente
+                nova_anamnese.save()
+                messages.success(request, 'Anamnese registrada com sucesso!')
+                return redirect('medDiagnostico', consulta_id=consulta.id)
+
+    context = {
+        'consulta': consulta,
+        'diagnosticos': diagnosticos,
+        'anamnese': anamnese,
+        'diagnostico_form': diagnostico_form,
+        'anamnese_form': anamnese_form,
+    }
+
+    return render(request, 'medicos/medDiagnostico.html', context)
