@@ -26,6 +26,7 @@
                     data-bs-target="#confirmDeleteModal">
                     Deletar Consulta
                 </button>
+                {% if consulta.status != 'cancelada' %}
                 <!-- Botão de cancelar consulta -->
                 <button type="button" class="btn btn-outline-danger" id="cancelar-btn"
                     data-bs-target="#cancelarConsulta"
@@ -38,6 +39,7 @@
                     data-bs-target="#delayConsultationModal">
                     Adiar Consulta
                 </button>
+                {% endif %}
             </div>
         </div>
 
