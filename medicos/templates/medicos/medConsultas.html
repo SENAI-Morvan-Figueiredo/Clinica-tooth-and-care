@@ -32,7 +32,7 @@
                     </thead>
                     <tbody>
                         {% for consulta in consultas %}
-                        <tr>
+                        <tr class="clickable-row" data-href="{% url 'medDiagnostico' consulta.id %}">
                             <td class="text-center">{{ consulta.data|date:"d/m/Y H:i" }}</td>
                             <td>{{ consulta.paciente.user.get_full_name|default:consulta.paciente.user.username }}</td>
                             <td class="text-center">{{ consulta.get_servico_display }}</td>
@@ -87,6 +87,8 @@
 
     .table-hover tbody tr:hover {
         background-color: #2C8E89;
+        color: white;
+        cursor: pointer;
         transition: 0.3s;
     }
 
@@ -100,9 +102,20 @@
         padding: 0.5em 0.75em;
     }
 
-    .a th{
+    .a th {
         background-color: #2C8E89;
         color: #ffffff;
     }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+            row.addEventListener("click", function() {
+                window.location = this.dataset.href;
+            });
+        });
+    });
+</script>
 {% endblock %}

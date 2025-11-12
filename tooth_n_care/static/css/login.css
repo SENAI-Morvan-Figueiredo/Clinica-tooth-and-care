@@ -12,14 +12,17 @@
 }
 
 #form-container {
-    min-height: 600px; 
-    width: 60%;
+    min-height: 600px;
+    width: 80%;
+    min-width: 300px; 
     background: white;
 }
 
-
 #form-container .col:nth-child(1) {
     background: #2C8E89;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #form-container .col:nth-child(1) img {
@@ -27,7 +30,7 @@
 }
 
 form {
-    padding: 3rem;
+    padding: 2rem 0;
     justify-content: space-evenly;
     height: 100%;
     width: 100%;
@@ -55,4 +58,10 @@ form button:hover {
 form button:active {
     border: 1px solid #000000;
     transition: 0.2s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    #form-container .col:nth-child(1) {
+        display: none;
+    }
 }
