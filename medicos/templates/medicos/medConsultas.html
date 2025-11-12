@@ -2,10 +2,20 @@
 {% load static %}
 
 {% block content %}
-    <h1>Consultas do Médico</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4 fw-bold" style="color: #2C8E89;">
+        Consultas Médico
+    </h1>
 
     {% if medico_encontrado %}
-        <p>Exibindo consultas para o médico: <strong>{{ medico.user.get_full_name|default:medico.user.username }}</strong> (CRM: {{ medico.crm }})</p>
+        <div class="card shadow-sm mb-4 border-0" style="border-left: 5px solid #2C8E89;">
+            <div class="card-body">
+                <p class="fs-5 mb-0">
+                    <strong>Médico:</strong> {{ medico.user.get_full_name|default:medico.user.username }}<br>
+                    <strong>CRM:</strong> {{ medico.crm }}
+                </p>
+            </div>
+        </div>
 
         {% if consultas %}
             <div class="table-responsive">
@@ -45,32 +55,16 @@
                 </table>
             </div>
         {% else %}
-<<<<<<< HEAD
             <div class="alert text-center mt-4" style="background-color: #e3f7f6; color: #2C8E89;" role="alert">
-                O médico <strong>{{ primeiro_medico.user.username }}</strong> não possui consultas agendadas.
+                O médico <strong>{{ medico.user.username }}</strong> não possui consultas agendadas.
             </div>
-=======
-<<<<<<< HEAD
-            <p>O médico **{{ medico.user.username }}** não possui consultas agendadas.</p>
-=======
-            <p>O médico **{{ primeiro_medico.user.username }}** não possui consultas agendadas.</p>
->>>>>>> login
->>>>>>> main
         {% endif %}
     {% else %}
         <div class="alert text-center mt-4" style="background-color: #f8d7da; color: #842029;" role="alert">
             Nenhum médico encontrado no banco de dados.
         </div>
     {% endif %}
-<<<<<<< HEAD
 </div>
-=======
-<<<<<<< HEAD
-=======
-    </div>
->>>>>>> login
-
->>>>>>> main
 {% endblock content %}
 
 {% block extra_scripts %}
