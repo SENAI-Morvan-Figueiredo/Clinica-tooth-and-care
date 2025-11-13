@@ -49,6 +49,7 @@ body {
   background-color: var(--sidebar-background);
   color: white;
   min-width: 250px; /* Largura fixa para a sidebar (UI/UX) */
+  transition: left 0.3s ease;
 }
 
 #sidebar a {
@@ -150,7 +151,6 @@ input.form-control[type="text"] {
 
   #hamburger-toggle:checked ~ #sidebar {
     left: 0;
-    transition: left 0.3s ease;
   }
 
   #hamburger-toggle:checked ~ #menu-overlay {
