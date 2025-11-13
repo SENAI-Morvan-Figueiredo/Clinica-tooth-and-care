@@ -6,9 +6,10 @@
 
 html,
 body {
-    height: 100vh;
+    height: 100%;
 }
 
 #left {
     background-color: #2C8E89;
 }
+

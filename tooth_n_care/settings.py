@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -152,16 +156,20 @@ ACCOUNT_LOGIN_URL = '/login'
 
 LOGIN_REDIRECT_URL = '/get_user_type'
 
-ACCOUNT_LOGOUT_REDIRECT_URL = '/login'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 # Opcional: Processo de logout via GET (não requer um formulário POST)
 ACCOUNT_LOGOUT_ON_GET = True
 
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+# não é necessário fornecer o nome
+ACCOUNT_USERNAME_REQUIRED = False
 
 # Opcional: E-mail deve ser único
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
@@ -180,3 +188,13 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_FORMS = {
     'signup': 'pacientes.forms.PacienteSignupForm',
 }
+
+
+# Configuração do email para recuperação de senhas
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')

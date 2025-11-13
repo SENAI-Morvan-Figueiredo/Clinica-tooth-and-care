@@ -14,6 +14,7 @@
 #form-container {
     min-height: 600px;
     width: 80%;
+    max-width: 1200px;
     min-width: 300px; 
     background: white;
 }
@@ -26,7 +27,7 @@
 }
 
 #form-container .col:nth-child(1) img {
-    width: 60%;
+    height: 100px;
 }
 
 form {
