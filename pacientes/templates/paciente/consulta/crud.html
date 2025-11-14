@@ -1,5 +1,5 @@
 {% extends 'paciente/base.html' %}
-
+{% load static %}
 {% load widget_tweaks %}
 
 {% block title %}Minhas Consultas{% endblock %}
@@ -11,63 +11,64 @@
 
     <!-- Mensagens de feedback -->
     {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
     {% endif %}
 
     <!-- Lista de Consultas -->
     {% if consultas %}
-        <div class="row g-4">
-            {% for consulta in consultas %}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card shadow-sm 
+    <div class="row g-4">
+        {% for consulta in consultas %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm 
                         {% if consulta.data >= today %}border-success{% else %}border-secondary{% endif %}">
-                        
-                        <div class="card-header 
+
+                <div
+                    class="card-header 
                             {% if consulta.data >= today %}bg-success text-white{% else %}bg-secondary text-white{% endif %}">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <strong>{{ consulta.data|date:"d/m/Y" }} - {{ consulta.horario|time:"H:i" }}</strong>
-                                <span class="badge 
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong>{{ consulta.data|date:"d/m/Y" }} - {{ consulta.horario|time:"H:i" }}</strong>
+                        <span
+                            class="badge 
                                     {% if consulta.data >= today %}bg-light text-success{% else %}bg-light text-secondary{% endif %}">
-                                    {% if consulta.data >= today %}Agendada{% else %}Realizada{% endif %}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="card-body">
-                            <p><strong>👨‍⚕️ Médico:</strong> {{ consulta.medico.nome }}</p>
-                            <p><strong>🩺 Especialidade:</strong> {{ consulta.medico.especialidade }}</p>
-                            <p><strong>📋 Tipo:</strong> {{ consulta.tipo_consulta }}</p>
-                            {% if consulta.observacoes %}
-                                <p><strong>📝 Observações:</strong> {{ consulta.observacoes }}</p>
-                            {% endif %}
-                        </div>
-
-                        {% if consulta.data >= today %}
-                        <div class="card-footer d-flex justify-content-between">
-                            <a href="{% url 'consultas-editar' consulta.id %}" class="btn btn-sm btn-outline-primary">
-                                ✏️ Editar
-                            </a>
-                            <a href="{% url 'consultas-excluir' consulta.id %}"
-                               class="btn btn-sm btn-outline-danger"
-                               onclick="return confirm('Tem certeza que deseja cancelar esta consulta?');">
-                                ❌ Cancelar
-                            </a>
-                        </div>
-                        {% endif %}
+                            {% if consulta.data >= today %}Agendada{% else %}Realizada{% endif %}
+                        </span>
                     </div>
                 </div>
-            {% endfor %}
+
+                <div class="card-body">
+                    <p><strong>👨‍⚕️ Médico:</strong> {{ consulta.medico.nome }}</p>
+                    <p><strong>🩺 Especialidade:</strong> {{ consulta.medico.especialidade }}</p>
+                    <p><strong>📋 Tipo:</strong> {{ consulta.tipo_consulta }}</p>
+                    {% if consulta.observacoes %}
+                    <p><strong>📝 Observações:</strong> {{ consulta.observacoes }}</p>
+                    {% endif %}
+                </div>
+
+                {% if consulta.data >= today %}
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{% url 'consultas-editar' consulta.id %}" class="btn btn-sm btn-outline-primary">
+                        ✏️ Editar
+                    </a>
+                    <a href="{% url 'consultas-excluir' consulta.id %}" class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('Tem certeza que deseja cancelar esta consulta?');">
+                        ❌ Cancelar
+                    </a>
+                </div>
+                {% endif %}
+            </div>
         </div>
+        {% endfor %}
+    </div>
     {% else %}
-        <div class="text-center my-5">
-            <p class="fs-5">📭 Nenhuma consulta agendada.</p>
-            <p>Agende sua primeira consulta abaixo!</p>
-        </div>
+    <div class="text-center my-5">
+        <p class="fs-5">📭 Nenhuma consulta agendada.</p>
+        <p>Agende sua primeira consulta abaixo!</p>
+    </div>
     {% endif %}
 
     <hr class="my-5">
@@ -81,34 +82,73 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <form method="post"
-                      action="{% if consulta_editando %}{% url 'consultas-editar' consulta.id %}{% else %}{% url 'agendar-consulta' %}{% endif %}">
+                    action="{% if consulta_editando %}{% url 'consultas-editar' consulta.id %}{% else %}{% url 'agendar-consulta' %}{% endif %}">
                     {% csrf_token %}
 
                     <div class="row g-3">
-                        {% for field in form %}
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                    {{ field|add_class:"form-control" }}
-                                    {% if field.errors %}
-                                        <div class="text-danger small">
-                                            {% for error in field.errors %}
-                                                <div>{{ error }}</div>
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="{{ form.medico.id_for_label }}" class="form-label">{{ form.medico.label }}</label>
+                                {{ form.medico|add_class:"form-control" }}
+                                {% for error in form.medico.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="{{ form.servico.id_for_label }}" class="form-label">{{ form.servico.label }}</label>
+                                {{ form.servico|add_class:"form-control" }}
+                                {% for error in form.servico.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_data_0" class="form-label">{{ form.data.label }}</label>
+                                <div id="id_data_wrapper" class="d-flex align-items-center">
+                                    {{ form.data }}
+                                </div>
+                                {% for error in form.data.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_hora_consulta" class="form-label">{{ form.hora_consulta.label }}</label>
+                                <select id="id_hora_consulta" name="hora_consulta" class="form-control" disabled>
+                                    <option value="">Selecione o Médico e a Data</option>
+                                </select>
+                                {% for error in form.hora_consulta.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" style="display: none;">
+                            <div class="form-group mb-3">
+                                <label for="id_sala" class="form-label">{{ form.sala.label }}</label>
+                                <input type="hidden" id="id_sala" name="sala" value="{{ form.sala.value|default:'' }}">
+                                {% for error in form.sala.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="d-flex justify-content-center gap-3 mt-4">
                         <button type="submit" class="btn btn-success">
                             {% if consulta_editando %}💾 Atualizar Consulta{% else %}✅ Agendar Consulta{% endif %}
                         </button>
-
                         {% if consulta_editando %}
-                            <a href="{% url 'paciente-consultas' %}" class="btn btn-secondary">↩️ Cancelar</a>
+                        <a href="{% url 'paciente-consultas' %}" class="btn btn-secondary">↩️ Cancelar</a>
                         {% endif %}
                     </div>
                 </form>
@@ -116,4 +156,6 @@
         </div>
     </section>
 </div>
+
+<script src="{% static 'js/paciente/agendamento.js' %}"></script>
 {% endblock %}
