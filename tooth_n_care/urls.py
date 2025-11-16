@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from appadmin import views as adm_views
+from pacientes import views as api_pacientes
 
 
 urlpatterns = [
@@ -33,4 +34,9 @@ urlpatterns = [
     
     #allauth
     path('accounts/', include('allauth.urls')),
+
+    # APIs
+    path('api/carrega_medicos/', api_pacientes.carrega_medicos, name='carrega_medicos'),
+    path('api/carrega_datas/', api_pacientes.carrega_datas, name='carrega_datas'),
+    path('api/medicos-por-servico/', api_pacientes.medicos_por_servico, name='medicos-por-servico'),
 ]

@@ -89,9 +89,9 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="{{ form.medico.id_for_label }}" class="form-label">{{ form.medico.label }}</label>
-                                {{ form.medico|add_class:"form-control" }}
-                                {% for error in form.medico.errors %}
+                                <label for="{{ form.servico.id_for_label }}" class="form-label">{{ form.servico.label }}</label>
+                                {{ form.servico|add_class:"form-control" }}
+                                {% for error in form.servico.errors %}
                                 <div class="text-danger small">{{ error }}</div>
                                 {% endfor %}
                             </div>
@@ -99,9 +99,9 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="{{ form.servico.id_for_label }}" class="form-label">{{ form.servico.label }}</label>
-                                {{ form.servico|add_class:"form-control" }}
-                                {% for error in form.servico.errors %}
+                                <label for="{{ form.medico.id_for_label }}" class="form-label">{{ form.medico.label }}</label>
+                                {{ form.medico|add_class:"form-control" }}
+                                {% for error in form.medico.errors %}
                                 <div class="text-danger small">{{ error }}</div>
                                 {% endfor %}
                             </div>
@@ -121,9 +121,9 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="id_hora_consulta" class="form-label">{{ form.hora_consulta.label }}</label>
+                                <label for="id_hora_consulta" class="form-label">Horário</label>
                                 <select id="id_hora_consulta" name="hora_consulta" class="form-control" disabled>
-                                    <option value="">Selecione o Médico e a Data</option>
+                                    <option value="">Primeiro selecione médico e data</option>
                                 </select>
                                 {% for error in form.hora_consulta.errors %}
                                 <div class="text-danger small">{{ error }}</div>
