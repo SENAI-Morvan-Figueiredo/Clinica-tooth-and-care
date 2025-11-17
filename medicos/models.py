@@ -13,7 +13,7 @@ class Medico(models.Model):
     rg = models.CharField(max_length=20, null=False, blank=False, unique=True)
     crm = models.CharField(max_length=20, null=False, blank=False, unique=True)
     telefone = models.CharField(max_length=20, null=False, blank=False)
-
+    ativo = models.BooleanField(default=True)
 
     especialidades = models.ManyToManyField(
         Especialidade,
@@ -22,6 +22,3 @@ class Medico(models.Model):
 
     def __str__(self):
         return self.user.username
-    
-
-

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    const tabelaElemento = $('#tabela-consultas');
+    const tabelaElemento = $('#medicosTable');
     // Verifica se há linhas de dados válidas (ignora a linha de mensagem 'empty' se ela existir)
     const possuiDados = tabelaElemento.find('tbody tr').length > 0 && !tabelaElemento.find('tbody tr').hasClass('dataTables_empty');
     

@@ -134,14 +134,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 $(document).ready(function() {
+    const tabelaElementoDOM = document.getElementById('tabela-pacientes');
+    const $tabelaElemento = $(tabelaElementoDOM);
+
     // Verifica se a tabela tem linhas de dados válidas (não apenas a mensagem de 'empty')
-    const possuiDados = tabelaElemento.find('tbody tr:not(.dataTables_empty)').length > 0;
+    const possuiDados = $tabelaElemento.find('tbody tr:not(.dataTables_empty)').length > 0;
     
     let tabela;
 
     if (possuiDados) {
         // Inicializa o DataTables APENAS se houver dados
-        tabela = tabelaElemento.DataTable({
+        tabela = $tabelaElemento.DataTable({
             dom: 'lrtip',
             paging: false,
             info: false,

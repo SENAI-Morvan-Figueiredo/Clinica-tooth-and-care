@@ -18,7 +18,17 @@
 <div class="card shadow-sm border-0 mb-4">
     <div class="card-body p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fw-bold"><i class="fas fa-user-md me-2 text-info"></i> {{ medico.user.username }}</h3>
+            <div>
+                <h3 class="fw-bold">
+                    <i class="fas fa-user-md me-2 text-info"></i> 
+                    {{ medico.user.username }}
+                </h3>
+                {% if not medico.ativo %}
+                <div class="text-muted">
+                    (inativo)
+                </div>
+                {% endif %}
+            </div>
             <!-- Novo Botão de Deletar com Modal -->
             <button 
                 type="button" 
