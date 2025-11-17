@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.widgets import SplitDateTimeWidget
 import datetime
-from .models import Consulta, Exame, Diagnostico, Anamnese, DisponibilidadeMedico
+from .models import Consulta, Exame, Diagnostico, Anamnese, DisponibilidadeMedico, SERVICOS
 from medicos.models import Medico
 
 # conecta o tipo de consulta com a especialidade do médico
@@ -28,7 +28,7 @@ PRECOS_SERVICOS = {
 class ConsultaForm(forms.ModelForm):    
     servico = forms.ChoiceField(
         label='Serviço:',
-        choices=Consulta.SERVICOS,
+        choices=SERVICOS,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 

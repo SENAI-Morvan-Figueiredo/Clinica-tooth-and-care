@@ -1,0 +1,71 @@
+body {
+    background-color: #d8f0ee;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar {
+    background-color: #2e8a83;
+    min-height: 100vh;
+    color: white;
+    padding-top: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 230px;
+}
+
+.sidebar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 10px;
+    background-color: #fff;
+}
+
+.sidebar h2 {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #009c96;
+}
+
+main {
+    margin-left: 240px;
+    padding: 30px;
+}
+
+header.navbar {
+    background-color: #007a74 !important;
+}
+
+header .btn-logout {
+    background-color: #fff;
+    color: #007a74;
+    border: none;
+    font-weight: 600;
+}
+
+header .btn-logout:hover {
+    background-color: #e8e8e8;
+}
+
+#consulta-card {
+    max-width: 550px;
+    margin-inline: 1rem;
+}

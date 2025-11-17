@@ -65,7 +65,7 @@ def consulta_criar_ou_editar(request, consulta_id=None):
     else:
         form = ConsultaForm(instance=consulta)
 
-    consultas = Consulta.objects.filter(paciente=paciente).order_by("-data")
+    consultas = Consulta.objects.filter(paciente=paciente, status__in=['marcada', 'remarcada']).order_by("-data")
 
     return render(request, "paciente/consulta/crud.html", {
         "form": form,

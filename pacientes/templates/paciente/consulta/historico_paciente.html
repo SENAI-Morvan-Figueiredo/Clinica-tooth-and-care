@@ -88,14 +88,20 @@
                                 <th>Médico</th>
                                 <th>Data</th>
                                 <th>Tipo</th>
+                                <th>status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for consulta in consultas %}
+                            {% if consulta.status == 'realizada' %}
+                            <tr class="table-success">
+                            {% else %}
                             <tr>
-                                <td>{{ consulta.medico.nome }}</td>
+                            {% endif %}
+                                <td>{{ consulta.medico.user.username }}</td>
                                 <td>{{ consulta.data|date:"d/m/Y" }}</td>
-                                <td>{{ consulta.tipo_consulta }}</td>
+                                <td>{{ consulta.get_servico_display }}</td>
+                                <td>{{ consulta.status }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
