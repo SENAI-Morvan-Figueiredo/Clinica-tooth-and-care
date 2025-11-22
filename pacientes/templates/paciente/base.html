@@ -1,42 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Painel do Paciente{% endblock %}</title>
+    <title>{% block title %}Painel{% endblock %}</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/paciente.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pacientes/paciente.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
     <!-- Header -->
     <header class="navbar navbar-dark fixed-top shadow-sm px-3">
         <div class="container-fluid">
-            <h1 class="navbar-brand mb-0 fs-5">Tooth & Care - Paciente</h1>
+            <h1 class="navbar-brand mb-0 fs-5">Tooth & Care</h1>
 
-            <form method="post" action="{% url 'account_logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-logout">Sair</button>
-            </form>
+            <div id="navBtns" class="d-flex gap-2">
+                <!-- Botão menu mobile -->
+                <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false" 
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <form method="post" action="{% url 'account_logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-logout" id="logout-btn">Sair</button>
+                </form>
+            </div>
         </div>
     </header>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Imagem do Usuário">
-        <h2>{{ paciente.user.username }}</h2>
+    <div class="d-flex main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar collapse d-md-block" id="sidebarCollapse">
+            <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Imagem do Usuário">
+            <h2>{{ paciente.user.username }}</h2>
 
-        <a href="{% url 'paciente-consultas' %}">📋 Consultas</a>
-        <a href="{% url 'informacoes-pessoais' %}">👤 Informações pessoais</a>
-    </aside>
+            <a href="{% url 'paciente-consultas' %}">📋 Consultas</a>
+            <a href="{% url 'informacoes-pessoais' %}">👤 Informações pessoais</a>
+        </aside>
 
-    <!-- Main content -->
-    <main class="container-fluid mt-5 pt-4">
-        {% block content %}{% endblock %}
-    </main>
+        <!-- Overlay para mobile -->
+        <div class="sidebar-overlay d-md-none" id="sidebarOverlay" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse"></div>
+
+        <!-- Main content -->
+        <main class="container-fluid mt-5 pt-4 flex-grow-1">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
