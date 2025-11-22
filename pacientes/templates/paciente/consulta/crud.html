@@ -22,7 +22,7 @@
             </div>
             <div class="card-body">
                 <p><strong>Serviço:</strong> {{ consulta.get_servico_display }}</p>
-                <p><strong>Médico:</strong> {{ consulta.medico }}</p>
+                <p><strong>Médico:</strong> {{ consulta.medico.user.first_name }} {{ consulta.medico.user.last_name }}</p>
                 <p><strong>Sala:</strong> {{ consulta.get_sala_display }}</p>
             </div>
         </div>

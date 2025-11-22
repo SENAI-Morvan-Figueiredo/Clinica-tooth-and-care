@@ -1,0 +1,156 @@
+[
+  {
+    "model": "auth.User",
+    "pk": 101,
+    "fields": {
+      "username": "Dr. Joao Clinico",
+      "first_name": "João",
+      "last_name": "Silva",
+      "email": "joao.clinico@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 102,
+    "fields": {
+      "username": "Dra. Maria Odontopediatra",
+      "first_name": "Maria",
+      "last_name": "Santos",
+      "email": "maria.pediatra@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 103,
+    "fields": {
+      "username": "Dr. Pedro Ortodontista",
+      "first_name": "Pedro",
+      "last_name": "Almeida",
+      "email": "pedro.orto@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 104,
+    "fields": {
+      "username": "Dra. Ana Endodontista",
+      "first_name": "Ana",
+      "last_name": "Ribeiro",
+      "email": "ana.endo@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 105,
+    "fields": {
+      "username": "Dr. Lucas Periodontista",
+      "first_name": "Lucas",
+      "last_name": "Oliveira",
+      "email": "lucas.perio@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 106,
+    "fields": {
+      "username": "Dra. Sofia Implantodontista",
+      "first_name": "Sofia",
+      "last_name": "Costa",
+      "email": "sofia.implante@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 107,
+    "fields": {
+      "username": "Dr. Daniel Bucomaxilo",
+      "first_name": "Daniel",
+      "last_name": "Ferreira",
+      "email": "daniel.bucomaxilo@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 108,
+    "fields": {
+      "username": "Dra. Paula Estomatologista",
+      "first_name": "Paula",
+      "last_name": "Rodrigues",
+      "email": "paula.estomato@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 109,
+    "fields": {
+      "username": "Dr. Gabriel Protesista",
+      "first_name": "Gabriel",
+      "last_name": "Gomes",
+      "email": "gabriel.protese@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 110,
+    "fields": {
+      "username": "Dra. Beatriz Radiologista",
+      "first_name": "Beatriz",
+      "last_name": "Martins",
+      "email": "beatriz.radio@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "auth.User",
+    "pk": 111,
+    "fields": {
+      "username": "Dr. Bruno Esteticista",
+      "first_name": "Bruno",
+      "last_name": "Lopes",
+      "email": "bruno.estetica@email.com",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "date_joined": "2025-01-01T10:00:00Z"
+    }
+  }
+]

@@ -3,23 +3,42 @@ from pacientes.models import Paciente
 from medicos.models import Medico
 
 SERVICOS = [
-    ("AVALIACAO", "Avaliação"),
-    ("LIMPEZA", "Limpeza"),
-    ("RESTAU", "Restauração"),
-    ("CANAL", "Tratamento de canal"),
-    ("EXTRACAO", "Extração dentária"),
-    ("CLAREAMENTO", "Clareamento"),
-    ("APARELHO", "Ortodontia"),
+    # 🦷 Serviços de Clínica Geral / Diagnóstico
+    ("AVALIACAO", "Avaliação e Diagnóstico"),
+    ("PROFILAXIA", "Profilaxia e Higiene"),
+    
+    # 🩹 Serviços de Odontologia Restauradora / Estética
+    ("RESTAU", "Restauração Dentária"),
+    ("CLAREAMENTO", "Clareamento Dental"),
+    ("ESTETICA_GERAL", "Procedimento de Odontologia Estética Geral"),
+    ("PROTESE", "Reabilitação Protética"),
+    ("IMPLANTE", "Implante Dentário"),
+    
+    # 🦠 Serviços de Tratamentos Específicos
+    ("CANAL", "Tratamento Endodôntico"),
+    ("PERIODONTAL", "Tratamento Periodontal"),
+    ("ORTODONTIA", "Instalação/Manutenção Ortodôntica"),
+    
+    # ✂️ Serviços Cirúrgicos
+    ("EXTRACAO", "Extração Dentária Simples"),
+    ("CIRURGIA_MAXILO", "Cirurgia Bucomaxilofacial Complexa"),
+    
+    # 👶 Serviços Pediátricos
+    ("ODONTOPED", "Consulta/Tratamento Infantil"),
+    
+    # 🔬 Serviços de Diagnóstico Avançado
+    ("RADIOLOGIA", "Exames de Imagem Odontológica"),
+    ("ESTOMATO", "Avaliação de Lesões Orais"),
 ]
 
 SALAS = [
-    ('SALA_GERAL_1', 'Sala de Atendimento Geral 1 (Rotina)'),
-    ('SALA_GERAL_2', 'Sala de Atendimento Geral 2 (Rotina)'),
+    ('SALA_GERAL_1', 'Sala de Atendimento Geral 1'),
+    ('SALA_GERAL_2', 'Sala de Atendimento Geral 2'),
     ('SALA_CIRURGIA_PRIN', 'Sala de Cirurgia Principal'),
     ('SALA_PROFILAXIA', 'Sala de Profilaxia e Higiene'),
     ('SALA_ORTODONTIA', 'Sala de Ortodontia'),
     ('SALA_PEDIATRICA', 'Sala Pediátrica'),
-    ('SALA_ENDODONTIA', 'Sala de Endodontia (Tratamento de Canal)'),
+    ('SALA_ENDODONTIA', 'Sala de Endodontia'),
     ('SALA_ESTETICA', 'Sala de Estética e Clareamento'),
     ('SALA_RADIOLOGIA', 'Sala de Radiologia e Imagem'),
     ('SALA_EMERGENCIA', 'Sala de Emergência Rápida'),

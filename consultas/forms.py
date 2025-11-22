@@ -4,25 +4,62 @@ import datetime
 from .models import Consulta, Exame, Diagnostico, Anamnese, DisponibilidadeMedico, SERVICOS
 from medicos.models import Medico
 
-# conecta o tipo de consulta com a especialidade do médico
 SERVICO_ESPECIALIDADE_MAP = {
+    # Clínica Geral / Diagnóstico
     "AVALIACAO": "Clínico Geral",
-    "LIMPEZA": "Higienização",
-    "RESTAU": "Restauração",
+    "PROFILAXIA": "Clínico Geral", # Substitui 'LIMPEZA'
+    
+    # Odontologia Restauradora / Estética
+    "RESTAU": "Clínico Geral", # Restaurações Simples
+    "CLAREAMENTO": "Odontologia Estética",
+    "ESTETICA_GERAL": "Odontologia Estética",
+    "PROTESE": "Prótese Dentária",
+    "IMPLANTE": "Implantodontia",
+    
+    # Tratamentos Específicos
     "CANAL": "Endodontia",
-    "EXTRACAO": "Cirurgia",
-    "CLAREAMENTO": "Estética",
-    "APARELHO": "Ortodontia",
+    "PERIODONTAL": "Periodontia",
+    "ORTODONTIA": "Ortodontia",
+    
+    # Cirúrgicos / Bucomaxilo
+    "EXTRACAO": "Cirurgia Bucomaxilofacial", # Substitui 'Cirurgia'
+    "CIRURGIA_MAXILO": "Cirurgia Bucomaxilofacial",
+    
+    # Pediátricos
+    "ODONTOPED": "Odontopediatria",
+    
+    # Diagnóstico Avançado
+    "RADIOLOGIA": "Radiologia Odontológica",
+    "ESTOMATO": "Estomatologia",
 }
 
 PRECOS_SERVICOS = {
+    # Clínica Geral / Diagnóstico
     "AVALIACAO": 50.00,
-    "LIMPEZA": 120.00,
-    "RESTAU": 200.00,
-    "CANAL": 550.00,
-    "EXTRACAO": 150.00,
-    "CLAREAMENTO": 800.00,
-    "APARELHO": 60.00, # Manutenção
+    "PROFILAXIA": 150.00,
+    
+    # Odontologia Restauradora / Estética
+    "RESTAU": 220.00,
+    "CLAREAMENTO": 850.00,
+    "ESTETICA_GERAL": 400.00,
+    "PROTESE": 1500.00,
+    "IMPLANTE": 3000.00,
+    
+    # Tratamentos Específicos
+    "CANAL": 650.00,
+    "PERIODONTAL": 350.00,
+    "ORTODONTIA": 80.00, # Manutenção
+    
+    # Cirúrgicos / Bucomaxilo
+    "EXTRACAO": 180.00,
+    "CIRURGIA_MAXILO": 900.00,
+    
+    # Pediátricos
+    "ODONTOPED": 160.00,
+    
+    # Diagnóstico Avançado
+    "RADIOLOGIA": 100.00,
+    "ESTOMATO": 250.00,
 }
 
 class ConsultaForm(forms.ModelForm):    
@@ -76,6 +113,11 @@ class ConsultaForm(forms.ModelForm):
         hora_consulta = cleaned_data.get("hora_consulta")
         sala_atendimento = cleaned_data.get("sala")
 
+        # Combina o objeto date com o objeto time
+        try:
+            data_hora_completa = datetime.datetime.combine(data_consulta, hora_consulta)
+        except (ValueError, TypeError) as e:
+                self.add_error(None, f"Erro ao checar data e hora")
         # Validação do fluxo sequencial
         if servico and not medico:
             self.add_error('medico', "Por favor, selecione um médico para o serviço escolhido.")
@@ -84,19 +126,9 @@ class ConsultaForm(forms.ModelForm):
             self.add_error('data', "Por favor, selecione uma data para a consulta.")
         
         if data_consulta and hora_consulta:
-            try:
-                # Combina o objeto date com o objeto time
-                data_hora_completa = datetime.datetime.combine(data_consulta, hora_consulta)
-
-                # Verificar se a data/hora não está no passado
-                if data_hora_completa < datetime.datetime.now():
-                    self.add_error('data', "Não é possível agendar consultas para datas/horários passados.")
-                
-                # Atribui ao campo 'data' (DateTimeField) da instância do modelo
-                self.instance.data = data_hora_completa
-                
-            except (ValueError, TypeError) as e:
-                self.add_error(None, f"Erro ao combinar data e hora: {str(e)}")
+            # Verificar se a data/hora não está no passado
+            if data_hora_completa < datetime.datetime.now():
+                self.add_error('data', "Não é possível agendar consultas para datas/horários passados.")
         else:
             # Adiciona erros específicos se algum campo estiver faltando
             if not data_consulta:
@@ -118,8 +150,6 @@ class ConsultaForm(forms.ModelForm):
             self.add_error(None, "Sala de atendimento não foi definida para o horário selecionado.")
         
         if data_consulta and hora_consulta and medico:
-            data_hora_completa = datetime.datetime.combine(data_consulta, hora_consulta)
-            
             consultas_existentes = Consulta.objects.filter(
                 medico=medico,
                 data=data_hora_completa,
@@ -148,6 +178,13 @@ class ConsultaForm(forms.ModelForm):
     def save(self, commit=True):
         consulta = super().save(commit=False)
         consulta.status = 'marcada'
+
+        # adiciona o tipo datetime no campo DateTime do modelo
+        data = self.cleaned_data.get('data')
+        hora = self.cleaned_data.get('hora_consulta')
+        data_hora_completa = datetime.datetime.combine(data, hora)
+
+        consulta.data = data_hora_completa
 
         if commit:
             consulta.save()

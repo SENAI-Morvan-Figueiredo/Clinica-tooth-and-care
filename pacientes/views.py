@@ -25,7 +25,7 @@ def consulta_lista(request):
         messages.error(request, "Paciente não encontrado.")
         return redirect('/')
 
-    consultas = Consulta.objects.filter(paciente=paciente).order_by("-data")
+    consultas = Consulta.objects.filter(paciente=paciente, status__in=['marcada', 'remarcada']).order_by("-data")
     form = ConsultaForm()
 
     contexto = {

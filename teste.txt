@@ -1,0 +1,6 @@
+hora_consulta: 09:00:00
+datetime obj: 2025-12-01 09:00:00hora_consulta: 09:00:00
+hora_consulta: 09:00:00
+tese cleaned_data: {'servico': 'EXTRACAO', 'medico': <Medico: Dr. Daniel Bucomaxilo>, 'data': datetime.date(2025, 11, 24), 'hora_consulta': datetime.time(9, 0), 'sala': 'SALA_CIRURGIA_PRIN'}hora_consulta: 10:00:00
+tese cleaned_data: None | 10:00:00hora_consulta: 10:00:00
+tese cleaned_data: 2025-12-01 | 10:00:00hora_consulta: 10:00:00

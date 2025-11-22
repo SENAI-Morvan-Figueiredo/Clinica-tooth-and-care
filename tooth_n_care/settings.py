@@ -161,12 +161,12 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_ON_GET = True
 
 ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_LOGIN_METHODS = {'email'}
 # ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 # não é necessário fornecer o nome
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
 # Opcional: E-mail deve ser único
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']

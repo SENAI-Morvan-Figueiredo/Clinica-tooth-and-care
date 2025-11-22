@@ -3,9 +3,9 @@
     "model": "consultas.DisponibilidadeMedico",
     "pk": 1,
     "fields": {
-      "medico": 101,
+      "medico": 1,
       "dia_semana": 0,
-      "hora_inicio": "08:00:00",
+      "hora_inicio": "09:00:00",
       "hora_fim": "12:00:00",
       "sala_padrao": "SALA_GERAL_1"
     }
@@ -14,97 +14,97 @@
     "model": "consultas.DisponibilidadeMedico",
     "pk": 2,
     "fields": {
-      "medico": 101,
-      "dia_semana": 2,
-      "hora_inicio": "13:30:00",
-      "hora_fim": "17:00:00",
-      "sala_padrao": "SALA_GERAL_1"
+      "medico": 2,
+      "dia_semana": 0,
+      "hora_inicio": "09:00:00",
+      "hora_fim": "12:00:00",
+      "sala_padrao": "SALA_PEDIATRICA"
     }
   },
   {
     "model": "consultas.DisponibilidadeMedico",
     "pk": 3,
     "fields": {
-      "medico": 102,
-      "dia_semana": 1,
-      "hora_inicio": "14:00:00",
-      "hora_fim": "18:30:00",
-      "sala_padrao": "SALA_CIRURGIA_PRIN"
+      "medico": 3,
+      "dia_semana": 0,
+      "hora_inicio": "09:00:00",
+      "hora_fim": "12:00:00",
+      "sala_padrao": "SALA_ORTODONTIA"
     }
   },
   {
     "model": "consultas.DisponibilidadeMedico",
     "pk": 4,
     "fields": {
-      "medico": 103,
-      "dia_semana": 3,
-      "hora_inicio": "09:30:00",
-      "hora_fim": "12:30:00",
-      "sala_padrao": "SALA_PEDIATRICA"
+      "medico": 4,
+      "dia_semana": 0,
+      "hora_inicio": "09:00:00",
+      "hora_fim": "12:00:00",
+      "sala_padrao": "SALA_ENDODONTIA"
     }
   },
   {
     "model": "consultas.DisponibilidadeMedico",
     "pk": 5,
     "fields": {
-      "medico": 104,
-      "dia_semana": 4,
-      "hora_inicio": "08:30:00",
-      "hora_fim": "11:30:00",
-      "sala_padrao": "SALA_ENDODONTIA"
+      "medico": 5,
+      "dia_semana": 0,
+      "hora_inicio": "09:00:00",
+      "hora_fim": "12:00:00",
+      "sala_padrao": "SALA_PROFILAXIA"
     }
   },
   {
     "model": "consultas.DisponibilidadeMedico",
     "pk": 6,
     "fields": {
-      "medico": 104,
-      "dia_semana": 4,
-      "hora_inicio": "14:00:00",
-      "hora_fim": "17:00:00",
-      "sala_padrao": "SALA_GERAL_2"
+      "medico": 6,
+      "dia_semana": 0,
+      "hora_inicio": "09:00:00",
+      "hora_fim": "12:00:00",
+      "sala_padrao": "SALA_CIRURGIA_PRIN"
     }
   },
   {
     "model": "consultas.DisponibilidadeMedico",
     "pk": 7,
     "fields": {
-      "medico": 105,
+      "medico": 7,
       "dia_semana": 0,
-      "hora_inicio": "13:00:00",
-      "hora_fim": "18:00:00",
-      "sala_padrao": "SALA_ORTODONTIA"
+      "hora_inicio": "09:00:00",
+      "hora_fim": "12:00:00",
+      "sala_padrao": "SALA_CIRURGIA_PRIN"
     }
   },
   {
     "model": "consultas.DisponibilidadeMedico",
     "pk": 8,
     "fields": {
-      "medico": 106,
-      "dia_semana": 1,
-      "hora_inicio": "08:00:00",
-      "hora_fim": "11:00:00",
-      "sala_padrao": "SALA_PROFILAXIA"
+      "medico": 8,
+      "dia_semana": 0,
+      "hora_inicio": "09:00:00",
+      "hora_fim": "12:00:00",
+      "sala_padrao": "SALA_GERAL_2" 
     }
   },
   {
     "model": "consultas.DisponibilidadeMedico",
     "pk": 9,
     "fields": {
-      "medico": 107,
-      "dia_semana": 6,
-      "hora_inicio": "10:00:00",
-      "hora_fim": "13:00:00",
-      "sala_padrao": "SALA_EMERGENCIA"
+      "medico": 9,
+      "dia_semana": 0,
+      "hora_inicio": "09:00:00",
+      "hora_fim": "12:00:00",
+      "sala_padrao": "SALA_GERAL_1" 
     }
   },
   {
     "model": "consultas.DisponibilidadeMedico",
     "pk": 10,
     "fields": {
-      "medico": 108,
-      "dia_semana": 2,
-      "hora_inicio": "10:00:00",
+      "medico": 10,
+      "dia_semana": 0,
+      "hora_inicio": "09:00:00",
       "hora_fim": "12:00:00",
       "sala_padrao": "SALA_RADIOLOGIA"
     }
@@ -113,22 +113,11 @@
     "model": "consultas.DisponibilidadeMedico",
     "pk": 11,
     "fields": {
-      "medico": 109,
-      "dia_semana": 5,
+      "medico": 11,
+      "dia_semana": 0,
       "hora_inicio": "09:00:00",
-      "hora_fim": "13:00:00",
+      "hora_fim": "12:00:00",
       "sala_padrao": "SALA_ESTETICA"
-    }
-  },
-  {
-    "model": "consultas.DisponibilidadeMedico",
-    "pk": 12,
-    "fields": {
-      "medico": 110,
-      "dia_semana": 3,
-      "hora_inicio": "15:30:00",
-      "hora_fim": "18:30:00",
-      "sala_padrao": "SALA_GERAL_2"
     }
   }
 ]
