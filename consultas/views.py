@@ -59,8 +59,7 @@ def get_horarios_e_salas_disponiveis(request):
                     'sala': disp.sala_padrao # Retorna a sala padrão do turno
                 })
             
-            # Próximo slot a cada 15 minutos (para permitir marcação de 15 em 15, mas a consulta ainda dura 60 min)
-            # Se você quer slots *livres* de 15 em 15 para uma consulta de 60 minutos, você avança 15 minutos
-            slot_inicio += timedelta(minutes=15)
+            # Avança para o próximo slot, que deve ser a duração da consulta
+            slot_inicio += duracao_consulta
 
     return JsonResponse({'slots': slots_livres})

@@ -32,38 +32,38 @@ class ConsultaForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
-    medico = forms.ChoiceField(
-        choices=[],  # Será preenchido via AJAX
+    medico = forms.ModelChoiceField(
+        queryset=Medico.objects.all(),
         label='Médico:',
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
-    data = forms.ChoiceField(
-        choices=[],  # Inicialmente vazio e será preenchido via AJAX
-        label='Data da consulta',
-        widget=forms.Select(attrs={'class': 'form-control'})
+    data = forms.DateField(
+        label="Data:",
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    
+    sala = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput()
     )
 
     hora_consulta = forms.TimeField(
-        label='Hora da Consulta',
+        label='Hora da Consulta:',
         required=True, 
-        widget=forms.HiddenInput() 
+        widget=forms.Select(attrs={"class": "form-control"}) 
     )
 
-    def __init__(self, *args, paciente_logado=None, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.paciente_logado = paciente_logado
-        
-        self.fields['medico'].widget.attrs.update({'class': 'form-control'})
-        self.fields['servico'].widget.attrs.update({'class': 'form-control'})
+
+        self.fields['medico'].choices = [('', '--- Escolha o Médico ---')] # Opção inicial vazia
+        self.fields['data'].choices = [('', '--- Escolha a Data ---')]
+        self.fields['hora_consulta'].choices = [('', '--- Escolha a hora ---')]
 
     class Meta:
         model= Consulta
-        fields = ['servico', 'medico'] 
-        labels = {
-            'servico': 'Serviço Agendado',
-            'medico': 'Médico Responsável',
-        }
+        fields = ['servico', 'medico', 'data', 'hora_consulta', 'sala'] 
         widgets = {} 
 
     def clean(self):
@@ -76,15 +76,6 @@ class ConsultaForm(forms.ModelForm):
         hora_consulta = cleaned_data.get("hora_consulta")
         sala_atendimento = cleaned_data.get("sala")
 
-        if medico:
-            try:
-                medico = Medico.objects.get(id=medico)
-                cleaned_data['medico'] = medico
-                self.instance.medico = medico
-            except Medico.DoesNotExist:
-                self.add_error('medico', 'Médico inválido.')
-
-        
         # Validação do fluxo sequencial
         if servico and not medico:
             self.add_error('medico', "Por favor, selecione um médico para o serviço escolhido.")
@@ -92,15 +83,11 @@ class ConsultaForm(forms.ModelForm):
         if medico and not data_consulta:
             self.add_error('data', "Por favor, selecione uma data para a consulta.")
         
-        if data_consulta and not hora_consulta:
-            self.add_error('hora_consulta', "Por favor, selecione um horário para a consulta.")
-
-        # Combinação de Data e Hora para o campo DateTimeField do modelo
         if data_consulta and hora_consulta:
             try:
                 # Combina o objeto date com o objeto time
                 data_hora_completa = datetime.datetime.combine(data_consulta, hora_consulta)
-                
+
                 # Verificar se a data/hora não está no passado
                 if data_hora_completa < datetime.datetime.now():
                     self.add_error('data', "Não é possível agendar consultas para datas/horários passados.")
@@ -123,6 +110,8 @@ class ConsultaForm(forms.ModelForm):
         elif servico:
             self.add_error('servico', "Serviço selecionado não possui preço definido.")
         
+        # O campo 'sala' é preenchido pelo JS no HiddenInput
+        sala_atendimento = cleaned_data.get("sala")
         if sala_atendimento:
             self.instance.sala = sala_atendimento
         elif hora_consulta:

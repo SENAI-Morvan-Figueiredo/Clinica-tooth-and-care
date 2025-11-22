@@ -36,6 +36,52 @@ def consulta_lista(request):
     }
     return render(request, "paciente/consulta/crud.html", contexto)
 
+#-------------------------- views para o form de criar Consultas -------------------------
+def carrega_medicos(request):
+    servico = request.GET.get('servico')
+    especialidade_nome = SERVICO_ESPECIALIDADE_MAP.get(servico)
+    medicos = Medico.objects.none()
+    if especialidade_nome:
+        medicos = Medico.objects.filter(especialidades__nome=especialidade_nome)
+
+    return JsonResponse(list(medicos.values('id', 'user__first_name', 'user__last_name')), safe=False)
+
+def carrega_datas(request):
+    medico_id = request.GET.get('medico_id')
+
+    try:
+        medico = Medico.objects.get(id=medico_id)
+    except Medico.DoesNotExist:
+        return JsonResponse([], safe=False)
+    
+    # Gera as datas para os próximos 30 dias
+    start_date = timezone.now().date()
+    end_date = start_date + timedelta(days=30)
+    dates_available = []
+    for single_date in (start_date + timedelta(n) for n in range((end_date - start_date).days)):
+        # Verifica o dia da semana
+        day_of_week = single_date.weekday()
+        # Verifica se o médico tem disponibilidade nesse dia da semana
+        if medico.disponibilidade.filter(dia_semana=day_of_week).exists():
+            dates_available.append(single_date.strftime("%Y-%m-%d"))
+
+    return JsonResponse(dates_available, safe=False)
+
+def medicos_por_servico(request):
+    servico = request.GET.get('servico')
+    especialidade_nome = SERVICO_ESPECIALIDADE_MAP.get(servico)
+    
+    if not especialidade_nome:
+        return JsonResponse({'medicos': []})
+    
+    especialidade = Especialidade.objects.filter(nome=especialidade_nome).first()
+    if not especialidade:
+        return JsonResponse({'medicos': []})
+    
+    medicos = Medico.objects.filter(especialidades=especialidade)
+    medicos_data = [{'id': medico.id, 'nome': f"Dr. {medico.user.first_name} {medico.user.last_name}"} for medico in medicos]
+    
+    return JsonResponse({'medicos': medicos_data})
 
 @login_required
 def consulta_criar_ou_editar(request, consulta_id=None):
@@ -76,7 +122,6 @@ def consulta_criar_ou_editar(request, consulta_id=None):
         "today": timezone.now().date(),
     })
 
-
 @login_required
 def consulta_excluir(request, consulta_id):
     """
@@ -92,57 +137,6 @@ def consulta_excluir(request, consulta_id):
     consulta.delete()
     messages.success(request, "Consulta excluída com sucesso!")
     return redirect("paciente-consultas")
-
-# views para o form
-def carrega_medicos(request):
-    servico = request.GET.get('servico')
-    especialidade_nome = SERVICO_ESPECIALIDADE_MAP.get(servico)
-    medicos = Medico.objects.none()
-    if especialidade_nome:
-        medicos = Medico.objects.filter(especialidades__nome=especialidade_nome)
-
-    return JsonResponse(list(medicos.values('id', 'user__first_name', 'user__last_name')), safe=False)
-
-def carrega_datas(request):
-    medico_id = request.GET.get('medico_id')
-
-    try:
-        medico = Medico.objects.get(id=medico_id)
-    except Medico.DoesNotExist:
-        return JsonResponse([], safe=False)
-    
-    # Gera as datas para os próximos 30 dias
-    start_date = timezone.now().date()
-    end_date = start_date + timedelta(days=30)
-    dates_available = []
-    for single_date in (start_date + timedelta(n) for n in range((end_date - start_date).days)):
-        # Verifica o dia da semana
-        day_of_week = single_date.weekday()
-        # Verifica se o médico tem disponibilidade nesse dia da semana
-        if medico.disponibilidade.filter(dia_semana=day_of_week).exists():
-            dates_available.append(single_date.strftime("%Y-%m-%d"))
-
-    with open('teste.txt', 'w') as p:
-        p.write(str(dates_available))
-
-    return JsonResponse(dates_available, safe=False)
-
-def medicos_por_servico(request):
-    servico = request.GET.get('servico')
-    especialidade_nome = SERVICO_ESPECIALIDADE_MAP.get(servico)
-    
-    if not especialidade_nome:
-        return JsonResponse({'medicos': []})
-    
-    especialidade = Especialidade.objects.filter(nome=especialidade_nome).first()
-    if not especialidade:
-        return JsonResponse({'medicos': []})
-    
-    medicos = Medico.objects.filter(especialidades=especialidade)
-    medicos_data = [{'id': medico.id, 'nome': f"Dr. {medico.user.first_name} {medico.user.last_name}"} for medico in medicos]
-    
-    return JsonResponse({'medicos': medicos_data})
-
 
 # ===================== INFORMAÇÕES PESSOAIS =====================
 

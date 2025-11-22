@@ -81,7 +81,7 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                <form method="post"
+                <form id="agendamento-form" method="post"
                     action="{% if consulta_editando %}{% url 'consultas-editar' consulta.id %}{% else %}{% url 'agendar-consulta' %}{% endif %}">
                     {% csrf_token %}
 
@@ -109,10 +109,8 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="id_data_0" class="form-label">{{ form.data.label }}</label>
-                                <div id="id_data_wrapper" class="d-flex align-items-center">
-                                    {{ form.data }}
-                                </div>
+                                <label for="{{ form.data.id_for_label }}" class="form-label">{{ form.data.label }}</label>
+                                {{ form.data|add_class:"form-control" }}
                                 {% for error in form.data.errors %}
                                 <div class="text-danger small">{{ error }}</div>
                                 {% endfor %}
@@ -121,10 +119,8 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="id_hora_consulta" class="form-label">Horário</label>
-                                <select id="id_hora_consulta" name="hora_consulta" class="form-control" disabled>
-                                    <option value="">Primeiro selecione médico e data</option>
-                                </select>
+                                <label for="{{ form.hora_consulta.id_for_label }}" class="form-label">{{ form.hora_consulta.label }}</label>
+                                {{ form.hora_consulta|add_class:"form-control" }}
                                 {% for error in form.hora_consulta.errors %}
                                 <div class="text-danger small">{{ error }}</div>
                                 {% endfor %}

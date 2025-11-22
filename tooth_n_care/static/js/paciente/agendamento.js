@@ -2,22 +2,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // Seletores do formulário
     const servicoSelect = document.getElementById('id_servico');
     const medicoSelect = document.getElementById('id_medico');
-    const dataWrapper = document.getElementById('id_data_wrapper');
+    const dataSelect = document.getElementById("id_data");
     const horaSelect = document.getElementById('id_hora_consulta');
     const salaInput = document.getElementById('id_sala');
 
     let datasDisponiveis = [];
 
-    if (!servicoSelect || !medicoSelect || !dataWrapper || !horaSelect || !salaInput) {
+    if (!servicoSelect || !medicoSelect || !dataSelect || !horaSelect || !salaInput) {
         console.error("Um ou mais campos do formulário de agendamento não foram encontrados. Verifique os IDs.");
         return;
     }
 
     // Inicialmente desabilitar médico, data e hora
     medicoSelect.disabled = true;
-    dataWrapper.querySelectorAll('select').forEach(select => {
-        select.disabled = true;
-    });
+    dataSelect.disabled = true;
     horaSelect.disabled = true;
 
     /**
@@ -31,10 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
         medicoSelect.innerHTML = '<option value="">Selecione um médico</option>';
         medicoSelect.disabled = true;
 
-        dataWrapper.querySelectorAll('select').forEach(select => {
-            select.value = '';
-            select.disabled = true;
-        });
+        dataSelect.innerHTML = 
+        dataSelect.disabled = true;
 
         horaSelect.innerHTML = '<option value="">Selecione o médico e a data</option>';
         horaSelect.disabled = true;
@@ -83,17 +79,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function enableDataField() {
         const medicoId = medicoSelect.value;
 
-        dataWrapper.querySelectorAll('select').forEach(select => {
-            select.disabled = !medicoId;
-            if (!medicoId) {
-                select.value = '';
-            }
-        });
+        dataSelect.disabled = !medicoId;
+        if (!medicoId) {
+            dataSelect.innerHTML = '<option value=\"">Selecione um médico</option>';
+        }
 
         if (!medicoId) {
-            horaSelect.innerHTML = '<option value="">Selecione o médico e a data</option>';
+            horaSelect.innerHTML = '<option value=\"">Selecione o médico e a data</option>';
             horaSelect.disabled = true;
-            salaInput.value = '';
+            salaInput.value = "";
         } else {
             // Se temos um médico selecionado, buscar as datas disponíveis
             updateDatasDisponiveis();
@@ -105,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function updateDatasDisponiveis() {
         const medicoId = medicoSelect.value;
-        const urlAPI = '/api/carrega_datas/';
+        const urlAPI = "/api/carrega_datas/";
 
         if (!medicoId) {
             return;
@@ -115,9 +109,9 @@ document.addEventListener('DOMContentLoaded', function () {
         datasDisponiveis = [];
 
         // Desabilita e limpa a seleção de hora
-        horaSelect.innerHTML = '<option value="">Selecione uma data primeiro</option>';
+        horaSelect.innerHTML = '<option value=\"">Selecione uma data primeiro</option>';
         horaSelect.disabled = true;
-        salaInput.value = '';
+        salaInput.value = "";
 
         // Faz a requisição Fetch para a API de datas disponíveis
         fetch(`${urlAPI}?medico_id=${medicoId}`)
@@ -129,16 +123,26 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 datasDisponiveis = data || [];
+                dataSelect.innerHTML = '<option value=\"">--- Escolha a Data ---</option>';
 
-                // Habilita os selects de data
-                dataWrapper.querySelectorAll('select').forEach(select => {
-                    select.disabled = false;
-                });
-
+                if (datasDisponiveis.length > 0) {
+                    datasDisponiveis.forEach(data => {
+                        const option = document.createElement("option");
+                        option.value = data;
+                        option.textContent = new Date(data + "T00:00:00").toLocaleDateString("pt-BR");
+                        dataSelect.appendChild(option);
+                    });
+                    dataSelect.disabled = false;
+                } else {
+                    dataSelect.innerHTML = "<option value=\"\" disabled>Nenhuma data disponível</option>";
+                    dataSelect.disabled = true;
+                }
             })
             .catch(error => {
                 console.error("Erro ao buscar datas disponíveis:", error);
                 datasDisponiveis = [];
+                dataSelect.innerHTML = "<option value=\"\">Erro ao carregar datas.</option>";
+                dataSelect.disabled = true;
             });
     }
 
@@ -148,17 +152,14 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function updateHorarios() {
         const medicoId = medicoSelect.value;
-        const ano = document.getElementById('id_data_0').value;
-        const mes = document.getElementById('id_data_1').value;
-        const dia = document.getElementById('id_data_2').value;
-        const dataSelecionada = `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
-        const urlAPI = '/consultas/api/disponibilidade/';
+        const dataSelecionada = dataSelect.value;
+        const urlAPI = "/consulta/api/disponibilidade/";
 
         // Desabilita e limpa a seleção de hora se o Médico ou a Data não estiverem selecionados
-        if (!medicoId || !ano || !mes || !dia) {
-            horaSelect.innerHTML = '<option value="">Selecione o Médico e a Data</option>';
+        if (!medicoId || !dataSelecionada) {
+            horaSelect.innerHTML = '<option value=\"">Selecione o Médico e a Data</option>';
             horaSelect.disabled = true;
-            salaInput.value = '';
+            salaInput.value = "";
             return;
         }
 
@@ -216,10 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
     servicoSelect.addEventListener('change', updateMedicos);
     medicoSelect.addEventListener('change', enableDataField);
 
-    // Adicionar um Event Listener em cada select (dia, mês, ano)
-    dataWrapper.querySelectorAll('select').forEach(select => {
-        select.addEventListener('change', updateHorarios);
-    });
+    dataSelect.addEventListener("change", updateHorarios);
 
     horaSelect.addEventListener('change', updateSala);
 
@@ -230,4 +228,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (medicoSelect.value) {
         enableDataField();
     }
+
+    // evita o envio com campos desabilitados
+    document.getElementById('agendamento-form').addEventListener('submit', (e) => {
+        servicoSelect.disabled = false;
+        medicoSelect.disabled = false;
+        dataSelect.disabled = false;
+        horaSelect.disabled = false;
+        salaInput.disabled = false;
+    });
 });
