@@ -5,18 +5,17 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.views.generic import CreateView
 
 # módulos do projeto
 from pacientes.models import Paciente
 from medicos.models import Medico, Especialidade
 from medicos.forms import MedicoUserForm
-from consultas.models import Consulta
+from consultas.models import Consulta, SERVICOS
 from django.utils import timezone
 from consultas.forms import ConsultaAdiar
 
 # outras bibliotecas
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta
 import json
 
 #------------------- funções auxiliares -------------------------
@@ -45,7 +44,7 @@ def gerar_slots_de_tempo(hora_inicio, hora_fim, intervalo_minutos):
 def dashboard(request):
     if request.method == 'GET':
         qtd_pacientes = Paciente.objects.count()
-        medicos_ativos = Medico.objects.all().prefetch_related("especialidades")
+        medicos_ativos = Medico.objects.filter(ativo=True).prefetch_related("especialidades")
         hoje = timezone.now().date()
         proximas_consultas = Consulta.objects.filter(data__date=hoje)   
         especialidades = Especialidade.objects.all()
@@ -82,7 +81,7 @@ def consultas(request):
 
         context = {
             "consultas": consultas, 
-            "servicos": Consulta.SERVICOS
+            "servicos": SERVICOS 
             }
 
         return render(request, 'appadmin/admConsultas.html', context)
@@ -197,6 +196,7 @@ def deletar_medico(request, pk=-1):
             data = json.loads(request.body)
             medico_ids = data.get('medico_ids') # procura a chave "medico_ids" no body
 
+
             if not medico_ids or not isinstance(medico_ids, list):
                 return HttpResponseBadRequest(
                     "Requisição inválida. Conteúdo recebido não está correto"
@@ -233,6 +233,44 @@ def deletar_medico(request, pk=-1):
         user_id = medico.user.pk
         user = User.objects.get(pk=user_id)
         user.delete() # deleta o usuário
+        
+        return redirect('adm-medicos')
+    
+def desativar_medicos(request, pk=-1):
+    if request.method == 'POST' and request.user.is_staff:        
+        try:
+            data = json.loads(request.body)
+            medico_ids = data.get('medico_ids') # procura a chave "medico_ids" no body
+
+            if not medico_ids or not isinstance(medico_ids, list):
+                return HttpResponseBadRequest(
+                    "Requisição inválida. Conteúdo recebido não está correto"
+                )
+            
+            # busca todos os médicos da lista
+            medicos_desativar = list(Medico.objects.filter(pk__in=medico_ids))
+            
+            for medico in medicos_desativar:
+                medico.ativo = False
+
+            return JsonResponse(
+                {"status": "sucesso",
+                "mensagem": f"{len(medicos_desativar)} médico(s) excluído(s) com sucesso!"},
+                status=200
+            )
+
+        except json.JSONDecodeError:
+            # Lidar com erro se o corpo não for um JSON válido
+            return HttpResponseBadRequest("Corpo da requisição deve ser um JSON válido.")
+        except Exception as e:
+            # Lidar com outros erros (erro de banco de dados, etc.)
+            return JsonResponse({
+                'status': 'erro',
+                'mensagem': f'Ocorreu um erro ao desativar os médicos: {str(e)}'
+            }, status=500)
+    else:
+        if pk == -1:
+            return HttpResponseBadRequest("id inválido.")
         
         return redirect('adm-medicos')
 

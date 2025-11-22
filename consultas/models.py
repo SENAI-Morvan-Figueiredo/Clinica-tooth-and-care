@@ -2,30 +2,30 @@ from django.db import models
 from pacientes.models import Paciente
 from medicos.models import Medico
 
+SERVICOS = [
+    ("AVALIACAO", "Avaliação"),
+    ("LIMPEZA", "Limpeza"),
+    ("RESTAU", "Restauração"),
+    ("CANAL", "Tratamento de canal"),
+    ("EXTRACAO", "Extração dentária"),
+    ("CLAREAMENTO", "Clareamento"),
+    ("APARELHO", "Ortodontia"),
+]
+
+SALAS = [
+    ('SALA_GERAL_1', 'Sala de Atendimento Geral 1 (Rotina)'),
+    ('SALA_GERAL_2', 'Sala de Atendimento Geral 2 (Rotina)'),
+    ('SALA_CIRURGIA_PRIN', 'Sala de Cirurgia Principal'),
+    ('SALA_PROFILAXIA', 'Sala de Profilaxia e Higiene'),
+    ('SALA_ORTODONTIA', 'Sala de Ortodontia'),
+    ('SALA_PEDIATRICA', 'Sala Pediátrica'),
+    ('SALA_ENDODONTIA', 'Sala de Endodontia (Tratamento de Canal)'),
+    ('SALA_ESTETICA', 'Sala de Estética e Clareamento'),
+    ('SALA_RADIOLOGIA', 'Sala de Radiologia e Imagem'),
+    ('SALA_EMERGENCIA', 'Sala de Emergência Rápida'),
+]
+
 class Consulta(models.Model):
-    SERVICOS = [
-        ("AVALIACAO", "Avaliação"),
-        ("LIMPEZA", "Limpeza"),
-        ("RESTAU", "Restauração"),
-        ("CANAL", "Tratamento de canal"),
-        ("EXTRACAO", "Extração dentária"),
-        ("CLAREAMENTO", "Clareamento"),
-        ("APARELHO", "Ortodontia"),
-    ]
-
-    SALAS = [
-        ('SALA_GERAL_1', 'Sala de Atendimento Geral 1 (Rotina)'),
-        ('SALA_GERAL_2', 'Sala de Atendimento Geral 2 (Rotina)'),
-        ('SALA_CIRURGIA_PRIN', 'Sala de Cirurgia Principal'),
-        ('SALA_PROFILAXIA', 'Sala de Profilaxia e Higiene'),
-        ('SALA_ORTODONTIA', 'Sala de Ortodontia'),
-        ('SALA_PEDIATRICA', 'Sala Pediátrica'),
-        ('SALA_ENDODONTIA', 'Sala de Endodontia (Tratamento de Canal)'),
-        ('SALA_ESTETICA', 'Sala de Estética e Clareamento'),
-        ('SALA_RADIOLOGIA', 'Sala de Radiologia e Imagem'),
-        ('SALA_EMERGENCIA', 'Sala de Emergência Rápida'),
-    ]
-
     data = models.DateTimeField(null=False,blank=False)
     sala = models.CharField(max_length=50, choices=SALAS,null=False,blank=False)
     servico =  models.CharField(max_length=100,choices=SERVICOS,null=False,blank=False)
@@ -51,7 +51,7 @@ class DisponibilidadeMedico(models.Model):
     dia_semana = models.IntegerField(choices=DIAS_SEMANA)
     hora_inicio = models.TimeField()
     hora_fim = models.TimeField()
-    sala_padrao = models.CharField(max_length=50, choices=Consulta.SALAS) # Adiciona a sala padrão
+    sala_padrao = models.CharField(max_length=50, choices=SALAS) # Adiciona a sala padrão
 
     class Meta:
         unique_together = ('medico', 'dia_semana', 'hora_inicio') # Evita horários duplicados no mesmo dia

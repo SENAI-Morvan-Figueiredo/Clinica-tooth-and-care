@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.forms import CheckboxSelectMultiple
-from .models import Medico, Especialidade
+from .models import Medico
 
 User = get_user_model()
 

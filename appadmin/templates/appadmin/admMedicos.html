@@ -3,10 +3,6 @@
 
 {% block title %}Médicos - Admin{% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/adm_medico.css' %}">
-{% endblock %}
-
 {% block content %}
 <div class="row">
     <div class="col-12">
@@ -21,14 +17,14 @@
             <input class="form-control me-3" type="text" placeholder="Pesquisar por nome ou CRM..." id="searchInput" style="max-width: 350px;">
             
             <div>
-                <!-- Novo Botão de Adicionar Médico -->
                 <a href="{% url 'adicionar-medico' %}" class="btn btn-primary me-2">
                     <i class="fas fa-user-plus me-1"></i> Adicionar Médico
                 </a>
-                
-                <!-- Botão de Remover (Ação Secundária/Perigosa) -->
                 <button type="button" id="remove-medico" class="btn btn-outline-danger" disabled>
                     <i class="fas fa-trash-alt me-1"></i> Remover Selecionados
+                </button>
+                <button type="button" id="desativa-btn" class="btn btn-outline-danger" disabled>
+                    Desativar Selecionados
                 </button>
             </div>
         </div>
@@ -44,6 +40,7 @@
                         <th scope="col">Médico</th>
                         <th scope="col">CRM</th>
                         <th scope="col">Especialidades</th>
+                        <th scope="col">Ativo</th>
                         <th scope="col" class="text-center" style="width: 80px;">Detalhes</th>
                     </tr>
                 </thead>
@@ -61,6 +58,13 @@
                             {% for especialidade in medico.especialidades.all %}
                                 <span class="badge bg-secondary me-1">{{ especialidade.nome }}</span>
                             {% endfor %}
+                        </td>
+                        <td>
+                            {% if medico.ativo %}
+                            <p class="text-success m-0">Ativo</p>
+                            {% else %}
+                            <p class="text-danger m-0">Inativo</p>
+                            {% endif %}
                         </td>
                         <td class="text-center">
                             <!-- Botão de Detalhe/Editar (usando ícone) -->
@@ -81,7 +85,7 @@
     </div>
 </div>
 
-<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO (NOVO ELEMENTO) -->
+<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -103,6 +107,27 @@
     </div>
 </div>
 
+<!-- MODAL DE CONFIRMAÇÃO DE DESATIVAÇÃO -->
+<div class="modal fade" id="confirmDeactModal" tabindex="-1" aria-labelledby="confirmDeactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeactModalLabel"><i class="fas fa-exclamation-triangle me-2"></i> Confirmação de Exclusão</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="deactMessage"></p>
+                <div class="alert alert-warning small mt-3">
+                    <i class="fas fa-info-circle me-1"></i>O registro do(s) médico(s) será(ão) alterado(s).
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeactButton">Desativar Médico(s)</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}
