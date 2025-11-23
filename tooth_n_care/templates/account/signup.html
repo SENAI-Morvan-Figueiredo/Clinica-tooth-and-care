@@ -1,20 +1,20 @@
 {% extends 'baseCadastro.html' %}
 {% load static %}
-{% load allauth account %}
+{% load widget_tweaks %} 
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center flex-column w-100">
+<div class="w-100">
     <h1 class="text-center mb-4">Cadastro de Paciente</h1>
 
-    <form method="post" action="{% url 'account_signup' %}" novalidate>
+    <form method="post" action="{% url 'account_signup' %}" novalidate class="w-100">
         {% csrf_token %}
 
         {% for field in form %}
         <div class="mb-3">
-            {{ field.label_tag }}
-
-            {{ field }}
-
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            
+            {% render_field field class="form-control" %}
+            
             {% if field.help_text %}
             <div class="form-text">{{ field.help_text }}</div>
             {% endif %}

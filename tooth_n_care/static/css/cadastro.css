@@ -7,9 +7,14 @@
 html,
 body {
     height: 100%;
+    overflow-x: hidden;
 }
 
 #left {
     background-color: #2C8E89;
 }
 
+.container-fluid {
+    margin: 0;
+    padding: 0;
+}

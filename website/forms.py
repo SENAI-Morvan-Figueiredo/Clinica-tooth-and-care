@@ -3,22 +3,6 @@ from allauth.account.forms import SignupForm
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-class CustomLoginForm(AuthenticationForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        # O campo 'username' corresponde ao nome de usuário
-        self.fields['username'].widget.attrs.update({
-            'class': 'form-control', # Opcional: para classes de CSS (ex: Bootstrap)
-            'placeholder': 'Email ou nome de usuário',
-        })
-        
-        # O campo 'password' corresponde à senha
-        self.fields['password'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Senha',
-        })
-
 class CustomSignupForm(SignupForm):
     password = forms.CharField(
         label=_("Senha"),

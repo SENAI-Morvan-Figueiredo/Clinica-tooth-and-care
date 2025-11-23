@@ -1,4 +1,4 @@
- {% load static %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -10,85 +10,92 @@
     {% block extra_head %}
     {% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Home Page{% endblock %}</title>
+    <title>{% block title %}Tooth & Care - Odontologia Especializada{% endblock %}</title>
 </head>
 <body>
 
-     <header>
-        
-        <img id='logo' src="{% static 'img/page_home/tc_logo.png' %}">
-
-        <ul class="menu">
-
-            <li><a href="{% url 'index' %}">Início</a></li>
-            <li><a href="#banner_espaco">Nosso espaço</li></a>
-            <li><a href="#banner_especialidades">Tratamentos</li></a>
-            <li><a href="#banner_contato">Contato</li></a>
-            <li><a href="{% url 'custom-login' %}">Cadastre-se</li></a>
-
-        </ul>
-    </header>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2C8E89;">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img id='logo' src="{% static 'img/page_home/tc_logo.png' %}" alt="Tooth & Care" class="d-none d-md-block" style="height: 4rem;">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#banner_espaco">Nosso espaço</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#banner_especialidades">Tratamentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#banner_contato">Contato</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'get_user_type' %}">logado como {{ user.first_name }}</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Cadastre-se</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     {% block content %}
     {% endblock content %}
 
-    <footer class="footer">
-    <div class="container">
-        <div class="text-center mb-4">
-            <div class="col-12">
-                <img src="{% static 'img/page_home/tc_logo.png' %}" alt="Tooth & Care Logo" class="footer-logo">
-            </div>
-        </div>
-
-        <div class="footer-content-row">
-            <div class="col-md-2 footer-col">
-                <h3 class="footer-title">Sobre</h3>
-                <ul class="list-unstyled">
-                    <li><a>Nosso espaço</a></li>
-                    <li><a>Quem somos</a></li>
-                </ul>
+    <!-- Footer permanece similar mas com melhorias Bootstrap -->
+    <footer class="footer py-5" style="background-color: #176B76;">
+        <div class="container">
+            <div class="text-center mb-4">
+                <img src="{% static 'img/page_home/tc_logo.png' %}" alt="Tooth & Care Logo" class="footer-logo img-fluid" style="max-width: 300px;">
             </div>
 
-            <div class="col-md-2 footer-col">
-                <h3 class="footer-title">Contato</h3>
-                <ul class="list-unstyled">
-                    <li><a>Nosso espaço</a></li>
-                    <li><a>Quem somos</a></li>
-                </ul>
-            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <h5 class="footer-title text-white">Sobre</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#banner_espaco" class="text-white text-decoration-none">Nosso espaço</a></li>
+                        <li><a href="#banner_especialidades" class="text-white text-decoration-none">Tratamentos</a></li>
+                    </ul>
+                </div>
 
-            <div class="col-md-3 footer-col text-left">
-                <h3 class="footer-title">Local:</h3>
-                <iframe id="map" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14628.371347861243!2d-46.652812!3d-23.565109!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c7c6e02771%3A0x5e82818f4f215e0a!2sAv.%20Paulista%2C%20999%20-%20Jardins%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001311-100!5e0!3m2!1spt-BR!2sbr!4v1761151884141!5m2!1spt-BR!2sbr" width="200" height="200" style="border:0;"></iframe>
-            </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <h5 class="footer-title text-white">Contato</h5>
+                    <ul class="list-unstyled text-white">
+                        <li>(11) 94002-8922</li>
+                        <li>contato@toothcare.com</li>
+                    </ul>
+                </div>
 
-            <div class="col-md-3 footer-col">
-                <h3 class="footer-title">Funcionamento:</h3>
-                <p>Segunda a Sexta</p>
-                <p>06:00 às 18:00</p>
-            </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <h5 class="footer-title text-white">Localização</h5>
+                    <div class="ratio ratio-1x1">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14628.371347861243!2d-46.652812!3d-23.565109!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c7c6e02771%3A0x5e82818f4f215e0a!2sAv.%20Paulista%2C%20999%20-%20Jardins%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001311-100!5e0!3m2!1spt-BR!2sbr!4v1761151884141!5m2!1spt-BR!2sbr" 
+                                style="border:0;" allowfullscreen></iframe>
+                    </div>
+                </div>
 
-            <div class="col-md-2 footer-col footer-socials">
-                <h3 class="footer-title">Redes sociais</h3>
-                <div class="social-icons">
-                    <a><img src="{% static 'img/page_home/icon_x.png' %}" ></a>
-                    <a><img src="{% static 'img/page_home/icon_facebook.png' %}"></a>
-                    <a><img src="{% static 'img/page_home/icon_instagram.png' %}"></a>
-                    <a><img src="{% static 'img/page_home/icon_youtube.png' %}"></a>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <h5 class="footer-title text-white">Funcionamento</h5>
+                    <p class="text-white">Segunda a Sexta<br>06:00 às 18:00</p>
+                    
+                    <h5 class="footer-title mt-3 text-white">Redes sociais</h5>
+                    <div class="social-icons d-flex gap-3 mt-2">
+                        <a href="#"><img src="{% static 'img/page_home/icon_facebook.png' %}" alt="Facebook" class="img-fluid" style="width: 30px;"></a>
+                        <a href="#"><img src="{% static 'img/page_home/icon_instagram.png' %}" alt="Instagram" class="img-fluid" style="width: 30px;"></a>
+                        <a href="#"><img src="{% static 'img/page_home/icon_youtube.png' %}" alt="YouTube" class="img-fluid" style="width: 30px;"></a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <hr class="footer-divider">
+            <hr class="border-white my-4">
 
-        <div class="row mt-3">
-            <div class="col-12 text-center copyright">
+            <div class="text-center text-white">
                 <p>&copy; 2024 Tooth & Care. Todos os direitos reservados.</p>
             </div>
         </div>
-    </div>
     </footer>
-   
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
