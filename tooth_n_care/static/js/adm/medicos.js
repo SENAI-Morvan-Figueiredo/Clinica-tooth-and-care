@@ -163,14 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(cb => parseInt(cb.value));
 
         deleteModal.hide();
-        processarAcao(ids, '/deletar-medicos', 'Deletar');
+        processarAcao(ids, '/deletar-medicos/', 'Deletar');
     });
     confirmDeactButton.addEventListener('click', () => {
         const ids = Array.from(document.querySelectorAll('.medico-checkbox:checked'))
             .map(cb => parseInt(cb.value));
 
         deactModal.hide();
-        processarAcao(ids, '/desativar-medicos', 'Desativar')
+        processarAcao(ids, '/desativar-medicos/', 'Desativar')
     });
 });
 

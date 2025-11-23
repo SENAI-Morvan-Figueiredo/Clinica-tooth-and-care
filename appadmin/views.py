@@ -15,28 +15,7 @@ from django.utils import timezone
 from consultas.forms import ConsultaAdiar
 
 # outras bibliotecas
-from datetime import datetime, timedelta
 import json
-
-#------------------- funções auxiliares -------------------------
-def gerar_slots_de_tempo(hora_inicio, hora_fim, intervalo_minutos):
-    # Combina a hora com a data de hoje para criar objetos datetime iteráveis
-    data_hoje = datetime.today().date()
-    inicio_dt = datetime.combine(data_hoje, hora_inicio)
-    fim_dt = datetime.combine(data_hoje, hora_fim)
-    
-    slots = []
-    tempo_atual = inicio_dt
-    
-    # Itera enquanto o tempo atual for menor ou igual ao tempo final
-    while tempo_atual <= fim_dt:
-        # Adiciona a hora formatada à lista
-        slots.append(tempo_atual.strftime('%H:%M'))
-        
-        # Avança para o próximo slot
-        tempo_atual += timedelta(minutes=intervalo_minutos)
-        
-    return slots
 
 # --------------------------list views--------------------
 @permission_required(['medicos.view_medico', "pacientes.view_paciente", "consultas.view_consulta"])
@@ -242,6 +221,9 @@ def desativar_medicos(request, pk=-1):
             data = json.loads(request.body)
             medico_ids = data.get('medico_ids') # procura a chave "medico_ids" no body
 
+            with open('teste.txt', 'a') as p:
+                p.write(f'medico_ids: {medico_ids}\n')
+
             if not medico_ids or not isinstance(medico_ids, list):
                 return HttpResponseBadRequest(
                     "Requisição inválida. Conteúdo recebido não está correto"
@@ -250,12 +232,16 @@ def desativar_medicos(request, pk=-1):
             # busca todos os médicos da lista
             medicos_desativar = list(Medico.objects.filter(pk__in=medico_ids))
             
+            with open('teste.txt', 'a') as p:
+                p.write(str(medicos_desativar) + '\n')
+
             for medico in medicos_desativar:
                 medico.ativo = False
+                medico.save()
 
             return JsonResponse(
                 {"status": "sucesso",
-                "mensagem": f"{len(medicos_desativar)} médico(s) excluído(s) com sucesso!"},
+                "mensagem": f"{len(medicos_desativar)} médico(s) alterados com sucesso!"},
                 status=200
             )
 

@@ -4,7 +4,7 @@ from .models import Medico, Especialidade
 # Register your models here.
 @admin.register(Medico)
 class MedicoAdmin(admin.ModelAdmin):
-    list_display = ['user__username', 'user__email', 'cpf', 'rg', 'crm', 'telefone', 'get_especialidades']
+    list_display = ['user__username', 'user__email', 'cpf', 'rg', 'crm', 'telefone', 'get_especialidades', 'ativo']
     search_fields = ['user__username', 'user__email', 'cpf', 'rg', 'crm']
 
     def get_especialidades(self, obj):
