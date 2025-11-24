@@ -1,6 +1,1 @@
-medico_ids: [5]
-[<Medico: Dr. Lucas Periodontista>]
-medico_ids: [4]
-[<Medico: Dra. Ana Endodontista>]
-medico_ids: [4]
-[<Medico: Dra. Ana Endodontista>]
+status: canceladastatus: canceladastatus: cancelada

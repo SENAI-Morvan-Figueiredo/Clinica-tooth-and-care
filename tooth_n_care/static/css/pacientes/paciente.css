@@ -76,6 +76,43 @@ header .btn-logout:hover {
     margin-inline: 1rem;
 }
 
+/* Estilização para que o <dialog> se pareça com um modal Bootstrap */
+dialog:not([open]) {
+    display: none;
+}
+
+dialog {
+    /* Centraliza o modal na tela */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Configurações visuais */
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    max-width: 500px; /* Largura máxima do modal */
+    width: 90%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Sombra de modal */
+    border-radius: 0.3rem; /* Arredondamento */
+    z-index: 1055; /* Z-index alto para ficar por cima */
+}
+
+/* Fundo escuro (Backdrop) */
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px); /* Efeito opcional de desfoque */
+}
+
+/* Garante que o conteúdo use as classes Bootstrap */
+dialog .modal-content {
+    border-radius: 0.3rem;
+    border: 1px solid rgba(0, 0, 0, .2);
+    box-shadow: none; /* remove o box-shadow redundante */
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .sidebar {

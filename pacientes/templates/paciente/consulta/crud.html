@@ -17,15 +17,46 @@
             <div class="card-header bg-info d-flex justify-content-between">
                 <strong>{{ consulta.data|date:"d/m/Y" }} às {{ consulta.data|time:"H:i" }}</strong>
                 <div class="badge bg-white text-black">
-                    {{ consulta.status }}  
+                    {{ consulta.status }}
                 </div>
             </div>
             <div class="card-body">
-                <p><strong>Serviço:</strong> {{ consulta.get_servico_display }}</p>
-                <p><strong>Médico:</strong> {{ consulta.medico.user.first_name }} {{ consulta.medico.user.last_name }}</p>
-                <p><strong>Sala:</strong> {{ consulta.get_sala_display }}</p>
+                <div class="row">
+                    <div class="col-12">
+                        <p><strong>Serviço:</strong> {{ consulta.get_servico_display }}</p>
+                        <p><strong>Médico:</strong> {{ consulta.medico.user.first_name }} {{ consulta.medico.user.last_name }}</p>
+                        <p><strong>Sala:</strong> {{ consulta.get_sala_display }}</p>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button class="btn btn-danger cancel-btn" data-dialog-id="{{ consulta.pk }}-dialog">cancelar
+                            consulta</button>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <dialog id="{{ consulta.pk }}-dialog" class="custom-modal-dialog bg-white">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark d-flex justify-content-between px-2">
+                    <h5 class="modal-title">Confirmação de Cancelamento</h5>
+                    <button type="button" class="btn-close close-dialog-btn" data-dialog-id="{{ consulta.pk }}-dialog"
+                        aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-2">
+                    <p class="lead">Tem certeza que deseja <strong>cancelar esta consulta</strong>?</p>
+                    <p class="text-muted small">
+                        Lembre-se: Para remarcar, você precisará agendar uma nova consulta com o mesmo serviço e médico.
+                    </p>
+                </div>
+                <div class="modal-footer d-flex gap-3 p-2">
+                    <button type="button" class="btn btn-secondary close-dialog-btn"
+                        data-dialog-id="{{ consulta.pk }}-dialog">Manter Consulta</button>
+                    <a href="{% url 'cancelar-consulta' consulta.pk %}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Cancelar Definitivamente
+                    </a>
+                </div>
+            </div>
+        </dialog>
         {% endfor %}
     </div>
     {% else %}
@@ -108,7 +139,8 @@
                             {% if consulta_editando %}💾 Atualizar Consulta{% else %}✅ Agendar Consulta{% endif %}
                         </button>
                         {% if consulta_editando %}
-                        <a href="{% url 'paciente-consultas' %}" class="btn btn-secondary flex-grow-1 flex-md-grow-0">↩️ Cancelar</a>
+                        <a href="{% url 'paciente-consultas' %}" class="btn btn-secondary flex-grow-1 flex-md-grow-0">↩️
+                            Cancelar</a>
                         {% endif %}
                     </div>
                 </form>

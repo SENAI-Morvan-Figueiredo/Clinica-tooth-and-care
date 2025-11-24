@@ -36,6 +36,22 @@ def consulta_lista(request):
     }
     return render(request, "paciente/consulta/crud.html", contexto)
 
+@login_required
+def cancelar_consulta(request, pk):
+    try:
+        consulta = Consulta.objects.get(pk=pk)
+    except Consulta.DoesNotExist:
+        messages.error(request, "Consulta não encontrada.")
+        return redirect('paciente-consultas')
+
+    consulta.status = 'cancelada'
+    consulta.save()
+
+    with open('teste.txt', 'a') as p:
+        p.write(f'status: {consulta.status}')
+
+    return redirect('paciente-consultas')
+
 #-------------------------- views para o form de criar Consultas -------------------------
 def carrega_medicos(request):
     servico = request.GET.get('servico')

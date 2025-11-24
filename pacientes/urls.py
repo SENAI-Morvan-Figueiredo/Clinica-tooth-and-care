@@ -7,4 +7,5 @@ urlpatterns = [
     path('agendar/', views.consulta_criar_ou_editar, name='agendar-consulta'),
     path('<int:consulta_id>/edit/', views.consulta_criar_ou_editar, name='consultas-editar'),
     path('<int:consulta_id>/excluir/', views.consulta_excluir, name='consultas-excluir'),
+    path('<int:pk>/cancelar_consulta/', views.cancelar_consulta, name="cancelar-consulta")
 ]

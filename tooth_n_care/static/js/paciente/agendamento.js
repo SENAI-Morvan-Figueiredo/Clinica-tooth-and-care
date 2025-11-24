@@ -1,4 +1,25 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // cancelamento de consultas
+    document.querySelectorAll('.cancel-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const dialog = document.getElementById(btn.dataset.dialogId);
+            if (dialog && typeof dialog.showModal === 'function') {
+                dialog.showModal(); // Use showModal para o backdrop
+            } else if (dialog) {
+                dialog.show();
+            }
+        });
+    });
+
+    document.querySelectorAll('.close-dialog-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const dialog = document.getElementById(btn.dataset.dialogId);
+            if (dialog && typeof dialog.close === 'function') {
+                dialog.close(); 
+            }
+        });
+    });
+
     // Seletores do formulário
     const servicoSelect = document.getElementById('id_servico');
     const medicoSelect = document.getElementById('id_medico');
