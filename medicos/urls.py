@@ -6,4 +6,5 @@ urlpatterns = [
     path('medDetalhesMed/', views.medico_update_teste, name='medDetalhesMed'),
     path('medConsultas/', views.consultas_primeiro_medico, name='medConsultas'),
     path('medDiagnostico/<int:consulta_id>/', views.consulta_detalhes, name='medDiagnostico'),
+    path('finalizarConsulta/<int:pk>', views.finalizar_consulta, name="finalizarConsulta"),
 ]

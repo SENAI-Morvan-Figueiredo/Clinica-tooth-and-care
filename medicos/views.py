@@ -1,8 +1,8 @@
 from django.views.generic import ListView
-from .models import Medico
-from .models import Especialidade
-from consultas.models import Consulta
-from pacientes.models import Paciente
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseBadRequest, HttpResponseServerError
+from .models import Medico, Especialidade
+from consultas.models import Consulta, Paciente
 from .forms import MedicoUserForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -14,11 +14,13 @@ from consultas.forms import DiagnosticoForm, AnamneseForm
 
 
 # ✅ Detalhar médico
+@login_required
 def medico_detail(request, pk):
     medico = get_object_or_404(Medico, pk=pk)
     return render(request, 'medicos/medIndex.html', {'medico': medico})
 
 # ✅ Editar médico
+@login_required
 def medico_update(request, pk):
     medico = get_object_or_404(Medico, pk=pk)
     if request.method == "POST":
@@ -31,7 +33,7 @@ def medico_update(request, pk):
     return render(request, 'medicos/medIndex.html', {'form': form})
 
 # Consultas de cada Médico
-
+@login_required
 def consultas_primeiro_medico(request):
     # 1. Tenta obter o primeiro médico do banco de dados (ordenando por id para garantir consistência)
     try:
@@ -58,6 +60,7 @@ def consultas_primeiro_medico(request):
     # 4. Renderiza o template, passando o contexto
     return render(request, 'medicos/medConsultas.html', context)
 
+@login_required
 def medico_update_teste(request):
     user = request.user
     medico = Medico.objects.get(user=user)
@@ -73,6 +76,7 @@ def medico_update_teste(request):
     return render(request, "medicos/medDetalhesMed.html", {"form": form, "medico": medico})
 
 
+@login_required
 def index(request):
     # user = request.user
     # medico = Medico.objects.get(user=user)
@@ -83,11 +87,13 @@ def index(request):
 
     consultas = Consulta.objects.filter(
         medico=medico, 
-        data__gte=hoje 
+        data__gte=hoje,
+        status__in=['marcada', 'remarcada']
     ).order_by('data')
     
     return render(request, 'medicos/medIndex.html', context={"medico": medico, "consultas": consultas})
 
+@login_required
 def consulta_detalhes(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
     diagnosticos = consulta.diagnosticos.all()
@@ -127,3 +133,18 @@ def consulta_detalhes(request, consulta_id):
     }
 
     return render(request, 'medicos/medDiagnostico.html', context)
+
+@login_required
+def finalizar_consulta(request, pk):
+    try:
+        # Encontra e modifica a consulta
+        consulta = Consulta.objects.get(pk=pk)
+        consulta.status = 'realizada'
+        # Salva as alterações
+        consulta.save()
+    except Consulta.DoesNotExist as e: 
+        return HttpResponseBadRequest('Consulta não encontrada.')
+    except Exception as e:
+        return HttpResponseServerError("Erro em finalizar consulta.")
+    
+    return redirect('medConsultas')
