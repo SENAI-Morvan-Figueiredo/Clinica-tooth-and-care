@@ -13,22 +13,9 @@
             <label for="{{ field.id }}" class="form-label">
                 {{ field.label_tag }}
             </label>
-            {% if field.name == 'especialidades' %}
 
-            <div class="checkbox-list-container">
-                {% for choice in field %}
-                <div class="form-check form-check-inline my-checkbox-style">
-                    <input type="checkbox" name="{{ choice.name }}" id="{{ choice.id_for_label }}"
-                        value="{{ choice.data.value }}" class="form-check-input my-specific-class" {% if choice.data.selected %}checked{% endif %}>
-                    <label class="form-check-label" for="{{ choice.id_for_label }}">
-                        {{ choice.choice_label }}
-                    </label>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
             {{ field.as_widget }}
-            {% endif %}
+
             {% for error in field.errors %}
             <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}

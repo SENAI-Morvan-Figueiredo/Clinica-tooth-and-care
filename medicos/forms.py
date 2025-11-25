@@ -11,11 +11,6 @@ class MedicoUserForm(forms.ModelForm):
     username = forms.CharField(label="Nome do Médico", max_length=150)
     email = forms.EmailField(label="Email")
 
-    especialidades = forms.ModelMultipleChoiceField(
-        queryset=Especialidade.objects.order_by('nome'),
-        widget=forms.CheckboxSelectMultiple
-    )
-
     class Meta:
         model = Medico
         # Inclui os campos do Medico que você quer editar
@@ -32,10 +27,9 @@ class MedicoUserForm(forms.ModelForm):
             
         # Opcional: Estilos Bootstrap
         for field_name in self.fields:
-            if field_name != 'especialidades':
-                self.fields[field_name].widget.attrs.update({
-                    'class': 'form-control rounded-lg'
-                })
+            self.fields[field_name].widget.attrs.update({
+                'class': 'form-control rounded-lg'
+            })
 
 
     def save(self, commit=True):
