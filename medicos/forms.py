@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Medico
+from .models import Medico, Especialidade
 
 User = get_user_model()
 
@@ -10,6 +10,11 @@ class MedicoUserForm(forms.ModelForm):
     """
     username = forms.CharField(label="Nome do Médico", max_length=150)
     email = forms.EmailField(label="Email")
+
+    especialidades = forms.ModelMultipleChoiceField(
+        queryset=Especialidade.objects.order_by('nome'),
+        widget=forms.CheckboxSelectMultiple
+    )
 
     class Meta:
         model = Medico
@@ -27,9 +32,10 @@ class MedicoUserForm(forms.ModelForm):
             
         # Opcional: Estilos Bootstrap
         for field_name in self.fields:
-            self.fields[field_name].widget.attrs.update({
-                'class': 'form-control rounded-lg'
-            })
+            if field_name != 'especialidades':
+                self.fields[field_name].widget.attrs.update({
+                    'class': 'form-control rounded-lg'
+                })
 
 
     def save(self, commit=True):

@@ -1,7 +1,8 @@
 from django import forms
 from django.db import transaction
-from .models import Paciente, GENERO_CHOICES
+from .models import Paciente, GENERO_CHOICES, Endereco
 from allauth.account.forms import SignupForm
+from datetime import datetime
 
 class PacienteSignupForm(SignupForm):
     """
@@ -12,49 +13,84 @@ class PacienteSignupForm(SignupForm):
     first_name = forms.CharField(
         max_length=150, 
         label=('Nome'), 
-        widget=forms.TextInput(attrs={'placeholder': ('Nome'), 'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
     last_name = forms.CharField(
         max_length=150, 
         label=('Sobrenome'), 
-        widget=forms.TextInput(attrs={'placeholder': ('Sobrenome'), 'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
     cpf = forms.CharField(
         max_length=14, 
         label='CPF', 
-        widget=forms.TextInput(attrs={'placeholder': 'CPF', 'class': 'form-control'})
+        widget=forms.TextInput(attrs={'placeholder': 'Ex: 000.000.000-00', 'class': 'form-control'})
     )
     
     rg = forms.CharField(
         max_length=20, 
         label='RG', 
-        widget=forms.TextInput(attrs={'placeholder': 'RG', 'class': 'form-control'})
+        widget=forms.TextInput(attrs={"placeholder": "00.000.000-0",'class': 'form-control'})
     )
     
     telefone = forms.CharField(
         max_length=15, 
         label='Telefone', 
-        widget=forms.TextInput(attrs={'placeholder': 'Telefone', 'class': 'form-control'})
+        widget=forms.TextInput(attrs={'placeholder': 'Ex: (00) 00000-0000', 'class': 'form-control'})
     )
     
-    endereco = forms.CharField(
-        max_length=255, 
-        label='Endereço Completo', 
-        widget=forms.TextInput(attrs={'placeholder': 'Endereço Completo', 'class': 'form-control'})
+    cep = forms.CharField(
+        max_length=9,
+        label='CEP',
+        widget=forms.TextInput(attrs={'placeholder': 'Ex: 01000-000', "class": "form-control"})
+    )
+
+    logradouro = forms.CharField(
+        max_length=255,
+        label="Rua",
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
+    numero = forms.CharField(
+        max_length=10,
+        label="Número",
+        widget=forms.TextInput(attrs={"class": "form-control"})
     )
     
+    complemento = forms.CharField(
+        required=False,
+        max_length=100,
+        label="Complemento",
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
+    bairro = forms.CharField(
+        max_length=255,
+        label="Bairro",
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
+    cidade = forms.CharField(
+        max_length=255,
+        label="Cidade",
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
     genero = forms.ChoiceField(
         choices=GENERO_CHOICES,
         label='Gênero', 
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    
+
+    ano_atual = datetime.now().year
     data_nasc = forms.DateField(
         label='Data de Nascimento', 
-        widget=forms.DateInput(attrs={"type": "date", 'class': 'form-control'})
-    )
+        widget=forms.SelectDateWidget(
+            attrs={"class": "form-control"},
+            years=range(1900, ano_atual)
+            )
+    )        
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -84,8 +120,17 @@ class PacienteSignupForm(SignupForm):
             rg=self.cleaned_data['rg'],
             telefone=self.cleaned_data['telefone'],
             data_nasc=self.cleaned_data['data_nasc'],
-            genero=self.cleaned_data['genero'],
-            endereco=self.cleaned_data['endereco'],
+            genero=self.cleaned_data['genero']
+        )
+
+        Endereco.objects.create(
+            paciente=paciente,
+            cep=self.cleaned_data['cep'],
+            logradouro=self.cleaned_data['logradouro'],
+            numero=self.cleaned_data['numero'],
+            complemento=self.cleaned_data['complemento'],
+            bairro=self.cleaned_data['bairro'],
+            cidade=self.cleaned_data['cidade']
         )
         
         return user
