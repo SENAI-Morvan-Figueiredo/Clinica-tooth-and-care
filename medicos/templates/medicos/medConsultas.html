@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container mt-5">
     <h1 class="text-center mb-4 fw-bold" style="color: #2C8E89;">
-        Consultas Médico
+        Consultas
     </h1>
 
     {% if medico_encontrado %}
@@ -56,7 +56,7 @@
             </div>
         {% else %}
             <div class="alert text-center mt-4" style="background-color: #e3f7f6; color: #2C8E89;" role="alert">
-                O médico <strong>{{ medico.user.username }}</strong> não possui consultas agendadas.
+                Você não possui consultas agendadas.
             </div>
         {% endif %}
     {% else %}

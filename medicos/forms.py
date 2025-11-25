@@ -64,3 +64,43 @@ class MedicoUserForm(forms.ModelForm):
             self.save_m2m() 
 
         return medico
+    
+class MedicoEditForm(forms.ModelForm):
+    username = forms.CharField(label="Nome", max_length=150)
+    email = forms.EmailField(label="Email")
+
+    class Meta:
+        model = Medico
+        fields = ['username', 'email', 'crm', 'cpf', 'rg', 'telefone']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Pré-preenche os campos do User se estiver editando um Medico existente
+        if self.instance and self.instance.pk:
+            user_instance = self.instance.user
+            self.fields['username'].initial = user_instance.username
+            self.fields['email'].initial = user_instance.email
+            
+        # Opcional: Estilos Bootstrap
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs.update({
+                'class': 'form-control rounded-lg'
+            })
+
+    def save(self, commit=True):
+        username = self.cleaned_data['username']
+        email = self.cleaned_data['email']
+
+        user = self.instance.user
+
+        user.username = username
+        user.email = email
+        if commit:
+            user.save()
+
+        medico = super().save(commit=False)
+        medico.user = user
+        if commit:
+            medico.save()
+            self.save_m2m() 

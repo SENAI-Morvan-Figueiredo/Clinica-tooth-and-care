@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest, HttpResponseServerError
 from .models import Medico, Especialidade
 from consultas.models import Consulta, Paciente
-from .forms import MedicoUserForm
+from .forms import MedicoUserForm, MedicoEditForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from datetime import date # Importe a classe date
@@ -24,12 +24,12 @@ def medico_detail(request, pk):
 def medico_update(request, pk):
     medico = get_object_or_404(Medico, pk=pk)
     if request.method == "POST":
-        form = MedicoUserForm(request.POST, instance=medico)
+        form = MedicoEditForm(request.POST, instance=medico)
         if form.is_valid():
             form.save()
             return redirect('medico_detail', pk=medico.pk)
     else:
-        form = MedicoUserForm(instance=medico)
+        form = MedicoEditForm(instance=medico)
     return render(request, 'medicos/medIndex.html', {'form': form})
 
 # Consultas de cada Médico
@@ -66,12 +66,12 @@ def medico_update_teste(request):
     medico = Medico.objects.get(user=user)
 
     if request.method == "POST":
-        form = MedicoUserForm(request.POST, instance=medico)
+        form = MedicoEditForm(request.POST, instance=medico)
         if form.is_valid():
             form.save()
             return redirect("medIndex")  # usa o nome correto da rota
     else:
-        form = MedicoUserForm(instance=medico)
+        form = MedicoEditForm(instance=medico)
 
     return render(request, "medicos/medDetalhesMed.html", {"form": form, "medico": medico})
 
