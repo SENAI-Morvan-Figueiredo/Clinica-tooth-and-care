@@ -49,7 +49,7 @@
                             <tr>
                                 <td>{{ consulta.paciente }}</td>
                                 <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
-                                <td>{{ consulta.servico }}</td>
+                                <td>{{ consulta.get_servico_display }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -222,11 +222,11 @@ class ExameForm(forms.ModelForm):
 class DiagnosticoForm(forms.ModelForm):
     class Meta:
         model = Diagnostico
-        fields = ['tipo', 'plano_de_tratamento', 'detalhes', 'consulta']
+        fields = ['tipo', 'plano_de_tratamento', 'detalhes']
         widgets = {}
 
 class AnamneseForm(forms.ModelForm):
     class Meta:
         model = Anamnese
-        fields = ['doencas_cronicas', 'medicamentos', 'queixa_principal', 'historico', 'alergia', 'observacao', 'paciente', 'consulta']
+        fields = ['doencas_cronicas', 'medicamentos', 'queixa_principal', 'historico', 'alergia', 'observacao']
         widgets = {}
