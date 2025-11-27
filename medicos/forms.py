@@ -1,6 +1,32 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from .models import Medico, Especialidade
+from consultas.models import DisponibilidadeMedico, SALAS
+from datetime import datetime, time
+
+ESPECIALIDADES_CHOICES = {}
+for especialidade in Especialidade.objects.all():
+    ESPECIALIDADES_CHOICES.update({especialidade.id:  especialidade.nome.capitalize()})
+
+CARGA_HORARIAS = {
+    "manha": "Manhã",
+    "tarde": "Tarde",
+    "integral": "Integral"
+}
+
+ESPECIALIDADE_SALAS_MAP = {
+    "Clínico Geral": "SALA_GERAL_1",
+    "Odontopediatria": "SALA_PEDIATRICA",
+    "Ortodontia": "SALA_ORTODONTIA",
+    "Endontia": "SALA_ENDONTIA",
+    "Periodontia": "SALA_PROFILAXIA",
+    "Implantodontia": "SALA_CIRURGIA_PRIN",
+    "Cirurgia Bucomaxilofacial": "SALA_CIRURGIA_PRIN",
+    "Estomatologia": "SALA_GERAL_2",
+    "Prótese Dentária": "SALA_ESTETICA",
+    "Radiologia Odontológica": "SALA_RADIOLOGIA",
+    "Odontologia Estética": "SALA_ESTETICA"
+}
 
 User = get_user_model()
 
@@ -10,11 +36,20 @@ class MedicoUserForm(forms.ModelForm):
     """
     username = forms.CharField(label="Nome do Médico", max_length=150)
     email = forms.EmailField(label="Email")
+    especialidades = forms.MultipleChoiceField(
+        label="Especialidades:",
+        widget=forms.CheckboxSelectMultiple,
+        choices=ESPECIALIDADES_CHOICES
+    )
+    carga_horaria = forms.ChoiceField(
+        label="Carga Horária",
+        choices=CARGA_HORARIAS   
+    )
 
     class Meta:
         model = Medico
         # Inclui os campos do Medico que você quer editar
-        fields = ['username', 'email', 'crm', 'cpf', 'rg', 'telefone', 'especialidades']
+        fields = ['username', 'email', 'crm', 'cpf', 'rg', 'telefone', 'especialidades', 'carga_horaria']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,9 +62,10 @@ class MedicoUserForm(forms.ModelForm):
             
         # Opcional: Estilos Bootstrap
         for field_name in self.fields:
-            self.fields[field_name].widget.attrs.update({
-                'class': 'form-control rounded-lg'
-            })
+            if field_name != "especialidades":
+                self.fields[field_name].widget.attrs.update({
+                    'class': 'form-control rounded-lg'
+                })
 
 
     def save(self, commit=True):
@@ -56,6 +92,26 @@ class MedicoUserForm(forms.ModelForm):
             
             # Salva o ManyToManyField de especialidades (precisa ser feito após o save inicial)
             self.save_m2m() 
+
+        carga_horaria = self.cleaned_data.get('carga_horaria')
+        if carga_horaria == 'manha':
+            hora_inicio = time(8)
+            hora_fim=time(12)            
+        elif carga_horaria == "tarde":
+            hora_inicio = time(12, 30)
+            hora_fim = time(18)
+        elif carga_horaria == "integral":
+            hora_inicio = time(9)
+            hora_fim = time(16)
+
+        for i in range(7):
+                DisponibilidadeMedico.objects.create(
+                medico=medico,
+                dia_semana=DisponibilidadeMedico.DIAS_SEMANA[i],
+                hora_inicio=hora_inicio,
+                hora_fim=hora_fim,
+                sala_padrao=ESPECIALIDADE_SALAS_MAP[medico.especialidades[0]]
+            )
 
         return medico
     

@@ -50,7 +50,7 @@
             <div class="col-md-4">
                 <div class="p-3 border rounded-3 h-100 bg-light">
                     <p class="mb-1 text-muted small"><i class="fas fa-hand-holding-medical me-1"></i> Serviço</p>
-                    <p class="fw-bold fs-5">{{ consulta.servico }}</p>
+                    <p class="fw-bold fs-5">{{ consulta.get_servico_display }}</p>
 
                     <p class="mb-1 text-muted small"><i class="fas fa-info-circle me-1"></i> Status</p>
                     {% if consulta.status == 'agendada' %}
