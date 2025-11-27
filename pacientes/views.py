@@ -59,8 +59,12 @@ def carrega_medicos(request):
     medicos = Medico.objects.none()
     if especialidade_nome:
         medicos = Medico.objects.filter(especialidades__nome=especialidade_nome)
+        lista_medicos = list(medicos.values('id', 'user__first_name', 'user__last_name'))
 
-    return JsonResponse(list(medicos.values('id', 'user__first_name', 'user__last_name')), safe=False)
+    with open('teste.txt', 'a') as p:
+        p.write(f'nome: {especialidade_nome} medicos: {lista_medicos}\n')
+
+    return JsonResponse(lista_medicos, safe=False)
 
 def carrega_datas(request):
     medico_id = request.GET.get('medico_id')

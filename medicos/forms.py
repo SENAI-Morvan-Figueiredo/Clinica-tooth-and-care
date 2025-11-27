@@ -34,7 +34,8 @@ class MedicoUserForm(forms.ModelForm):
     """
     Formulário combinado para editar o perfil do Medico e os dados do User associado.
     """
-    username = forms.CharField(label="Nome do Médico", max_length=150)
+    nome = forms.CharField(label="Nome do Médico", max_length=150)
+    sobrenome = forms.CharField(max_length=150)
     email = forms.EmailField(label="Email")
     especialidades = forms.MultipleChoiceField(
         label="Especialidades:",
@@ -49,7 +50,7 @@ class MedicoUserForm(forms.ModelForm):
     class Meta:
         model = Medico
         # Inclui os campos do Medico que você quer editar
-        fields = ['username', 'email', 'crm', 'cpf', 'rg', 'telefone', 'especialidades', 'carga_horaria']
+        fields = ['nome', 'sobrenome', 'email', 'crm', 'cpf', 'rg', 'telefone', 'especialidades', 'carga_horaria']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -73,12 +74,18 @@ class MedicoUserForm(forms.ModelForm):
         Sobrescreve o save para salvar nos dois modelos: User e Medico.
         """
         # 4. Obtém os dados dos campos do User antes de salvar o Medico
-        username = self.cleaned_data.get('username')
+        nome = self.cleaned_data.get('nome')
+        sobrenome = self.cleaned_data.get('sobrenome')
+        
+        username = f"{nome}_{sobrenome}"
+
         email = self.cleaned_data.get('email')
         
         # 5. Salva (ou atualiza) o objeto User
         user = self.instance.user
         
+        user.first_name = nome
+        user.last_name = sobrenome
         user.username = username
         user.email = email
         if commit:
