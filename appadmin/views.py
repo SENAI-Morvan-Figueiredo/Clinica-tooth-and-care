@@ -125,42 +125,9 @@ def adicionar_medico(request):
         
         if form.is_valid():
             # dados do usuário
-            new_name = form.cleaned_data["username"]
-            new_email = form.cleaned_data["email"]
-            
-            # dados do médico
-            new_cpf = form.cleaned_data["cpf"]
-            new_rg = form.cleaned_data["rg"]
-            new_crm = form.cleaned_data["crm"]
-            new_telefone = form.cleaned_data["telefone"]
-            new_especialidades = request.POST.getlist('especialidades')  
-            
-            user = User.objects.create( #cria o usuário e salva em uma variável
-                username=new_name,
-                email=new_email
-            )
+            form.save()
 
-            try:
-                medico = Medico.objects.create( #cria o médico e salva em uma variável
-                    user=user,
-                    cpf=new_cpf,
-                    rg=new_rg,
-                    crm=new_crm,
-                    telefone=new_telefone
-                )
-
-                # Adiciona as especialidades ao médico
-                medico.especialidades.set(new_especialidades)
-                return redirect('adm-medicos')
-
-            except TypeError as e:
-                # Deleta o usuário para evitar erros futuros
-                user_del = User.objects.get(username=new_name)
-                user_del.delete()
-
-                messages.error(request, "Algo de errado aconteceu!")
-                return redirect('adicionar-medico')
-
+        return redirect('adm-medicos')
     else:
         form = MedicoUserForm
 

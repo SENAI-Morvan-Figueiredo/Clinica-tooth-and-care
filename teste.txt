@@ -1,6 +1,1 @@
-
-medico_ids: [115, 116]
-[<Medico: teste>, <Medico: asdfas>]
-medico_ids: [117]
-[<Medico: teste_horarios>]
-status: canceladastatus: cancelada
+status: canceladastatus: canceladastatus: canceladastatus: cancelada

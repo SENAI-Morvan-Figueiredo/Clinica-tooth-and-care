@@ -34,8 +34,7 @@ def medico_update(request, pk):
 
 # Consultas de cada Médico
 @login_required
-def consultas_primeiro_medico(request):
-    # 1. Tenta obter o primeiro médico do banco de dados (ordenando por id para garantir consistência)
+def consultas_medico(request):
     try:
         user = request.user
         medico = Medico.objects.get(user=user)
@@ -61,7 +60,7 @@ def consultas_primeiro_medico(request):
     return render(request, 'medicos/medConsultas.html', context)
 
 @login_required
-def medico_update_teste(request):
+def medico_update(request):
     user = request.user
     medico = Medico.objects.get(user=user)
 
@@ -73,7 +72,7 @@ def medico_update_teste(request):
     else:
         form = MedicoEditForm(instance=medico)
 
-    return render(request, "medicos/medDetalhesMed.html", {"form": form, "medico": medico})
+    return render(request, "medicos/medDetalhes.html", {"form": form, "medico": medico})
 
 
 @login_required

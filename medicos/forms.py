@@ -77,28 +77,33 @@ class MedicoUserForm(forms.ModelForm):
         nome = self.cleaned_data.get('nome')
         sobrenome = self.cleaned_data.get('sobrenome')
         
-        username = f"{nome}_{sobrenome}"
+        username = f"Dr. {nome} {sobrenome}"
 
         email = self.cleaned_data.get('email')
         
         # 5. Salva (ou atualiza) o objeto User
-        user = self.instance.user
-        
-        user.first_name = nome
-        user.last_name = sobrenome
-        user.username = username
-        user.email = email
+        user = User.objects.create(
+            first_name = nome,
+            last_name = sobrenome,
+            username = username,
+            email = email
+        )
+
         if commit:
             user.save()
 
         # 6. Chama o save do ModelForm para salvar o objeto Medico (que agora tem um User linkado)
-        medico = super().save(commit=False)
-        medico.user = user # Garante que o link está correto
-        if commit:
-            medico.save()
-            
-            # Salva o ManyToManyField de especialidades (precisa ser feito após o save inicial)
-            self.save_m2m() 
+        try:
+            medico = super().save(commit=False)
+            medico.user = user # Garante que o link está correto
+            if commit:
+                medico.save()
+                
+                # Salva o ManyToManyField de especialidades (precisa ser feito após o save inicial)
+                self.save_m2m() 
+        except Exception as e:
+            User.objects.delete(pk=user.pk)
+            self.add_error(None, f"Erro em criar o perfil do médico")
 
         carga_horaria = self.cleaned_data.get('carga_horaria')
         if carga_horaria == 'manha':
@@ -111,14 +116,20 @@ class MedicoUserForm(forms.ModelForm):
             hora_inicio = time(9)
             hora_fim = time(16)
 
-        for i in range(7):
+        try:
+            for i in range(7):
                 DisponibilidadeMedico.objects.create(
                 medico=medico,
-                dia_semana=DisponibilidadeMedico.DIAS_SEMANA[i],
+                dia_semana=DisponibilidadeMedico.DIAS_SEMANA[i][0],
                 hora_inicio=hora_inicio,
                 hora_fim=hora_fim,
-                sala_padrao=ESPECIALIDADE_SALAS_MAP[medico.especialidades[0]]
-            )
+                sala_padrao=ESPECIALIDADE_SALAS_MAP[medico.especialidades.all()[0].nome]
+                )
+        except Exception as e:
+            User.objects.get(pk=user.pk).delete()
+
+            self.add_error(None, f"Erro em criar os horários do médico")
+
 
         return medico
     
