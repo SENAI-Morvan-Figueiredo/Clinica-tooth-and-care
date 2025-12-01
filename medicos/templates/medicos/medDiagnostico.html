@@ -28,15 +28,13 @@
                     <strong>Diagnósticos</strong>
                 </div>
                 <div class="card-body scrollable-card">
-                    {% if diagnosticos %}
-                        <ul class="list-group mb-3">
-                            {% for diag in diagnosticos %}
-                                <li class="list-group-item">
-                                    <strong>{{ diag.tipo }}</strong><br>
-                                    <em>Plano de tratamento:</em> {{ diag.plano_de_tratamento }}<br>
-                                    <em>Detalhes:</em> {{ diag.detalhes }}
-                                </li>
-                            {% endfor %}
+                    {% if diagnostico %}
+                        <ul class="list-group mb-3">     
+                            <li class="list-group-item">
+                                <strong>{{ diagnostico.tipo }}</strong><br>
+                                <em>Plano de tratamento:</em> {{ diagnostico.plano_de_tratamento }}<br>
+                                <em>Detalhes:</em> {{ diagnostico.detalhes }}
+                            </li>
                         </ul>
                     {% else %}
                         <p class="text-muted">Nenhum diagnóstico registrado.</p>

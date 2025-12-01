@@ -29,5 +29,5 @@ class DiagnosticoAdmin(admin.ModelAdmin):
 
 @admin.register(Anamnese)
 class AnamneseAdmin(admin.ModelAdmin):
-    list_display = ['doencas_cronicas', 'medicamentos', 'queixa_principal', 'historico', 'alergia', 'observacao', 'paciente', 'consulta']
-    list_filter = ['paciente']
+    list_display = ['doencas_cronicas', 'medicamentos', 'queixa_principal', 'historico', 'alergia', 'observacao', 'consulta']
+    list_filter = ['consulta']

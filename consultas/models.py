@@ -126,7 +126,7 @@ class Diagnostico(models.Model):
     ],null=False,blank=False)
     plano_de_tratamento = models.TextField(null=False,blank=False)
     detalhes = models.TextField(null=False,blank=False)
-    consulta = models.ManyToManyField(Consulta, related_name="diagnosticos")
+    consulta = models.ForeignKey(Consulta, on_delete=models.CASCADE, related_name="diagnostico")
     def __str__(self):
         return self.detalhes
     
@@ -137,7 +137,6 @@ class Anamnese(models.Model):
     historico = models.TextField()
     alergia = models.TextField()
     observacao = models.TextField()
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name="anamnese")
     consulta = models.ForeignKey(Consulta, on_delete=models.CASCADE, related_name="anamnese")
     def __str__(self):
         return self.queixa_principal

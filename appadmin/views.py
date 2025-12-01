@@ -188,9 +188,6 @@ def desativar_medicos(request, pk=-1):
             data = json.loads(request.body)
             medico_ids = data.get('medico_ids') # procura a chave "medico_ids" no body
 
-            with open('teste.txt', 'a') as p:
-                p.write(f'medico_ids: {medico_ids}\n')
-
             if not medico_ids or not isinstance(medico_ids, list):
                 return HttpResponseBadRequest(
                     "Requisição inválida. Conteúdo recebido não está correto"
@@ -198,9 +195,6 @@ def desativar_medicos(request, pk=-1):
             
             # busca todos os médicos da lista
             medicos_desativar = list(Medico.objects.filter(pk__in=medico_ids))
-            
-            with open('teste.txt', 'a') as p:
-                p.write(str(medicos_desativar) + '\n')
 
             for medico in medicos_desativar:
                 medico.ativo = False

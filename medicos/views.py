@@ -95,7 +95,7 @@ def index(request):
 @login_required
 def consulta_detalhes(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    diagnosticos = consulta.diagnosticos.all()
+    diagnostico = consulta.diagnostico
     anamnese = consulta.anamnese.first()  # cada consulta tem uma anamnese
 
     # Inicialização dos formulários
@@ -108,8 +108,8 @@ def consulta_detalhes(request, consulta_id):
             diagnostico_form = DiagnosticoForm(request.POST)
             if diagnostico_form.is_valid():
                 novo_diag = diagnostico_form.save(commit=False)
+                novo_diag.consulta = consulta
                 novo_diag.save()
-                novo_diag.consulta.add(consulta)
                 messages.success(request, 'Diagnóstico adicionado com sucesso!')
                 return redirect('medDiagnostico', consulta_id=consulta.id)
 
@@ -125,7 +125,7 @@ def consulta_detalhes(request, consulta_id):
 
     context = {
         'consulta': consulta,
-        'diagnosticos': diagnosticos,
+        'diagnostico': diagnostico,
         'anamnese': anamnese,
         'diagnostico_form': diagnostico_form,
         'anamnese_form': anamnese_form,

@@ -48,9 +48,6 @@ def cancelar_consulta(request, pk):
     consulta.status = 'cancelada'
     consulta.save()
 
-    with open('teste.txt', 'a') as p:
-        p.write(f'status: {consulta.status}')
-
     return redirect('paciente-consultas')
 
 #-------------------------- views para o form de criar Consultas -------------------------
