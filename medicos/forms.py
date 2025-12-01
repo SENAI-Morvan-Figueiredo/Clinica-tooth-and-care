@@ -3,11 +3,6 @@ from django.contrib.auth import get_user_model
 from .models import Medico, Especialidade
 from consultas.models import DisponibilidadeMedico, SALAS
 from datetime import datetime, time
-
-ESPECIALIDADES_CHOICES = {}
-for especialidade in Especialidade.objects.all():
-    ESPECIALIDADES_CHOICES.update({especialidade.id:  especialidade.nome.capitalize()})
-
 CARGA_HORARIAS = {
     "manha": "Manhã",
     "tarde": "Tarde",
@@ -34,6 +29,8 @@ class MedicoUserForm(forms.ModelForm):
     """
     Formulário combinado para editar o perfil do Medico e os dados do User associado.
     """
+    ESPECIALIDADES_CHOICES = {}
+
     nome = forms.CharField(label="Nome do Médico", max_length=150)
     sobrenome = forms.CharField(max_length=150)
     email = forms.EmailField(label="Email")
@@ -55,6 +52,9 @@ class MedicoUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
+        for especialidade in Especialidade.objects.all():
+            ESPECIALIDADES_CHOICES.update({especialidade.id:  especialidade.nome.capitalize()})
+
         # Pré-preenche os campos do User se estiver editando um Medico existente
         if self.instance and self.instance.pk:
             user_instance = self.instance.user
