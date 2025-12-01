@@ -118,6 +118,7 @@ class ConsultaForm(forms.ModelForm):
             data_hora_completa = datetime.datetime.combine(data_consulta, hora_consulta)
         except (ValueError, TypeError) as e:
                 self.add_error(None, f"Erro ao checar data e hora")
+
         # Validação do fluxo sequencial
         if servico and not medico:
             self.add_error('medico', "Por favor, selecione um médico para o serviço escolhido.")
@@ -136,7 +137,7 @@ class ConsultaForm(forms.ModelForm):
             if not hora_consulta:
                 self.add_error('hora_consulta', "A hora da consulta é obrigatória.")
 
-        # 2. Define o valor do serviço baseado no mapeamento
+        # Define o valor do serviço baseado no mapeamento
         if servico and servico in PRECOS_SERVICOS:
             self.instance.valor = PRECOS_SERVICOS[servico]
         elif servico:

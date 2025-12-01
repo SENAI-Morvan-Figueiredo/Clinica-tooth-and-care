@@ -3,13 +3,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.http import JsonResponse
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from django.utils import timezone
 
 from consultas.models import Consulta
 from consultas.forms import ConsultaForm, SERVICO_ESPECIALIDADE_MAP
 from medicos.models import Medico, Especialidade
 from .models import Paciente
+from consultas.models import DisponibilidadeMedico
 
 
 # ===================== CONSULTAS =====================
@@ -61,9 +62,6 @@ def carrega_medicos(request):
         medicos = Medico.objects.filter(especialidades__nome=especialidade_nome)
         lista_medicos = list(medicos.values('id', 'user__first_name', 'user__last_name'))
 
-    with open('teste.txt', 'a') as p:
-        p.write(f'nome: {especialidade_nome} medicos: {lista_medicos}\n')
-
     return JsonResponse(lista_medicos, safe=False)
 
 def carrega_datas(request):
@@ -87,21 +85,69 @@ def carrega_datas(request):
 
     return JsonResponse(dates_available, safe=False)
 
-def medicos_por_servico(request):
-    servico = request.GET.get('servico')
-    especialidade_nome = SERVICO_ESPECIALIDADE_MAP.get(servico)
+def get_horarios_e_salas_disponiveis(request):
+    medico_id = request.GET.get('medico_id')
+    data_str = request.GET.get('data') 
+
+    if not medico_id or not data_str:
+        return JsonResponse({'error': 'Médico e Data são obrigatórios'}, status=400)
+
+    try:
+        medico = get_object_or_404(Medico, pk=medico_id)
+        data_selecionada = datetime.strptime(data_str, '%Y-%m-%d').date()
+    except Exception as e:
+        return JsonResponse({'error': f'Dados inválidos: {e}'}, status=400)
+
+    dia_semana = data_selecionada.weekday() 
     
-    if not especialidade_nome:
-        return JsonResponse({'medicos': []})
-    
-    especialidade = Especialidade.objects.filter(nome=especialidade_nome).first()
-    if not especialidade:
-        return JsonResponse({'medicos': []})
-    
-    medicos = Medico.objects.filter(especialidades=especialidade)
-    medicos_data = [{'id': medico.id, 'nome': f"Dr. {medico.user.first_name} {medico.user.last_name}"} for medico in medicos]
-    
-    return JsonResponse({'medicos': medicos_data})
+    disponibilidades = DisponibilidadeMedico.objects.filter(
+        medico=medico, 
+        dia_semana=dia_semana
+    )
+
+    horarios_ocupados = Consulta.objects.filter(
+        medico=medico, 
+        data__date=data_selecionada # Filtra consultas existentes naquele dia
+    ).values_list('data', flat=True) # Pega apenas o campo data (que é DateTimeField)
+
+    slots_livres = []
+    duracao_consulta = timedelta(minutes=60) 
+
+    for disp in disponibilidades:
+        inicio_naive = datetime.combine(data_selecionada, disp.hora_inicio)
+        fim_naive = datetime.combine(data_selecionada, disp.hora_fim)
+        
+        inicio = timezone.make_aware(inicio_naive)
+        fim = timezone.make_aware(fim_naive)
+
+        slot_inicio = inicio
+        while slot_inicio + duracao_consulta <= fim:
+            slot_fim = slot_inicio + duracao_consulta
+            
+            # Verificar se o slot está livre (sem sobreposição com horarios_ocupados)
+            is_free = True
+            for ocupado_dt in horarios_ocupados:
+                # Ocupado_dt é um datetime.datetime
+                
+                # Definir o final do slot ocupado, se a duração for de 60 min
+                ocupado_fim = ocupado_dt + duracao_consulta 
+                
+                # Checar sobreposição
+                if (slot_inicio < ocupado_fim) and (ocupado_dt < slot_fim):
+                    is_free = False
+                    continue
+            
+            if is_free:
+                slots_livres.append({
+                    'hora': slot_inicio.strftime('%H:%M'),
+                    'sala': disp.sala_padrao # Retorna a sala padrão do turno
+                })
+            
+            # Avança para o próximo slot, que deve ser a duração da consulta
+            slot_inicio += duracao_consulta
+
+    return JsonResponse({'slots': slots_livres})
+
 
 @login_required
 def consulta_criar_ou_editar(request, consulta_id=None):

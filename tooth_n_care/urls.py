@@ -29,15 +29,7 @@ urlpatterns = [
     path('consulta/', include('consultas.urls')),
     path('paciente/', include('pacientes.urls')),
     path('appadmin/', include('appadmin.urls')),
-    path('deletar-medicos/', adm_views.deletar_medico, name="deletar-medicos"),
-    path('desativar-medicos/', adm_views.desativar_medicos, name="desativar-medicos"),
-    path('deletar-pacientes/', adm_views.deletar_paciente, name="deletar-pacientes"),
     
     #allauth
     path('accounts/', include('allauth.urls')),
-
-    # APIs
-    path('api/carrega_medicos/', api_pacientes.carrega_medicos, name='carrega_medicos'),
-    path('api/carrega_datas/', api_pacientes.carrega_datas, name='carrega_datas'),
-    path('api/medicos-por-servico/', api_pacientes.medicos_por_servico, name='medicos-por-servico'),
 ]

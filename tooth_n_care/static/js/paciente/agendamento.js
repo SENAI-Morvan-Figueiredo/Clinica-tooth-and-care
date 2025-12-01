@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function updateMedicos() {
         const servico = servicoSelect.value;
-        const urlAPI = '/api/carrega_medicos/';
+        const urlAPI = '/paciente/api/carrega_medicos/';
 
         // Limpa e desabilita campos dependentes
         medicoSelect.innerHTML = '<option value="">Selecione um médico</option>';
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function updateDatasDisponiveis() {
         const medicoId = medicoSelect.value;
-        const urlAPI = "/api/carrega_datas/";
+        const urlAPI = "/paciente/api/carrega_datas/";
 
         if (!medicoId) {
             return;
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateHorarios() {
         const medicoId = medicoSelect.value;
         const dataSelecionada = dataSelect.value;
-        const urlAPI = "/consulta/api/disponibilidade/";
+        const urlAPI = "/paciente/api/disponibilidade/";
 
         // Desabilita e limpa a seleção de hora se o Médico ou a Data não estiverem selecionados
         if (!medicoId || !dataSelecionada) {

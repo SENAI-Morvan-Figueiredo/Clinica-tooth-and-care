@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteModal.hide(); // Fecha o modal imediatamente
 
         //TODO: modificar a url quando hospedar
-        fetch("http://127.0.0.1:8000/deletar-pacientes/", {
+        fetch("/appadmin/deletar-pacientes/", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
