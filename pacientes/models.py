@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 GENERO_CHOICES = [
     ("M", "Masculino"),
     ("F", "Feminino"),
-    ("O", "Outro"),
+    ("N", "Prefiro não informar"),
 ]
 
 # Create your models here.

@@ -8,8 +8,9 @@ from django.utils import timezone
 
 from consultas.models import Consulta
 from consultas.forms import ConsultaForm, SERVICO_ESPECIALIDADE_MAP
-from medicos.models import Medico, Especialidade
+from medicos.models import Medico
 from .models import Paciente
+from .forms import PacienteEditForm
 from consultas.models import DisponibilidadeMedico
 
 
@@ -218,23 +219,20 @@ def informacoes_pessoais(request):
     consultas = Consulta.objects.filter(paciente=paciente).order_by("-data")
 
     if request.method == "POST" and editing:
-        # Atualiza os campos do paciente
-        paciente.nome = request.POST.get('nome')
-        paciente.data_nasc = request.POST.get('data_nascimento')
-        paciente.genero = request.POST.get('sexo')
-        paciente.cpf = request.POST.get('cpf')
-        paciente.rg = request.POST.get('rg')
-        paciente.endereco = request.POST.get('endereco')
-        paciente.telefone = request.POST.get('telefone')
-        paciente.user.email = request.POST.get('email')
-        paciente.user.save()
-        paciente.save()
+        form = PacienteEditForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+        
         messages.success(request, "Informações atualizadas com sucesso!")
         return redirect('informacoes-pessoais')
+    else:
+        form = PacienteEditForm(paciente_instance=paciente)
 
     context = {
         "paciente": paciente,
         "editing": editing,
         "consultas": consultas,
+        "form": form
     }
     return render(request, "paciente/consulta/historico_paciente.html", context)

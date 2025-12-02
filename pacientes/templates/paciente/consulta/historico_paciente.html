@@ -13,14 +13,57 @@
                 <a href="{% url 'informacoes-pessoais' %}?edit=true" class="btn btn-light btn-sm">✏️ Editar</a>
             {% endif %}
         </div>
-        <div class="card-body">
+        <div class="card-body" style="font-size: 1.3rem;">
             {% if not editing %}
-                <p><strong>Nome completo:</strong> {{ paciente.user }}</p>
-                <p><strong>Data de Nascimento:</strong> {{ paciente.data_nasc|date:"d/m/Y" }}</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Nome completo:</strong> {{ paciente.user }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Data de Nascimento:</strong> {{ paciente.data_nasc|date:"d/m/Y" }}</p>
+                    </div>    
+                </div>
                 <p><strong>Sexo:</strong> {{ paciente.genero }}</p>
-                <p><strong>CPF:</strong> {{ paciente.cpf }}</p>
-                <p><strong>RG:</strong> {{ paciente.rg }}</p>
-                <p><strong>Endereço:</strong> {{ paciente.endereco }}</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>CPF:</strong> {{ paciente.cpf }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>RG:</strong> {{ paciente.rg }}</p>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Cidade:</strong>
+                            {{ paciente.endereco.cidade }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Bairro:</strong>
+                            {{ paciente.endereco.bairro }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Rua:</strong>
+                            {{ paciente.endereco.logradouro }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Número:</strong>
+                            {{ paciente.endereco.numero }}
+                        </div>
+                        <div class="col-md-5">
+                            <strong>Complemento:</strong>
+                            {% if paciente.endereco.complemento %}
+                                {{ paciente.endereco.complemento }}
+                            {% else %}
+                                Sem complemento
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3">
+                            <strong>CEP:</strong>
+                            {{ paciente.endereco.cep }}
+                        </div>
+                    </div>
                 <p><strong>Telefone:</strong> {{ paciente.telefone }}</p>
                 <p><strong>Email:</strong> {{ paciente.user.email }}</p>
             {% else %}
@@ -28,40 +71,95 @@
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Nome completo:</label>
-                            <input type="text" name="nome" value="{{ paciente.user }}" class="form-control" required>
+                            <label class="form-label">Nome:</label>
+                            <div class="form-group d-flex gap-2">
+                                {{ form.first_name }}
+                                {{ form.last_name }}
+                            </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Data de Nascimento:</label>
-                            <input type="date" name="data_nasc" value="{{ paciente.data_nasc|date:'Y-m-d' }}" class="form-control" required>
+                            <div class="form-group d-flex gap-2">
+                                {{ form.data_nasc }}
+                            </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Sexo:</label>
-                            <select name="genero" class="form-select" required>
-                                <option value="Masculino" {% if paciente.genero == 'Masculino' %}selected{% endif %}>Masculino</option>
-                                <option value="Feminino" {% if paciente.genero == 'Feminino' %}selected{% endif %}>Feminino</option>
-                            </select>
+                            <div class="form-group">
+                                {{ form.genero }}
+                            </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">CPF:</label>
-                            <input type="text" name="cpf" value="{{ paciente.cpf }}" class="form-control" required>
+                            <div class="form-group">
+                                {{ form.cpf }}
+                            </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">RG:</label>
-                            <input type="text" name="rg" value="{{ paciente.rg }}" class="form-control" required>
+                            <div class="form-group">
+                                {{ form.rg }}
+                            </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="form-label">Endereço:</label>
-                            <input type="text" name="endereco" value="{{ paciente.endereco }}" class="form-control" required>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="form-label" for="{{ form.cep.id_for_label }}">{{ form.cep.label_tag }}</label>
+                                    <div class="form-group">
+                                        {{ form.cep }}
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="{{ form.logradouro.id_for_label}}" class="form-label">{{ form.logradouro.label_tag }}</label>
+                                    <div class="form-group">
+                                        {{ form.logradouro }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="{{ form.numero.id_for_label }}" class="form-label">{{ form.numero.label_tag }}</label>
+                                    <div class="form-group">
+                                        {{ form.numero }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="{{ form.complemento.id_for_label }}" class="form-label">{{ form.complemento.label_tag }} (opcional)</label>
+                                        {{ form.complemento }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="{{ form.bairro.id_for_label }}" class="form-label">{{ form.bairro.label_tag }}</label>
+                                        {{ form.bairro }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="{{ form.cidade.id_for_label }}" class="form-label">{{ form.cidade.label_tag }}</label>
+                                        {{ form.cidade }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Telefone:</label>
-                            <input type="tel" name="telefone" value="{{ paciente.telefone }}" class="form-control" required>
+                        <div class="col-md-12">
+                            <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Telefone:</label>
+                                <div class="form-group">
+                                    {{ form.telefone }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email:</label>
+                                <div class="form-group">
+                                    {{ form.email }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Email:</label>
-                            <input type="email" name="email" value="{{ paciente.user.email }}" class="form-control" required>
                         </div>
                     </div>
 
