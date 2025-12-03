@@ -12,9 +12,34 @@ body {
 
 #left {
     background-color: #2C8E89;
+    position: fixed;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+#logo_img {
+    width: 90%;
+    margin: auto;
+}
+
+#right {
+    margin-left: 35%;
+}
+
 
 .container-fluid {
     margin: 0;
     padding: 0;
+}
+
+@media (max-width: 768px) {
+    #left {
+        display: none;
+    }
+
+    #right {
+        margin: auto;
+    }
 }
