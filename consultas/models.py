@@ -126,9 +126,9 @@ class Diagnostico(models.Model):
     ],null=False,blank=False)
     plano_de_tratamento = models.TextField(null=False,blank=False)
     detalhes = models.TextField(null=False,blank=False)
-    consulta = models.ForeignKey(Consulta, on_delete=models.CASCADE, related_name="diagnostico")
+    consulta = models.OneToOneField(Consulta, on_delete=models.CASCADE, related_name="diagnostico")
     def __str__(self):
-        return self.detalhes
+        return f"diagnostico da {self.consulta}"
     
 class Anamnese(models.Model):
     doencas_cronicas = models.TextField()
