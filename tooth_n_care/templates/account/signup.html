@@ -6,7 +6,7 @@
 <div class="w-100">
     <h1 class="text-center mb-4">Cadastro</h1>
 
-    <form method="post" action="{% url 'account_signup' %}" novalidate class="w-100">
+    <form id="signup_form" method="post" action="{% url 'account_signup' %}" novalidate class="w-100" >
         {% csrf_token %}
 
         {% for field in form %}
@@ -35,4 +35,23 @@
         <button type="submit" class="btn btn-primary w-100 mt-3">Cadastrar</button>
     </form>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let form = document.getElementById('signup_form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    let submitButton = form.querySelector('button[type="submit"]');
+
+                    if (submitButton) {
+                        submitButton.disabled = true;
+
+                        submitButton.textContent = 'Enviando...';
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}
