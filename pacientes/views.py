@@ -218,12 +218,13 @@ def informacoes_pessoais(request):
     editing = request.GET.get('edit', 'false').lower() == 'true'
     consultas = Consulta.objects.filter(paciente=paciente).order_by("-data")
 
-    if request.method == "POST" and editing:
+    if request.method == "POST":
         form = PacienteEditForm(request.POST)
-
-        if form.is_valid():
-            form.save()
         
+        if form.is_valid():
+            form.paciente_instance = paciente
+            form.save()
+
         messages.success(request, "Informações atualizadas com sucesso!")
         return redirect('informacoes-pessoais')
     else:

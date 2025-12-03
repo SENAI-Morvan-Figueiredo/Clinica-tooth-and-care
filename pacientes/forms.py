@@ -154,7 +154,7 @@ class PacienteEditForm(forms.Form):
     email = forms.EmailField(
         label=('E-mail'),
         # O email é apenas para visualização e não deve ser alterado diretamente aqui
-        widget=forms.EmailInput(attrs={'class': 'form-control', 'readonly': 'readonly', 'disabled': 'disabled'})
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
     )
     # Campos do Paciente
     cpf = forms.CharField(
