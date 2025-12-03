@@ -39,16 +39,18 @@
                     {% else %}
                         <p class="text-muted">Nenhum diagnóstico registrado.</p>
                     {% endif %}
-
+                    {% if not diagnostico %}
                     <hr>
                     <h6 class="fw-bold text-teal mt-3">Novo Diagnóstico</h6>
                     <form method="POST" class="custom-form">
                         {% csrf_token %}
                         {{ diagnostico_form.as_p }}
-                        <button type="submit" name="submit_diagnostico" class="btn btn-success w-100 mt-2">
-                            Salvar Diagnóstico
-                        </button>
+                        
+                            <button type="submit" name="submit_diagnostico" class="btn btn-success w-100 mt-2">
+                                Salvar Diagnóstico
+                            </button>
                     </form>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -16,32 +16,32 @@
         <div class="card-body" style="font-size: 1.3rem;">
             {% if not editing %}
                 <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Nome completo:</strong> {{ paciente.user }}</p>
+                    <div class="col-md-3">
+                        <p><strong>Nome:</strong> {{ paciente.user.first_name }} {{paciente.user.last_name }}</p>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <p><strong>Data de Nascimento:</strong> {{ paciente.data_nasc|date:"d/m/Y" }}</p>
                     </div>    
                 </div>
                 <p><strong>Sexo:</strong> {{ paciente.genero }}</p>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <p><strong>CPF:</strong> {{ paciente.cpf }}</p>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <p><strong>RG:</strong> {{ paciente.rg }}</p>
                     </div>
                 </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <strong>Cidade:</strong>
                             {{ paciente.endereco.cidade }}
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <strong>Bairro:</strong>
                             {{ paciente.endereco.bairro }}
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <strong>Rua:</strong>
                             {{ paciente.endereco.logradouro }}
                         </div>
@@ -51,7 +51,7 @@
                             <strong>Número:</strong>
                             {{ paciente.endereco.numero }}
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <strong>Complemento:</strong>
                             {% if paciente.endereco.complemento %}
                                 {{ paciente.endereco.complemento }}
@@ -64,8 +64,14 @@
                             {{ paciente.endereco.cep }}
                         </div>
                     </div>
-                <p><strong>Telefone:</strong> {{ paciente.telefone }}</p>
-                <p><strong>Email:</strong> {{ paciente.user.email }}</p>
+                <div class="row">
+                    <div class="col-md-3">
+                        <p><strong>Telefone:</strong> {{ paciente.telefone }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p><strong>Email:</strong> {{ paciente.user.email }}</p>
+                    </div>
+                </div>
             {% else %}
                 <form method="post" action="{% url 'informacoes-pessoais' %}">
                     {% csrf_token %}
