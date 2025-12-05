@@ -95,7 +95,11 @@ def index(request):
 @login_required
 def consulta_detalhes(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    diagnostico = Diagnostico.objects.get(consulta=consulta)
+    try:
+        diagnostico = Diagnostico.objects.get(consulta=consulta)
+    except Diagnostico.DoesNotExist:
+        diagnostico = None
+    
     anamnese = consulta.anamnese.first()  # cada consulta tem uma anamnese
 
     # Inicialização dos formulários
