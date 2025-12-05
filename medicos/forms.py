@@ -34,11 +34,6 @@ class MedicoUserForm(forms.ModelForm):
     nome = forms.CharField(label="Nome do Médico", max_length=150)
     sobrenome = forms.CharField(max_length=150)
     email = forms.EmailField(label="Email")
-    especialidades = forms.MultipleChoiceField(
-        label="Especialidades:",
-        widget=forms.CheckboxSelectMultiple,
-        choices=ESPECIALIDADES_CHOICES
-    )
     carga_horaria = forms.ChoiceField(
         label="Carga Horária",
         choices=CARGA_HORARIAS   
@@ -51,9 +46,11 @@ class MedicoUserForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-        for especialidade in Especialidade.objects.all():
-            ESPECIALIDADES_CHOICES.update({especialidade.id:  especialidade.nome.capitalize()})
+
+        self.fields['especialidades'].widget = forms.CheckboxSelectMultiple(
+            attrs={'class': 'form-check-input'}
+        )
+        self.fields['especialidades'].queryset = Especialidade.objects.all()
 
         # Pré-preenche os campos do User se estiver editando um Medico existente
         if self.instance and self.instance.pk:
@@ -66,6 +63,10 @@ class MedicoUserForm(forms.ModelForm):
             if field_name != "especialidades":
                 self.fields[field_name].widget.attrs.update({
                     'class': 'form-control rounded-lg'
+                })
+            else:
+                self.fields[field_name].widget.attrs.update({
+                    'class': 'form-check'
                 })
 
 
