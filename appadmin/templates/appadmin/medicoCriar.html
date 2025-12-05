@@ -21,7 +21,8 @@
             {% endfor %}
         </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary mt-3">Salvar médico</button>
+        <a href="{% url 'adm-medicos' %}" class="btn btn-outline-primary mt-3">Cancelar</a>
+        <button type="submit" class="btn btn-primary mt-3 mx-2">Salvar médico</button>
     </form>
 </div>
 {% endblock %}

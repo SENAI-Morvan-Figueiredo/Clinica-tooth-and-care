@@ -9,8 +9,11 @@
 
 {% block content %}
 <div class="row mb-4">
-    <div class="col-12">
+    <div class="col-11">
         <h2 class="text-primary fw-bold">Detalhe do Médico</h2>
+    </div>
+    <div class="col-1 d-flex justify-content-end p-1">
+        <a href="{% url 'adm-medicos' %}" class="btn btn-outline-primary">Voltar</a>
     </div>
 </div>
 
@@ -73,7 +76,7 @@
 <!-- CARD DE CONSULTAS DO MÉDICO -->
 <div class="card shadow-sm border-0 mb-4">
     <div class="card-body p-4">
-        <h3>Consultas Agendadas</h3>
+        <h3>Consultas Agendadas</h3>    
         <div class="table-responsive mt-3">
             <table class="table table-hover align-middle">
                 <thead class="table-header-custom">
