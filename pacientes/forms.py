@@ -257,9 +257,13 @@ class PacienteEditForm(forms.Form):
             raise Exception("Instância de Paciente não fornecida para edição.")
 
         # 1. Atualiza o User
+        prim_nome = self.cleaned_data['first_name']
+        sobrenome = self.cleaned_data['last_name']
+
         user = self.paciente_instance.user
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
+        user.username = f"{prim_nome} {sobrenome}"
+        user.first_name = prim_nome
+        user.last_name = sobrenome
         user.save()
 
         # 2. Atualiza o Paciente

@@ -74,7 +74,7 @@
                         <tbody>
                             {% for consulta in consultas %}
                             <tr class="position-relative" data-search="{{ consulta.paciente.user.username }} {{ consulta.medico.user.username }} {{ consulta.data|date:'Y-m-d' }} {{ consulta.get_servico_display }} {{ consulta.status }}">
-                                <td>{{ consulta.paciente.user.username }}</td>
+                                <td>{{ consulta.paciente.user.first_name }} {{ consulta.paciente.user.last_name }}</td>
                                 <td>
                                     {{ consulta.medico.user.username }}
                                     <a href="{% url 'adm-detalhe-consulta' consulta.id %}" class="stretched-link" aria-label="Ver detalhes da consulta com {{ consulta.medico.user.username }}"></a>

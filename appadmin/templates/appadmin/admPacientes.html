@@ -46,7 +46,7 @@
                             <input type="checkbox" name="paciente_id" class="paciente-checkbox form-check-input" value="{{ paciente.pk }}">
                         </td>
                         <td class="fw-bold text-nowrap">
-                            <i class="fas fa-user-circle me-2 text-primary"></i> {{ paciente.user.username }}
+                            <i class="fas fa-user-circle me-2 text-primary"></i> {{ paciente.user.first_name }} {{ paciente.user.last_name }}
                         </td>
                         <td>{{ paciente.cpf }}</td>
                         <td class="text-center text-muted text-nowrap">{{ paciente.user.last_login|date:"d/m/Y \à\s H:i" }}</td>

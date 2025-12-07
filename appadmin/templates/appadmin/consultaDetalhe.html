@@ -72,7 +72,7 @@
             <div class="col-md-4">
                 <div class="p-3 border rounded-3 h-100">
                     <p class="mb-1 text-muted small"><i class="fas fa-user me-1"></i> Paciente</p>
-                    <h5 class="fw-bold">{{ consulta.paciente.user.username }}</h5>
+                    <h5 class="fw-bold">{{ consulta.paciente.user.first_name }} {{ consulta.paciente.user.last_name }}</h5>
                     <ul class="list-unstyled small mb-0">
                         <li><i class="fas fa-envelope me-1 text-primary"></i> {{ consulta.paciente.user.email }}</li>
                         <li><i class="fas fa-phone me-1 text-primary"></i> {{ consulta.paciente.telefone }}</li>
@@ -87,7 +87,7 @@
             <div class="col-md-4">
                 <div class="p-3 border rounded-3 h-100">
                     <p class="mb-1 text-muted small"><i class="fas fa-user-md me-1"></i> Médico</p>
-                    <h5 class="fw-bold">{{ consulta.medico.user.username }}</h5>
+                    <h5 class="fw-bold">{{ consulta.medico.user.first_name }} {{ consulta.medico.user.last_name }}</h5>
                     <ul class="list-unstyled small mb-0">
                         <li><i class="fas fa-id-card me-1 text-primary"></i> CRM: {{ consulta.medico.crm }}</li>
                         <!-- Assumindo que especialidades é um campo relacionado e pegando a primeira -->
