@@ -57,7 +57,7 @@ def carrega_medicos(request):
     especialidade_nome = SERVICO_ESPECIALIDADE_MAP.get(servico)
     medicos = Medico.objects.none()
     if especialidade_nome:
-        medicos = Medico.objects.filter(especialidades__nome=especialidade_nome)
+        medicos = Medico.objects.filter(especialidades__nome=especialidade_nome, ativo=True)
         lista_medicos = list(medicos.values('id', 'user__first_name', 'user__last_name'))
 
     return JsonResponse(lista_medicos, safe=False)
