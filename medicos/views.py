@@ -46,7 +46,7 @@ def consultas_medico(request):
 
     if medico:
         # 2. Se um médico for encontrado, obtenha todas as suas consultas
-        consultas = Consulta.objects.filter(medico=medico).order_by('data')
+        consultas = Consulta.objects.filter(medico=medico).order_by('-data')
         medico_encontrado = True
 
     # 3. Prepara o contexto para o template
