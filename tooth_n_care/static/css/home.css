@@ -118,6 +118,7 @@ section {
 
 /* Foco visível para acessibilidade */
 .btn:focus, .nav-link:focus {
-    outline: 2px solid #fff;
+    outline: 2px solid #cddbd5;
+    border-radius: 1rem;
     outline-offset: 2px;
 }

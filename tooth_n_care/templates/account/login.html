@@ -10,11 +10,11 @@
 
 {% block content %}
 {% load allauth account %}
-<div class="d-flex justify-content-center align-items-center" id="login-container">
+<div class="d-flex justify-content-center align-items-center" id="login-container" data-bg>
     <!-- background -->
     <img src="{% static 'img/background_login.png' %}" alt="background" id="background-image">
     <!-- login form -->
-    <div class="row rounded-4" id="form-container">
+    <div class="d-flex rounded-4" id="form-container">
         <div class="col rounded-4 ">
             <img src="{% static 'img/logo.png' %}" alt="logo">
         </div>
